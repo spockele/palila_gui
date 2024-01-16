@@ -9,19 +9,25 @@
         on_release:
             root.play()
 
+    ProgressBar:
+        id: progress
+        value: 0
+        max: 1
+
+        size_hint_y: .05
+
     Label:
         id: txt
         text: 'Press play to listen to audio'
 
-        size_hint_y: .2
+        size_hint_y: .15
 
 
 
 <AudioQuestionScreen>:
-    FloatLayout:
-        AudioManager:
-            audio_path: 'GUI/assets/tone500Hz.wav'
-            n_max: 1
+    AudioManager:
+        audio_path: 'GUI/assets/tone500Hz.wav'
+        n_max: 5
 
-            pos_hint: {'center_x': .5, 'y': .6}
-            size_hint: .6, .3
+        pos_hint: {'center_x': .5, 'y': .6}
+        size_hint: .3, .3
