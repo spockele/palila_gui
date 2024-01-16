@@ -1,12 +1,14 @@
 from kivy.app import App
 
+from GUI import AudioQuestionScreen
+
 
 class PalilaApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def build(self):
-        pass
+        return AudioQuestionScreen()
 
 
 if __name__ == '__main__':

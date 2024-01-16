@@ -1,0 +1,27 @@
+<AudioManager>:
+    orientation: 'vertical'
+    Button:
+        id: bttn
+        text: 'play'
+
+        size_hint_y: .8
+
+        on_release:
+            root.play()
+
+    Label:
+        id: txt
+        text: 'Press play to listen to audio'
+
+        size_hint_y: .2
+
+
+
+<AudioQuestionScreen>:
+    FloatLayout:
+        AudioManager:
+            audio_path: 'GUI/assets/tone500Hz.wav'
+            n_max: 1
+
+            pos_hint: {'center_x': .5, 'y': .6}
+            size_hint: .6, .3
