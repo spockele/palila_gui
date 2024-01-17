@@ -2,12 +2,18 @@
     orientation: 'vertical'
     Button:
         id: bttn
-        text: 'play'
 
         size_hint_y: .8
 
         on_release:
             root.play()
+
+        Image:
+            id: bttn_image
+            pos: self.parent.x + self.parent.size[0] * .1, self.parent.y + self.parent.size[1] * .1
+            size: self.parent.size[0] * .8, self.parent.size[1] * .8
+            fit_mode: 'contain'
+            source: 'GUI/assets/play.png'
 
     ProgressBar:
         id: progress
@@ -18,10 +24,36 @@
 
     Label:
         id: txt
-        text: 'Press play to listen to audio'
-
+        text: 'Press play to start sample'
         size_hint_y: .15
 
+        canvas.before:
+            Color:
+                rgba: .6, .6, .6, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+<QuestionsLayout@BoxLayout>:
+    spacing: 10
+    orientation: 'horizontal'
+
+    Widget:
+        canvas:
+            Color:
+                rgba: .6, .6, .6, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    Widget:
+        canvas:
+            Color:
+                rgba: .6, .6, .6, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
 
 
 <AudioQuestionScreen>:
@@ -29,5 +61,9 @@
         audio_path: 'GUI/assets/tone500Hz.wav'
         n_max: 5
 
-        pos_hint: {'center_x': .5, 'y': .6}
+        pos_hint: {'center_x': .5, 'center_y': .8}
         size_hint: .3, .3
+
+    QuestionsLayout:
+        pos_hint: {'center_x': .5, 'y': .11}
+        size_hint: .95, .525

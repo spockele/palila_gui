@@ -73,12 +73,13 @@ class AudioManager(BoxLayout):
 
             self.thread.start()
             self.audio.play()
-
             self.playing = True
-            self.count += 1
 
-            if self.count == self.n_max:
-                self.ids.txt.text = 'Maximum number of replays reached.'
+            self.ids.bttn_image.source = 'GUI/assets/hearing.png'
+            self.ids.bttn.background_color = [.5, .5, 1, 1]
+            self.ids.txt.text = 'Playing sample ...'
+
+            self.count += 1
 
     def done_playing(self):
         """
@@ -89,6 +90,15 @@ class AudioManager(BoxLayout):
         self.thread = None
         # Register that no audio is playing
         self.playing = False
+
+        if self.count < self.n_max:
+            self.ids.bttn_image.source = 'GUI/assets/play.png'
+            self.ids.bttn.background_color = [1, 1, 1, 1]
+            self.ids.txt.text = 'Press play to restart sample'
+        else:
+            self.ids.bttn_image.source = 'GUI/assets/done.png'
+            self.ids.bttn.background_color = [.5, 1, .5, 1]
+            self.ids.txt.text = 'Maximum number of replays reached.'
 
 
 class AudioQuestionScreen(Screen):
