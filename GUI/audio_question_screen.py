@@ -66,8 +66,6 @@ class AudioManager(BoxLayout):
         Function that starts the audio
         """
         if self.count < self.n_max and not self.playing:
-            print(f'{self.audio_path}, {self.count}')
-
             self.thread = ProgressBarThread(self.ids.progress)
             self.ids.progress.max = self.audio.length
 
