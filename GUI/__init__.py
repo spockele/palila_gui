@@ -4,6 +4,7 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
 from .audio_question_screen import *
+from .input_system import *
 
 
 Builder.load_file('GUI/setup.kv')
