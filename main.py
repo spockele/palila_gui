@@ -1,8 +1,5 @@
-from GUI import ExperimentParser
+from GUI import PalilaApp
 
 
 if __name__ == '__main__':
-    # PalilaApp().run()
-    experiment = ExperimentParser('gui_dev')
-
-    print(experiment)
+    PalilaApp().run()
