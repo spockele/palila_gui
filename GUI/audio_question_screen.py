@@ -1,4 +1,3 @@
-from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.progressbar import ProgressBar
 from kivy.core.audio import SoundLoader
@@ -7,6 +6,8 @@ from kivy.lang import Builder
 import threading
 import time
 import os
+
+from .screens import PalilaScreen
 
 
 __all__ = ['AudioQuestionScreen']
@@ -59,6 +60,8 @@ class AudioManager(BoxLayout):
         self.audio = SoundLoader.load(audio_path)
         self.audio.on_stop = self.done_playing
 
+        self.ids.txt.text = f'You can play the sample {self.n_max} times'
+
     def play(self):
         """
         Function that starts the audio
@@ -90,14 +93,17 @@ class AudioManager(BoxLayout):
         if self.count < self.n_max:
             self.ids.bttn_image.source = 'GUI/assets/play.png'
             self.ids.bttn.background_color = [1, 1, 1, 1]
-            self.ids.txt.text = 'Press play to restart sample'
+            self.ids.txt.text = f'You can replay {self.n_max - self.count} more times.'
         else:
             self.ids.bttn_image.source = 'GUI/assets/done.png'
             self.ids.bttn.background_color = [.5, 1, .5, 1]
-            self.ids.txt.text = 'Cannot restart sample.'
+            self.ids.txt.text = ''
 
 
-class AudioQuestionScreen(Screen):
+class AudioQuestionScreen(PalilaScreen):
+    """
+
+    """
     def __init__(self, config_dict: dict, **kwargs):
         super().__init__(**kwargs)
         self.config_dict = config_dict
