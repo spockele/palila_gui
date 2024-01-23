@@ -96,7 +96,7 @@ class AudioManager(BoxLayout):
         else:
             self.ids.bttn_image.source = 'GUI/assets/done.png'
             self.ids.bttn.background_color = [.5, 1, .5, 1]
-            self.ids.txt.text = 'Maximum number of replays reached.'
+            self.ids.txt.text = 'Cannot restart sample.'
 
 
 class AudioQuestionScreen(Screen):
