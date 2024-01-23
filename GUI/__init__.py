@@ -4,7 +4,7 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
 from .audio_question_screen import *
-from .input_system import *
+from .file_system import *
 
 
 Builder.load_file('GUI/setup.kv')
@@ -21,8 +21,6 @@ class PalilaScreenManager(ScreenManager):
         super().__init__(**kwargs)
         self.experiment = experiment
 
-        # Extract the experiment sections
-        self.sections = [section for section in self.experiment.sections if 'section' in section]
         # Go about initialising the Screens based on the input file
         self._initialise_screens()
 
@@ -30,16 +28,18 @@ class PalilaScreenManager(ScreenManager):
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
-        # Loop over the experiment sections
-        for section in self.sections:
-            audios = [audio for audio in self.experiment[section].sections if 'audio' in audio]
-            # Within each section, loop over the audios
-            for audio in audios:
+        # Loop over the experiment parts
+        for part in self.experiment.parts:
+            # Within each part, loop over the audios
+            for audio in self.experiment[part]['audios']:
                 # Gather the corresponding configuration dictionary and add the general audio path of the experiment
-                audio_config_dict = self.experiment[section][audio]
+                audio_config_dict = self.experiment[part][audio]
                 audio_config_dict['filepath'] = self.experiment.audio_path
-                # Create the screen and add to the Manager
-                self.add_widget(AudioQuestionScreen(audio_config_dict))
+
+                # Create the screen
+                new_screen = AudioQuestionScreen(audio_config_dict, name=f'{part}-{audio}')
+
+                self.add_widget(new_screen)
 
 
 class PalilaApp(App):
@@ -64,6 +64,7 @@ class PalilaApp(App):
         # Set the screen to a fixed resolution
         Window.size = (1600, 900)
 
+        # Create the ScreenManager and pass the experiment along
         manager = PalilaScreenManager(self.experiment)
-
+        # Required return of the ScreenManager
         return manager
