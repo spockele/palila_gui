@@ -12,8 +12,8 @@ class PalilaExperiment(ConfigObj):
         self.name = name
         self.audio_path = os.path.abspath(f'{name}')
 
-        self.parts = [part for part in self.sections if 'part' in part]
-        for part in self.parts:
+        self['parts'] = [part for part in self.sections if 'part' in part]
+        for part in self['parts']:
             self[part]['audios'] = [audio for audio in self[part] if 'audio' in audio]
             if self[part].as_bool('randomise'):
                 random.shuffle(self[part]['audios'])

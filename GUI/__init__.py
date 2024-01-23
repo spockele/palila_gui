@@ -29,7 +29,7 @@ class PalilaScreenManager(ScreenManager):
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
         # Loop over the experiment parts
-        for part in self.experiment.parts:
+        for part in self.experiment['parts']:
             # Within each part, loop over the audios
             for audio in self.experiment[part]['audios']:
                 # Gather the corresponding configuration dictionary and add the general audio path of the experiment
