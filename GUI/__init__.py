@@ -15,11 +15,18 @@ class PalilaScreenManager(ScreenManager):
         super().__init__(**kwargs)
 
         self.experiment = experiment
+        self.sections = [section for section in self.experiment.sections if 'section' in section]
 
         self._organise()
 
     def _organise(self):
-        pass
+        for section in self.sections:
+            audios = [audio for audio in self.experiment[section].sections if 'audio' in audio]
+            for audio in audios:
+                audio_config_dict = self.experiment[section][audio]
+                audio_config_dict['filepath'] = self.experiment.audio_path
+
+                self.add_widget(AudioQuestionScreen(audio_config_dict))
 
 
 class PalilaApp(App):
@@ -33,6 +40,5 @@ class PalilaApp(App):
         Window.size = (1600, 900)
 
         manager = PalilaScreenManager(self.experiment)
-        manager.add_widget(AudioQuestionScreen())
 
         return manager

@@ -1,12 +1,12 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.progressbar import ProgressBar
-from kivy.properties import NumericProperty, StringProperty
 from kivy.core.audio import SoundLoader
 from kivy.lang import Builder
 
 import threading
 import time
+import os
 
 
 __all__ = ['AudioQuestionScreen']
@@ -40,25 +40,23 @@ class AudioManager(BoxLayout):
     """
     Class with the audio stuff for the question screen
     """
-    # Some variables to be set through kivy
-    audio_path = StringProperty('')
-    n_max = NumericProperty(0)
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Temporary placeholders
         self.audio = None
+        self.n_max = None
         self.thread = None
 
         # Initial values for the audio playback
         self.playing = False
         self.count: int = 0
 
-    def on_audio_path(self, *_):
+    def initialise_audio(self, audio_path: str, n_max: int):
         """
         Setup audio when the file path is set in kivy
         """
-        self.audio = SoundLoader.load(self.audio_path)
+        self.n_max = n_max
+        self.audio = SoundLoader.load(audio_path)
         self.audio.on_stop = self.done_playing
 
     def play(self):
@@ -100,5 +98,9 @@ class AudioManager(BoxLayout):
 
 
 class AudioQuestionScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, config_dict: dict, **kwargs):
         super().__init__(**kwargs)
+        self.config_dict = config_dict
+        self.audio_path = os.path.join(self.config_dict['filepath'], self.config_dict['filename'])
+
+        self.ids.audio_manager.initialise_audio(self.audio_path, int(self.config_dict['max replays']))

@@ -27,13 +27,6 @@
         text: 'Press play to start sample'
         size_hint_y: .15
 
-        canvas.before:
-            Color:
-                rgba: .6, .6, .6, 1
-            Rectangle:
-                pos: self.pos
-                size: self.size
-
 
 <QuestionsLayout@BoxLayout>:
     spacing: 10
@@ -58,9 +51,7 @@
 
 <AudioQuestionScreen>:
     AudioManager:
-        audio_path: 'GUI/assets/tone500Hz.wav'
-        n_max: 5
-
+        id: audio_manager
         pos_hint: {'center_x': .5, 'center_y': .8}
         size_hint: .3, .3
 
