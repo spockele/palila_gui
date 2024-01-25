@@ -20,3 +20,25 @@
 <Button>
     background_normal: 'gui/assets/background_normal.png'
     background_down: 'gui/assets/background_down.png'
+
+<PalilaScreen>
+    BoxLayout:
+        id: navigation
+        pos_hint: {'center_x': .5, 'y': .02}
+        size_hint: .6, .07
+        orientation: 'horizontal'
+
+        Button:
+            text: 'Back'
+            size_hint_x: .45
+            on_release:
+                root.manager.navigate_previous()
+
+        Widget:
+            size_hint_x: .1
+
+        Button:
+            text: 'Continue'
+            size_hint_x: .45
+            on_release:
+                root.manager.navigate_next()
