@@ -105,8 +105,7 @@ class AudioQuestionScreen(PalilaScreen):
 
     """
     def __init__(self, config_dict: dict, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(config_dict['previous'], config_dict['next'], **kwargs)
         self.config_dict = config_dict
-        self.audio_path = os.path.join(self.config_dict['filepath'], self.config_dict['filename'])
 
-        self.ids.audio_manager.initialise_audio(self.audio_path, int(self.config_dict['max replays']))
+        self.ids.audio_manager.initialise_audio(self.config_dict['filepath'], int(self.config_dict['max replays']))
