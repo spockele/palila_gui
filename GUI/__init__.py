@@ -5,6 +5,7 @@ from kivy.uix.screenmanager import ScreenManager
 
 from .audio_question_screen import *
 from .file_system import *
+from .screens import *
 
 
 Builder.load_file('GUI/setup.kv')
@@ -28,18 +29,32 @@ class PalilaScreenManager(ScreenManager):
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
+        prev, nxt = self.experiment['questionnaire']['previous'], self.experiment['questionnaire']['next']
+        self.add_widget(PalilaScreen(prev, nxt, name='questionnaire'))
+
         # Loop over the experiment parts
         for part in self.experiment['parts']:
             # Within each part, loop over the audios
-            for audio in self.experiment[part]['audios']:
+            for ia, audio in enumerate(self.experiment[part]['audios']):
                 # Gather the corresponding configuration dictionary and add the general audio path of the experiment
                 audio_config_dict = self.experiment[part][audio]
-                audio_config_dict['filepath'] = self.experiment.audio_path
 
                 # Create the screen
                 new_screen = AudioQuestionScreen(audio_config_dict, name=f'{part}-{audio}')
 
                 self.add_widget(new_screen)
+
+            # End the final questionnaire if it is present
+            prev, nxt = self.experiment[part]['questionnaire']['previous'], self.experiment[part]['questionnaire']['next']
+            self.add_widget(PalilaScreen(prev, nxt, name=f'{part}-questionnaire'))
+
+        self.add_widget(PalilaScreen('', '', name='end'))
+
+    def navigate_next(self):
+        self.current = self.current_screen.next_screen
+
+    def navigate_previous(self):
+        self.current = self.current_screen.previous_screen
 
 
 class PalilaApp(App):
@@ -66,5 +81,6 @@ class PalilaApp(App):
 
         # Create the ScreenManager and pass the experiment along
         manager = PalilaScreenManager(self.experiment)
+
         # Required return of the ScreenManager
         return manager
