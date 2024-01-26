@@ -1,9 +1,11 @@
 <AudioManager>:
-    orientation: 'vertical'
+    orientation: 'horizontal'
+    spacing: 10
+
     Button:
         id: bttn
 
-        size_hint_y: .8
+        size_hint_x: .15
 
         on_release:
             root.play()
@@ -15,38 +17,42 @@
             fit_mode: 'contain'
             source: 'GUI/assets/play.png'
 
-    ProgressBar:
-        id: progress
-        value: 0
-        max: 1
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: .85
 
-        size_hint_y: .05
+        Label:
+            id: txt
+            text: ''
+            size_hint_y: .95
+            text_size: .98 * self.size[0], self.size[1]
+            halign: 'left'
+            valign: 'bottom'
 
-    Label:
-        id: txt
-        text: ''
-        size_hint_y: .15
+        ProgressBar:
+            id: progress
+            value: 0
+            max: 1
+
+            size_hint_y: .05
 
 
-<QuestionsLayout@BoxLayout>:
+<QuestionManager>:
     spacing: 10
-    orientation: 'horizontal'
-
-    Widget:
-        canvas:
-            Color:
-                rgba: .6, .6, .6, 1
-            Rectangle:
-                pos: self.pos
-                size: self.size
+    orientation: 'vertical'
 
 
 <AudioQuestionScreen>:
-    AudioManager:
-        id: audio_manager
-        pos_hint: {'center_x': .5, 'center_y': .8}
-        size_hint: .3, .3
+    BoxLayout:
+        pos_hint: {'center_x': .5, 'y': .13}
+        size_hint: .95, .85
+        orientation: 'vertical'
+        spacing: 10
 
-    QuestionsLayout:
-        pos_hint: {'center_x': .5, 'y': .11}
-        size_hint: .95, .525
+        AudioManager:
+            id: audio_manager
+            size_hint_y: .2
+
+        QuestionManager:
+            id: question_manager
+            size_hint_y: .8

@@ -1,5 +1,4 @@
 from configobj import ConfigObj
-import warnings
 import random
 import os
 
@@ -16,6 +15,9 @@ class PalilaExperiment(ConfigObj):
         self['parts'] = [part for part in self.sections if 'part' in part]
         for part in self['parts']:
             self[part]['audios'] = [audio for audio in self[part] if 'audio' in audio]
+
+            for audio in self[part]['audios']:
+                self[part][audio]['questions'] = [question for question in self[part][audio].sections]
 
         self.verify_experiment()
         self._prepare_experiment()

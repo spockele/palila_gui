@@ -1,44 +1,30 @@
-<Screen>:
-    Image:
-        size_hint: .15, .1
-        pos_hint: {'x': .01, 'y': 0}
-        source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
-
-    Image:
-        fit_mode: 'contain'
-        size_hint: .1, .08
-        pos_hint: {'x': .89, 'y': .018}
-        source: 'GUI/assets/PALILA.png'
-
-
 <Label>:
     color: 0, 0, 0, 1
     font_name: 'Arial'
     font_size: 36
+    line_height: 1.25
 
 
 <Button>
     background_normal: 'gui/assets/background_normal.png'
     background_down: 'gui/assets/background_down.png'
 
+
 <PalilaScreen>
-    BoxLayout:
-        id: navigation
-        pos_hint: {'center_x': .5, 'y': .02}
-        size_hint: .6, .07
-        orientation: 'horizontal'
+    Button:
+        text: 'Continue'
+        pos_hint: {'center_x': .5, 'y': .015}
+        size_hint: .3, .1
+        on_release:
+            root.manager.navigate_next()
 
-        Button:
-            text: 'Back'
-            size_hint_x: .45
-            on_release:
-                root.manager.navigate_previous()
+    Image:
+        size_hint: .115, .06
+        pos_hint: {'x': .05, 'y': .02}
+        source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
 
-        Widget:
-            size_hint_x: .1
-
-        Button:
-            text: 'Continue'
-            size_hint_x: .45
-            on_release:
-                root.manager.navigate_next()
+    Image:
+        fit_mode: 'contain'
+        size_hint: .042, .06
+        pos_hint: {'x': .9, 'y': .02}
+        source: 'GUI/assets/PALILA.png'

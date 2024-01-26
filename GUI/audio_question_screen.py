@@ -5,9 +5,9 @@ from kivy.lang import Builder
 
 import threading
 import time
-import os
 
 from .screens import PalilaScreen
+from . import audio_questions
 
 
 __all__ = ['AudioQuestionScreen']
@@ -59,8 +59,10 @@ class AudioManager(BoxLayout):
         self.n_max = n_max
         self.audio = SoundLoader.load(audio_path)
         self.audio.on_stop = self.done_playing
-
-        self.ids.txt.text = f'You can play the sample {self.n_max} times'
+        if self.n_max == 1:
+            self.ids.txt.text = f'Listen to the audio sample\nYou can play the sample {self.n_max} time'
+        else:
+            self.ids.txt.text = f'Listen to the audio sample\nYou can play the sample {self.n_max} times'
 
     def play(self):
         """
@@ -90,14 +92,43 @@ class AudioManager(BoxLayout):
         # Register that no audio is playing
         self.playing = False
 
-        if self.count < self.n_max:
+        remaining = self.n_max - self.count
+        if remaining > 0:
             self.ids.bttn_image.source = 'GUI/assets/play.png'
             self.ids.bttn.background_color = [1, 1, 1, 1]
-            self.ids.txt.text = f'You can replay {self.n_max - self.count} more times.'
+            if remaining == 1:
+                self.ids.txt.text = f'You can replay {remaining} more time'
+            else:
+                self.ids.txt.text = f'You can replay {remaining} more times'
         else:
             self.ids.bttn_image.source = 'GUI/assets/done.png'
             self.ids.bttn.background_color = [.5, 1, .5, 1]
             self.ids.txt.text = ''
+
+
+class QuestionManager(BoxLayout):
+    n_max = 2
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.n_question = 0
+
+    def add_question(self, question_dict: dict):
+        if self.n_question <= self.n_max:
+            question_type = getattr(audio_questions, question_dict['type'])
+
+            self.add_widget(question_type(question_dict))
+            self.n_question += 1
+
+        else:
+            raise OverflowError('Audio contains more than 3 questions.')
+
+    def readjust(self, n_max: int = None):
+        if n_max is not None:
+            self.n_max = n_max
+
+        for ii in range(self.n_max - self.n_question):
+            self.add_widget(audio_questions.Filler())
 
 
 class AudioQuestionScreen(PalilaScreen):
@@ -109,3 +140,8 @@ class AudioQuestionScreen(PalilaScreen):
         self.config_dict = config_dict
 
         self.ids.audio_manager.initialise_audio(self.config_dict['filepath'], int(self.config_dict['max replays']))
+
+        for question in self.config_dict['questions']:
+            self.ids.question_manager.add_question(self.config_dict[question])
+
+        self.ids.question_manager.readjust()
