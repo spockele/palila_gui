@@ -80,35 +80,54 @@ class PalilaExperiment(ConfigObj):
         previous_audio = ''
         previous_name = ''
 
+        # Add the start screen to the previous property of the initial questionnaire
         self['questionnaire']['previous'] = 'start'
 
+        # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
+            # Randomise the audios in this part if so desired
             if self[part].as_bool('randomise'):
                 random.shuffle(self[part]['audios'])
 
+            # Loop over the audios
             for ia, audio in enumerate(self[part]['audios']):
+                # Define the screen name
                 current_name = f'{part}-{audio}'
+                # Define the full filepath of the audio
                 self[part][audio]['filepath'] = os.path.join(self.audio_path, self[part][audio]['filename'])
 
+                # If this is the first audio ever
                 if previous_part == '' and previous_audio == '':
+                    # Set this one as the one following the initial questionnaire
                     self['questionnaire']['next'] = current_name
+                    # Set the initial questionnaire as the previous of this audio
                     self[part][audio]['previous'] = 'questionnaire'
 
+                # If this is the first audio of a part
                 elif not ia:
+                    # Set this one as the one following the previous part questionnaire
                     self[previous_part]['questionnaire']['next'] = current_name
+                    # Set the previous part questionnaire as the previous of this audio
                     self[part][audio]['previous'] = previous_name
 
+                # In all other cases
                 else:
+                    # Define this as following the previous
                     self[part][previous_audio]['next'] = current_name
+                    # Define the previous as the previous of this audio
                     self[part][audio]['previous'] = previous_name
 
+                # Keep track of the last screen name and associated audio name
                 previous_name = current_name
                 previous_audio = audio
 
+            # After setting up all audios of a part, set up the part questionnaire
             self[part][previous_audio]['next'] = f'{part}-questionnaire'
             self[part]['questionnaire']['previous'] = previous_name
 
+            # Keep track of the last screen name and associated part
             previous_name = f'{part}-questionnaire'
             previous_part = part
 
+        # Add the end screen as the next of the last questionnaire
         self[previous_part]['questionnaire']['next'] = 'end'
