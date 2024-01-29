@@ -55,3 +55,44 @@ class MultipleChoiceQuestion(BoxLayout):
             self.current_answer = None
         else:
             self.current_answer = choice
+
+
+class NumScaleQuestion(BoxLayout):
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(**kwargs)
+
+        self.question_dict = question_dict
+        self.ids.question_text.text = question_dict['text']
+
+        if 'left note' in question_dict.keys():
+            self.ids.left_note.text = question_dict['left note']
+
+        if 'right note' in question_dict.keys():
+            self.ids.right_note.text = question_dict['right note']
+
+        self.min = int(question_dict['min'])
+        self.max = int(question_dict['max'])
+
+        n_button = self.max - self.min + 1
+        button_width = .6 / n_button
+
+        for bi, bv in enumerate(range(self.min, self.max + 1)):
+            pos_hint = {'center_x': (.2 + button_width / 2) + (bi * button_width), 'center_y': .5}
+
+            button = ChoiceButton(choice=str(bv))
+            self.ids.answer_options.add_widget(button)
+
+            button.size_hint_x = .7 * button_width
+            button.size_hint_y = .7 * 5 / n_button
+            button.pos_hint = pos_hint
+
+        self.current_answer = None
+
+    def select_choice(self, choice: ChoiceButton):
+        if self.current_answer is not None:
+            self.current_answer.deselect()
+
+        if self.current_answer == choice:
+            self.current_answer = None
+        else:
+            self.current_answer = choice
