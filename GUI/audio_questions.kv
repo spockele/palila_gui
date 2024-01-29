@@ -6,6 +6,10 @@
             pos: self.pos
             size: self.size
 
+<ChoiceButton>:
+    id: self.text
+
+
 <TextQuestion>
     Label:
         id: question_text
@@ -17,3 +21,27 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
+
+<MultipleChoiceQuestion>
+    orientation: 'vertical'
+    spacing: 10
+
+    Label:
+        size_hint_y: .4
+
+        id: question_text
+        text: ''
+
+        canvas.before:
+            Color:
+                rgba: .6, .6, .6, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    BoxLayout:
+        size_hint_y: .6
+
+        id: answer_options
+        orientation: 'horizontal'
+        spacing: 10
