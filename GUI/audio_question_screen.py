@@ -115,7 +115,7 @@ class QuestionManager(BoxLayout):
 
     def add_question(self, question_dict: dict):
         if self.n_question <= self.n_max:
-            question_type = getattr(audio_questions, question_dict['type'])
+            question_type = getattr(audio_questions, f'{question_dict["type"]}Question')
 
             self.add_widget(question_type(question_dict))
             self.n_question += 1
