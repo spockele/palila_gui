@@ -77,7 +77,7 @@ class PalilaApp(App):
         # Set the screen color to a very light grey
         Window.clearcolor = (.95, .95, .95, 1)
         # Set the screen to a fixed resolution
-        Window.size = (1600, 900)
+        Window.fullscreen = 'auto'
 
         # Create the ScreenManager and pass the experiment along
         manager = PalilaScreenManager(self.experiment)
