@@ -132,7 +132,7 @@ class QuestionManager(BoxLayout):
 
         # Throw hands if the space is full
         else:
-            raise OverflowError('Audio contains more than 3 questions.')
+            raise OverflowError(f'Audio contains more than {self.n_max} questions.')
 
     def readjust(self, filler: bool) -> None:
         """
