@@ -1,10 +1,10 @@
-<Filler>:
-    canvas.before:
-        Color:
-            rgba: .6, .6, .6, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+#<F`iller>:
+#    canvas.before:
+#        Color:
+#            rgba: .6, .6, .6, 1
+#        Rectangle:
+#            pos: self.pos
+#            size: `self.size
 
 <ChoiceButton>:
     id: self.text
@@ -17,11 +17,12 @@
 
         text_size: self.size
         halign: 'left'
-        valign: 'bottom'
+        valign: 'center'
+
 
 <MultipleChoiceQuestion>
     orientation: 'vertical'
-    spacing: 10
+    spacing: 0
 
     Label:
         size_hint_y: .4
@@ -34,15 +35,18 @@
         valign: 'bottom'
 
     BoxLayout:
+    	pos_hint: {'center_x': .5}
+    	size_hint_x: .95
         size_hint_y: .6
 
         id: answer_options
         orientation: 'horizontal'
-        spacing: 10
+        spacing: 20
+
 
 <NumScaleQuestion>
     orientation: 'vertical'
-    spacing: 10
+    spacing: 0
 
     Label:
         size_hint_y: .4
@@ -58,8 +62,6 @@
         size_hint_y: .6
 
         id: answer_options
-        orientation: 'horizontal'
-        spacing: 10
 
         Label:
             pos_hint: {'x': 0, 'center_y': .5, }

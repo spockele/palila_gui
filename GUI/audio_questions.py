@@ -74,16 +74,16 @@ class NumScaleQuestion(BoxLayout):
         self.max = int(question_dict['max'])
 
         n_button = self.max - self.min + 1
-        button_width = .6 / n_button
+        button_width = .65 / n_button
 
         for bi, bv in enumerate(range(self.min, self.max + 1)):
-            pos_hint = {'center_x': (.2 + button_width / 2) + (bi * button_width), 'center_y': .5}
+            pos_hint = {'center_x': (.175 + button_width / 2) + (bi * button_width), 'center_y': .5}
 
             button = ChoiceButton(choice=str(bv))
             self.ids.answer_options.add_widget(button)
 
-            button.size_hint_x = .7 * button_width
-            button.size_hint_y = .7 * 5 / n_button
+            button.size_hint_x = .8 * button_width
+            button.size_hint_y = .8 * button_width * 9
             button.pos_hint = pos_hint
 
         self.current_answer = None

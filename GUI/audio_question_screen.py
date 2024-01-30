@@ -121,7 +121,7 @@ class QuestionManager(BoxLayout):
         Adds a question to the allocated space.
         """
         # Check if the space is full
-        if self.n_question <= self.n_max:
+        if self.n_question < self.n_max:
             # Add the question according to the input file
             question_type = getattr(audio_questions, f'{question_dict["type"]}Question')
 
@@ -134,13 +134,14 @@ class QuestionManager(BoxLayout):
         else:
             raise OverflowError('Audio contains more than 3 questions.')
 
-    def readjust(self) -> None:
+    def readjust(self, filler: bool) -> None:
         """
         Fill the empty space to avoid weird sizing of the questions.
         """
-        # Add filler widgets in the leftover space
-        for ii in range(self.n_max - self.n_question):
-            self.add_widget(audio_questions.Filler())
+        if filler:
+            # Add filler widgets in the leftover space
+            for ii in range(self.n_max - self.n_question):
+                self.add_widget(audio_questions.Filler())
 
 
 class AudioQuestionScreen(PalilaScreen):
@@ -158,4 +159,4 @@ class AudioQuestionScreen(PalilaScreen):
         for question in self.config_dict['questions']:
             self.ids.question_manager.add_question(self.config_dict[question])
         # Readjust the question manager after adding all questions
-        self.ids.question_manager.readjust()
+        self.ids.question_manager.readjust(self.config_dict['filler'])

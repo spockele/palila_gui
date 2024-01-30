@@ -72,6 +72,9 @@ class PalilaExperiment(ConfigObj):
             if not os.path.isfile(os.path.join(self.audio_path, self[part][audio]['filename'])):
                 raise FileNotFoundError(f'Audio file {self[part][audio]["filename"]} not found for {part}: {audio}.')
 
+            if 'filler' not in self[part][audio].keys():
+                self[part][audio]['filler'] = 'yes'
+
     def _prepare_experiment(self):
         """
         Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
@@ -96,6 +99,8 @@ class PalilaExperiment(ConfigObj):
                 # Define the full filepath of the audio
                 self[part][audio]['filepath'] = os.path.join(self.audio_path, self[part][audio]['filename'])
 
+                self[part][audio]['filler'] = self[part][audio].as_bool('filler')
+
                 # If this is the first audio ever
                 if previous_part == '' and previous_audio == '':
                     # Set this one as the one following the initial questionnaire
@@ -116,6 +121,9 @@ class PalilaExperiment(ConfigObj):
                     self[part][previous_audio]['next'] = current_name
                     # Define the previous as the previous of this audio
                     self[part][audio]['previous'] = previous_name
+
+                for question in self[part][audio].sections:
+                    self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
 
                 # Keep track of the last screen name and associated audio name
                 previous_name = current_name
