@@ -95,3 +95,211 @@
                 Rectangle:
                     pos: self.pos
                     size: self.size
+
+
+<PointCompassQuestion>
+	orientation: 'vertical'
+    spacing: 0
+
+    Label:
+        size_hint_y: .2
+
+        id: question_text
+        text: ''
+
+        text_size: self.size
+        halign: 'left'
+        valign: 'bottom'
+
+    FloatLayout:
+        size_hint_y: .8
+
+        Image:
+        	source: 'GUI/assets/compass.png'
+        	size_hint_y: .5
+        	pos_hint: {'center_x': .5, 'center_y': .5}
+        	color: 1, 1, 1, .25
+
+        ChoiceButton:
+        	pos_hint: {'center_x': .5, 'center_y': .855}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'front'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: 90
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
+
+		ChoiceButton:
+        	pos_hint: {'center_x': .605, 'center_y': .5}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'right'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: 0
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
+
+		ChoiceButton:
+        	pos_hint: {'center_x': .5, 'center_y': .145}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'rear'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -90
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
+
+		ChoiceButton:
+        	pos_hint: {'center_x': .395, 'center_y': .5}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'left'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -180
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
+
+        ChoiceButton:
+        	pos_hint: {'center_x': .575, 'center_y': .75}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'front right'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: 45
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
+
+		ChoiceButton:
+        	pos_hint: {'center_x': .575, 'center_y': .25}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'rear right'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -45
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
+
+		ChoiceButton:
+        	pos_hint: {'center_x': .425, 'center_y': .25}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'rear left'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -135
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
+
+		ChoiceButton:
+        	pos_hint: {'center_x': .425, 'center_y': .75}
+        	size_hint: None, .2
+        	width: self.height
+
+        	text: 'front left'
+        	color: 0, 0, 0, 0
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -225
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+			Image:
+				source: 'GUI/assets/arrow.png'
+				size: self.parent.size
+				pos: self.parent.pos
