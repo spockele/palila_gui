@@ -12,13 +12,20 @@ class PalilaExperiment(ConfigObj):
         self.name = name
         self.audio_path = os.path.abspath(f'{name}')
 
+        # Initialise the list for question ids
+        self.question_id_list = []
+        # Create list of parts in the overall dict
         self['parts'] = [part for part in self.sections if 'part' in part]
+
         for part in self['parts']:
+            # Create a list of audios in the part dict
             self[part]['audios'] = [audio for audio in self[part] if 'audio' in audio]
 
             for audio in self[part]['audios']:
+                # Create a list of questions in the audio dict
                 self[part][audio]['questions'] = [question for question in self[part][audio].sections]
 
+        # Verify and prepare for the GUI
         self.verify_experiment()
         self._prepare_experiment()
 
@@ -122,8 +129,23 @@ class PalilaExperiment(ConfigObj):
                     # Define the previous as the previous of this audio
                     self[part][audio]['previous'] = previous_name
 
-                for question in self[part][audio].sections:
+                for question in self[part][audio]['questions']:
+                    # Remove tabs from the input file in the question text
                     self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
+
+                    # Extract the id to the overall question id list
+                    if 'id' in self[part][audio][question]:
+                        self.question_id_list.append(self[part][audio][question]['id'])
+                    # Generate a not-so-nice (but standardised) id when it's not defined explicitly
+                    else:
+                        # Extract the user input part, audio and question names from the brackets
+                        part_id = part.replace('part ', '')
+                        audio_id = audio.replace('audio ', '')
+                        question_id = question.replace('question ', '')
+                        # Put those together and add to the list
+                        qid = f'qid-{part_id}-{audio_id}-{question_id}'
+                        self.question_id_list.append(qid)
+                        self[part][audio][question]['id'] = qid
 
                 # Keep track of the last screen name and associated audio name
                 previous_name = current_name
