@@ -3,6 +3,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
+from .answer_system import PalilaAnswers
 from .audio_question_screen import *
 from .file_system import *
 from .screens import *
@@ -69,6 +70,8 @@ class PalilaApp(App):
 
         # Load the experiment from the file
         self.experiment = PalilaExperiment(experiment_name)
+
+        self.answers = PalilaAnswers(self.experiment)
 
     def build(self):
         """
