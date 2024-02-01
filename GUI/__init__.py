@@ -64,6 +64,9 @@ class PalilaScreenManager(ScreenManager):
     def set_pid(self, pid: str):
         self.answers.set_pid(pid)
 
+    def store_answer(self, key: str, value):
+        self.answers.out.loc[self.answers.pid, key] = value
+
 
 class PalilaApp(App):
     """

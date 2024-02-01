@@ -9,7 +9,7 @@ class PalilaAnswers:
         self.experiment = experiment
         self.pid_mode = self.experiment['pid']
 
-        self.answers = pd.DataFrame(columns=self.experiment.question_id_list)
+        self.out = pd.DataFrame(columns=self.experiment.question_id_list)
 
         if self.pid_mode == 'auto':
             self.pid = datetime.datetime.now().strftime('%y%m%d-%H%M')
@@ -24,7 +24,7 @@ class PalilaAnswers:
             return True
 
         elif pid == '':
-            raise False
+            return False
 
         else:
             self.pid = pid
