@@ -32,4 +32,4 @@ class WelcomeScreen(PalilaScreen):
 
     def on_leave(self, *args):
         if not self.ids.pid_entry.disabled:
-            self.manager.set_pid(self.ids.pid_entry.text)
+            pid_set = self.manager.set_pid(self.ids.pid_entry.text)

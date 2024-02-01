@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime
+import os
 
 from .file_system import PalilaExperiment
 
@@ -9,11 +10,11 @@ class PalilaAnswers:
         self.experiment = experiment
         self.pid_mode = self.experiment['pid']
 
-        self.out = pd.DataFrame(None, index=[], columns=self.experiment.question_id_list)
+        self.out = pd.DataFrame(None, index=['response'], columns=self.experiment.question_id_list)
 
         if self.pid_mode == 'auto':
             self.pid = datetime.datetime.now().strftime('%y%m%d-%H%M')
-            self.out.index = [self.pid,]
+            self.out_path = os.path.join(self.experiment.path, 'responses', f'{self.pid}.csv')
         else:
             self.pid = None
 
@@ -29,5 +30,5 @@ class PalilaAnswers:
 
         else:
             self.pid = pid
-            self.out.index = [self.pid,]
+            self.out_path = os.path.join(self.experiment.path, 'responses', f'{self.pid}.csv')
             return True

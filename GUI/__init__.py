@@ -62,10 +62,10 @@ class PalilaScreenManager(ScreenManager):
         self.current = self.current_screen.previous_screen
 
     def set_pid(self, pid: str):
-        self.answers.set_pid(pid)
+        return self.answers.set_pid(pid)
 
     def store_answer(self, key: str, value):
-        self.answers.out.loc[self.answers.pid, key] = value
+        self.answers.out.loc['response', key] = value
         print(self.answers.out)
 
 
@@ -97,3 +97,6 @@ class PalilaApp(App):
 
         # Required return of the ScreenManager
         return manager
+
+    def on_stop(self):
+        self.answers.out.to_csv(self.answers.out_path)
