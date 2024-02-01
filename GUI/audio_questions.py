@@ -25,29 +25,16 @@ class ChoiceButton(Button):
         self.parent.parent.select_choice(self)
 
 
-class TextQuestion(BoxLayout):
+class PalilaQuestion(BoxLayout):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(**kwargs)
 
         self.question_dict = question_dict
         self.ids.question_text.text = question_dict['text']
 
-
-class MultipleChoiceQuestion(BoxLayout):
-    def __init__(self, question_dict: dict, **kwargs):
-        super().__init__(**kwargs)
-
-        self.question_dict = question_dict
-        self.ids.question_text.text = question_dict['text']
-
-        self._add_choices()
         self.current_answer = None
 
-    def _add_choices(self):
-        for choice in self.question_dict['choices']:
-            self.ids.answer_options.add_widget(ChoiceButton(choice))
-
-    def select_choice(self, choice: ChoiceButton) -> None:
+    def select_choice(self, choice: ChoiceButton):
         if self.current_answer is not None:
             self.current_answer.deselect()
 
@@ -57,12 +44,27 @@ class MultipleChoiceQuestion(BoxLayout):
             self.current_answer = choice
 
 
-class NumScaleQuestion(BoxLayout):
+class TextQuestion(PalilaQuestion):
     def __init__(self, question_dict: dict, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(question_dict, **kwargs)
 
-        self.question_dict = question_dict
-        self.ids.question_text.text = question_dict['text']
+        self.ids.question_text.valign = 'center'
+
+
+class MultipleChoiceQuestion(PalilaQuestion):
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(question_dict, **kwargs)
+
+        self._add_choices()
+
+    def _add_choices(self):
+        for choice in self.question_dict['choices']:
+            self.ids.answer_options.add_widget(ChoiceButton(choice))
+
+
+class NumScaleQuestion(PalilaQuestion):
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(question_dict, **kwargs)
 
         if 'left note' in question_dict.keys():
             self.ids.left_note.text = question_dict['left note']
@@ -86,38 +88,14 @@ class NumScaleQuestion(BoxLayout):
             button.size_hint_y = .8 * button_width * 9
             button.pos_hint = pos_hint
 
-        self.current_answer = None
 
-    def select_choice(self, choice: ChoiceButton):
-        if self.current_answer is not None:
-            self.current_answer.deselect()
-
-        if self.current_answer == choice:
-            self.current_answer = None
-        else:
-            self.current_answer = choice
-
-
-class PointCompassQuestion(BoxLayout):
+class PointCompassQuestion(PalilaQuestion):
     def __init__(self, question_dict: dict, **kwargs):
-        super().__init__(**kwargs)
-
-        self.question_dict = question_dict
-        self.ids.question_text.text = question_dict['text']
-
-        self.current_answer = None
+        super().__init__(question_dict, **kwargs)
+        self.ids.question_text.size_hint_y = .2
 
     def on_size(self, *_):
         if self.parent.n_question > 1:
             raise OverflowError('PointCompass question takes 2 question slots.')
 
         self.parent.n_max = 1
-
-    def select_choice(self, choice: ChoiceButton):
-        if self.current_answer is not None:
-            self.current_answer.deselect()
-
-        if self.current_answer == choice:
-            self.current_answer = None
-        else:
-            self.current_answer = choice

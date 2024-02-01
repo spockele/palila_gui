@@ -1,4 +1,4 @@
-#<F`iller>:
+#<Filler>:
 #    canvas.before:
 #        Color:
 #            rgba: .6, .6, .6, 1
@@ -10,23 +10,12 @@
     id: self.text
 
 
-<TextQuestion>
-    Label:
-        id: question_text
-        text: ''
-
-        text_size: self.size
-        halign: 'left'
-        valign: 'center'
-
-
-<MultipleChoiceQuestion>
+<PalilaQuestion>
     orientation: 'vertical'
     spacing: 0
 
     Label:
         size_hint_y: .4
-
         id: question_text
         text: ''
 
@@ -34,6 +23,7 @@
         halign: 'left'
         valign: 'bottom'
 
+<MultipleChoiceQuestion>
     BoxLayout:
     	pos_hint: {'center_x': .5}
     	size_hint_x: .95
@@ -45,19 +35,6 @@
 
 
 <NumScaleQuestion>
-    orientation: 'vertical'
-    spacing: 0
-
-    Label:
-        size_hint_y: .4
-
-        id: question_text
-        text: ''
-
-        text_size: self.size
-        halign: 'left'
-        valign: 'bottom'
-
     FloatLayout:
         size_hint_y: .6
 
@@ -98,19 +75,6 @@
 
 
 <PointCompassQuestion>
-	orientation: 'vertical'
-    spacing: 0
-
-    Label:
-        size_hint_y: .2
-
-        id: question_text
-        text: ''
-
-        text_size: self.size
-        halign: 'left'
-        valign: 'bottom'
-
     FloatLayout:
         size_hint_y: .8
 
