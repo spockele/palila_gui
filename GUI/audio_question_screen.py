@@ -115,6 +115,7 @@ class QuestionManager(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.n_question = 0
+        self.question_dict = {}
 
     def add_question(self, question_dict: dict) -> None:
         """
@@ -124,9 +125,11 @@ class QuestionManager(BoxLayout):
         if self.n_question < self.n_max:
             # Add the question according to the input file
             question_type = getattr(audio_questions, f'{question_dict["type"]}Question')
+            question = question_type(question_dict)
 
+            self.question_dict[question_dict['id']] = question
             # Add the question to the widgets
-            self.add_widget(question_type(question_dict))
+            self.add_widget(question)
             # Update the counter
             self.n_question += 1
 
@@ -160,3 +163,8 @@ class AudioQuestionScreen(PalilaScreen):
             self.ids.question_manager.add_question(self.config_dict[question])
         # Readjust the question manager after adding all questions
         self.ids.question_manager.readjust(self.config_dict['filler'])
+
+    def on_leave(self, *args):
+        for qid, question in self.ids.question_manager.question_dict.items():
+            print(question.return_answer())
+            self.manager.store_answer(qid, question.return_answer())

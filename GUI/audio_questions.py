@@ -11,8 +11,8 @@ class Filler(Widget):
 
 
 class ChoiceButton(Button):
-    def __init__(self, choice: str = '', **kwargs):
-        super().__init__(text=choice, **kwargs)
+    def __init__(self, text: str = '', **kwargs):
+        super().__init__(text=text, **kwargs)
 
     def select(self) -> None:
         self.background_color = [.5, 1, .5, 1]
@@ -42,6 +42,13 @@ class PalilaQuestion(BoxLayout):
             self.current_answer = None
         else:
             self.current_answer = choice
+
+    def return_answer(self):
+        if self.current_answer is not None:
+            return self.current_answer.text
+
+        else:
+            return 'NA'
 
 
 class TextQuestion(PalilaQuestion):
@@ -81,7 +88,7 @@ class NumScaleQuestion(PalilaQuestion):
         for bi, bv in enumerate(range(self.min, self.max + 1)):
             pos_hint = {'center_x': (.175 + button_width / 2) + (bi * button_width), 'center_y': .5}
 
-            button = ChoiceButton(choice=str(bv))
+            button = ChoiceButton(str(bv))
             self.ids.answer_options.add_widget(button)
 
             button.size_hint_x = .8 * button_width
