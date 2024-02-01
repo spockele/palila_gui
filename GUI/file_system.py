@@ -10,7 +10,12 @@ class PalilaExperiment(ConfigObj):
     def __init__(self, name: str):
         super().__init__(os.path.abspath(f'{name}.palila'))
         self.name = name
-        self.audio_path = os.path.abspath(f'{name}')
+        self.path = os.path.abspath(f'{name}')
+        self.response_path = os.path.join(self.path, 'responses')
+
+        # Create a directory to store the experiment responses to
+        if not os.path.isdir(self.response_path):
+            os.mkdir(self.response_path)
 
         # Initialise the list for question ids
         self.question_id_list = []
@@ -76,7 +81,7 @@ class PalilaExperiment(ConfigObj):
             if 'filename' not in self[part][audio].keys():
                 raise SyntaxError(f'No filename found for {part}: {audio}.')
 
-            if not os.path.isfile(os.path.join(self.audio_path, self[part][audio]['filename'])):
+            if not os.path.isfile(os.path.join(self.path, self[part][audio]['filename'])):
                 raise FileNotFoundError(f'Audio file {self[part][audio]["filename"]} not found for {part}: {audio}.')
 
             if 'filler' not in self[part][audio].keys():
@@ -104,7 +109,7 @@ class PalilaExperiment(ConfigObj):
                 # Define the screen name
                 current_name = f'{part}-{audio}'
                 # Define the full filepath of the audio
-                self[part][audio]['filepath'] = os.path.join(self.audio_path, self[part][audio]['filename'])
+                self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
 
                 self[part][audio]['filler'] = self[part][audio].as_bool('filler')
 
