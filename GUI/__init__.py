@@ -7,7 +7,7 @@ from .answer_system import PalilaAnswers
 from .audio_question_screen import *
 from .file_system import *
 from .screens import *
-
+from .screens import *
 
 Builder.load_file('GUI/setup.kv')
 
@@ -16,12 +16,16 @@ class PalilaScreenManager(ScreenManager):
     """
     Subclass of kivy ScreenManager which handles the connection between the GUI and the input file system.
     """
-    def __init__(self, experiment: PalilaExperiment, **kwargs):
+    def __init__(self, experiment: PalilaExperiment, answers: PalilaAnswers, **kwargs):
         """
         :param experiment: An instance of PalilaExperiment containing the configuration for the ScreenManager.
         """
         super().__init__(**kwargs)
         self.experiment = experiment
+        self.answers = answers
+
+        self.add_widget(WelcomeScreen(self.experiment['pid'], self.experiment['welcome'], '', 'questionnaire',
+                                      name='welcome'))
 
         # Go about initialising the Screens based on the input file
         self._initialise_screens()
@@ -57,6 +61,9 @@ class PalilaScreenManager(ScreenManager):
     def navigate_previous(self):
         self.current = self.current_screen.previous_screen
 
+    def set_pid(self, pid: str):
+        self.answers.set_pid(pid)
+
 
 class PalilaApp(App):
     """
@@ -70,7 +77,6 @@ class PalilaApp(App):
 
         # Load the experiment from the file
         self.experiment = PalilaExperiment(experiment_name)
-
         self.answers = PalilaAnswers(self.experiment)
 
     def build(self):
@@ -83,7 +89,7 @@ class PalilaApp(App):
         Window.fullscreen = 'auto'
 
         # Create the ScreenManager and pass the experiment along
-        manager = PalilaScreenManager(self.experiment)
+        manager = PalilaScreenManager(self.experiment, self.answers)
 
         # Required return of the ScreenManager
         return manager

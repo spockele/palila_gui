@@ -28,3 +28,28 @@
         size_hint: .07, .09
         pos_hint: {'x': .88, 'y': .02}
         source: 'GUI/assets/PALILA.png'
+
+<WelcomeScreen>
+	BoxLayout:
+		pos_hint: {'center_x': .5, 'center_y': .6}
+		size_hint: .7, .2
+		orientation: 'vertical'
+
+		Label:
+			id: welcome
+			text: ''
+			size_hint_y: .66
+
+			text_size: self.size
+			halign: 'left'
+			valign: 'bottom'
+
+		TextInput:
+			id: pid_entry
+			text: ''
+			size_hint_y: .33
+
+			font_size: 48
+			text_size: self.size
+			line_height: 1.2
+			valign: 'center'

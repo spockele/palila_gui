@@ -96,7 +96,7 @@ class PalilaExperiment(ConfigObj):
         previous_name = ''
 
         # Add the start screen to the previous property of the initial questionnaire
-        self['questionnaire']['previous'] = 'start'
+        self['questionnaire']['previous'] = 'welcome'
 
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
