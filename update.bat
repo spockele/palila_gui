@@ -14,5 +14,5 @@ del update.txt
 REM Also update the repo by pulling the latest
 git pull origin main
 
-echo
+echo.
 set /p n="Update succesfull! Press any key to exit. "
