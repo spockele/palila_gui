@@ -159,6 +159,4 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-# Ignore the test input files
-gui_dev.palila
-gui_dev/
+gui_dev/responses/
