@@ -9,3 +9,6 @@ REM  4) Actually update the packages with pip
 venv\Scripts\python.exe -m pip install --upgrade -r update.txt
 REM  5) Remove the update file
 del update.txt
+
+REM Also update the repo by pulling the latest
+git pull origin main
