@@ -1,3 +1,4 @@
+@echo off
 REM Script to update all installed python packages and pip
 REM  1) Update pip and setuptools
 venv\Scripts\python.exe -m pip install --upgrade pip setuptools
@@ -12,3 +13,5 @@ del update.txt
 
 REM Also update the repo by pulling the latest
 git pull origin main
+
+set /p n=""
