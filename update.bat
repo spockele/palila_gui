@@ -2,7 +2,7 @@
 
 set /P choice="Which updates do you want to get? Python only (P), GUI only (G), both (press enter): "
 
-if (%choice%==P) or (not (defined %choice%)) (
+if (%choice%==P or %choice%==p) or (not (defined %choice%)) (
 REM Script to update all installed python packages and pip
 REM  1) Update pip and setuptools
 venv\Scripts\python.exe -m pip install --upgrade pip setuptools
@@ -16,7 +16,7 @@ REM  5) Remove the update file
 del update.txt
 )
 
-if (%choice%==G) or (not (defined %choice%)) ()
+if (%choice%==G or %choice%==g) or (not (defined %choice%)) ()
 REM Also update the repo by pulling the latest
 git pull origin main
 )
