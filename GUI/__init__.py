@@ -98,4 +98,5 @@ class PalilaApp(App):
         return manager
 
     def on_stop(self):
-        self.answers.out.to_csv(self.answers.out_path)
+        if self.experiment.name != 'gui_dev':
+            self.answers.out.to_csv(self.answers.out_path)
