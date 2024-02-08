@@ -3,6 +3,7 @@
 set /P choice="Which updates do you want to get? Python only (P), GUI only (G), both (press enter): "
 
 if %choice%==p (
+	echo.
 	REM Script to update all installed python packages and pip
 	REM  1) Update pip and setuptools
 	venv\Scripts\python.exe -m pip install --upgrade pip setuptools
@@ -17,6 +18,7 @@ if %choice%==p (
 )
 
 if %choice%==g (
+	echo.
 	REM Also update the repo by pulling the latest
 	git pull origin main
 )
