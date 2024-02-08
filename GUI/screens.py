@@ -14,7 +14,9 @@ class ContinueButton(Button):
 
     def on_release(self):
         if not self.locked:
-            self.parent.manager.navigate_next()
+            ready = self.parent.pre_navigation()
+            if ready:
+                self.parent.manager.navigate_next()
         else:
             self.parent.ids.continue_lbl.text = 'Complete this screen before continuing'
 
@@ -39,6 +41,9 @@ class PalilaScreen(Screen):
         if not superinit:
             self.ids.continue_bttn.unlock()
 
+    def pre_navigation(self):
+        return True
+
 
 class WelcomeScreen(PalilaScreen):
     def __init__(self, pid_mode: str, welcome_text: str, *args, **kwargs):
@@ -57,6 +62,14 @@ class WelcomeScreen(PalilaScreen):
 
         self.ids.welcome.text = welcome_text
 
-    def on_leave(self, *args):
+    def pre_navigation(self):
         if not self.ids.pid_entry.disabled:
-            pid_set = self.manager.set_pid(self.ids.pid_entry.text)
+            self.manager.set_pid(self.ids.pid_entry.text)
+
+        return True
+
+    def check_lock(self, input_text: str):
+        if input_text:
+            self.ids.continue_bttn.unlock()
+        else:
+            self.ids.continue_bttn.lock()

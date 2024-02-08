@@ -18,17 +18,9 @@ class PalilaAnswers:
         else:
             self.pid = None
 
-    def set_pid(self, pid: str) -> bool:
+    def set_pid(self, pid: str) -> None:
         """
         Function to set the participant ID from GUI input
         """
-        if self.pid is not None:
-            return True
-
-        elif pid == '':
-            return False
-
-        else:
-            self.pid = pid
-            self.out_path = os.path.join(self.experiment.path, 'responses', f'{self.pid}.csv')
-            return True
+        self.pid = pid
+        self.out_path = os.path.join(self.experiment.path, 'responses', f'{self.pid}.csv')
