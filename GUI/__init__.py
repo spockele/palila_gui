@@ -65,7 +65,6 @@ class PalilaScreenManager(ScreenManager):
 
     def store_answer(self, key: str, value):
         self.answers.out.loc['response', key] = value
-        print(self.answers.out)
 
 
 class PalilaApp(App):

@@ -7,26 +7,42 @@ __all__ = ['PalilaScreen', 'WelcomeScreen']
 
 
 class ContinueButton(Button):
+    """
+    Button subclass with special functionality for the continue function
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
+        # Button is always locked initially
         self.locked = True
         self.background_color = [.5, .5, .5, 1.]
 
     def on_release(self):
+        """
+        Click action button to do the navigation if the button is unlocked
+        """
         if not self.locked:
+            # Have the parent screen do its pre-navigation actions (which should return a boolean)
+            # The pre-navigation should do any messaging towards the user
             ready = self.parent.pre_navigation()
+            # When the screen is ready, navigate
             if ready:
                 self.parent.manager.navigate_next()
         else:
+            # If the button is locked, show a message for 5 seconds
             self.parent.ids.continue_lbl.text = 'Complete this screen before continuing'
             Clock.schedule_once(self.parent.reset_continue_label, 5)
 
     def unlock(self):
+        """
+        Set the button state to unlocked
+        """
         self.locked = False
         self.background_color = [1., 1., 1., 1.]
 
     def lock(self):
+        """
+        Set the button state to locked
+        """
         self.locked = True
         self.background_color = [.5, .5, .5, 1.]
 
@@ -44,13 +60,22 @@ class PalilaScreen(Screen):
             self.ids.continue_bttn.unlock()
 
     def pre_navigation(self):
+        """
+        Placeholder for any pre-navigation functionality of the Screen
+        """
         return True
 
     def reset_continue_label(self, *_):
+        """
+        Function to call for resetting the continue label
+        """
         self.ids.continue_lbl.text = ''
 
 
 class WelcomeScreen(PalilaScreen):
+    """
+    A screen to welcome participants and set the PID
+    """
     def __init__(self, pid_mode: str, welcome_text: str, *args, **kwargs):
         super().__init__(*args, superinit=True, **kwargs)
 
@@ -68,14 +93,23 @@ class WelcomeScreen(PalilaScreen):
         self.ids.welcome.text = welcome_text
 
     def pre_navigation(self):
+        """
+        Function setting the PID before navigating
+        """
         if not self.ids.pid_entry.disabled:
+            # Set the PID in case the entry box is not disabled
             self.manager.set_pid(self.ids.pid_entry.text)
 
         return True
 
     def check_lock(self, input_text: str):
+        """
+        Function to properly set the lock of the Continue Button with each text entry
+        """
         if input_text:
+            # Unlock and reset message in case text is in the box
             self.reset_continue_label()
             self.ids.continue_bttn.unlock()
         else:
+            # Lock the button in case there is no text in the box
             self.ids.continue_bttn.lock()

@@ -149,15 +149,23 @@ class QuestionManager(BoxLayout):
                 self.add_widget(audio_questions.Filler())
 
     def question_answered(self, question_id: str, answered: bool):
+        """
+        Function to set and check the state of the questions
+        """
+        # Firstly set the state of the question
         self.answered[question_id] = answered
-        check_bool = True
+        # Start a variable to store the total state
+        total_state = True
         for state in self.answered.values():
-            check_bool = check_bool and state
+            # Update the total state via the boolean "and" operator
+            total_state = total_state and state
 
-        if check_bool:
+        if total_state:
+            # If all questions are answered: unlock the continue button
             self.parent.parent.reset_continue_label()
             self.parent.parent.ids.continue_bttn.unlock()
         else:
+            # Make sure the continue button is locked if not
             self.parent.parent.ids.continue_bttn.lock()
 
 
@@ -178,7 +186,10 @@ class AudioQuestionScreen(PalilaScreen):
         # Readjust the question manager after adding all questions
         self.ids.question_manager.readjust(self.config_dict['filler'])
 
-    def on_leave(self, *args):
+    def on_pre_leave(self, *args):
+        """
+        Store the answers on leaving the screen
+        """
         for qid, question in self.ids.question_manager.question_dict.items():
-            print(question.return_answer())
+            # Store the answers, question by question
             self.manager.store_answer(qid, question.return_answer())
