@@ -7,7 +7,6 @@ from .answer_system import PalilaAnswers
 from .audio_question_screen import *
 from .file_system import *
 from .screens import *
-from .screens import *
 
 Builder.load_file('GUI/setup.kv')
 

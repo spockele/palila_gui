@@ -116,6 +116,7 @@ class QuestionManager(BoxLayout):
         super().__init__(**kwargs)
         self.n_question = 0
         self.question_dict = {}
+        self.answered = {}
 
     def add_question(self, question_dict: dict) -> None:
         """
@@ -128,6 +129,7 @@ class QuestionManager(BoxLayout):
             question = question_type(question_dict)
 
             self.question_dict[question_dict['id']] = question
+            self.answered[question_dict['id']] = False
             # Add the question to the widgets
             self.add_widget(question)
             # Update the counter
@@ -146,13 +148,24 @@ class QuestionManager(BoxLayout):
             for ii in range(self.n_max - self.n_question):
                 self.add_widget(audio_questions.Filler())
 
+    def question_answered(self, question_id: str, answered: bool):
+        self.answered[question_id] = answered
+        check_bool = True
+        for state in self.answered.values():
+            check_bool = check_bool and state
+
+        if check_bool:
+            self.parent.parent.ids.continue_bttn.unlock()
+        else:
+            self.parent.parent.ids.continue_bttn.lock()
+
 
 class AudioQuestionScreen(PalilaScreen):
     """
     Class that defines the overall audio question screens
     """
     def __init__(self, config_dict: dict, **kwargs):
-        super().__init__(config_dict['previous'], config_dict['next'], **kwargs)
+        super().__init__(config_dict['previous'], config_dict['next'], superinit=True, **kwargs)
         self.config_dict = config_dict
 
         # Initialise the audio manager with the audio defined in the input file

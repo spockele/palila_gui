@@ -30,6 +30,7 @@ class PalilaQuestion(BoxLayout):
         super().__init__(**kwargs)
 
         self.question_dict = question_dict
+        self.qid = question_dict['id']
         self.ids.question_text.text = question_dict['text']
 
         self.current_answer = None
@@ -40,8 +41,10 @@ class PalilaQuestion(BoxLayout):
 
         if self.current_answer == choice:
             self.current_answer = None
+            self.parent.question_answered(self.qid, False)
         else:
             self.current_answer = choice
+            self.parent.question_answered(self.qid, True)
 
     def return_answer(self):
         if self.current_answer is not None:
@@ -56,6 +59,9 @@ class TextQuestion(PalilaQuestion):
         super().__init__(question_dict, **kwargs)
 
         self.ids.question_text.valign = 'center'
+
+    def on_size(self, *_):
+        self.parent.question_answered(self.qid, True)
 
 
 class MultipleChoiceQuestion(PalilaQuestion):

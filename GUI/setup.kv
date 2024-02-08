@@ -11,12 +11,18 @@
 
 
 <PalilaScreen>
-    Button:
+	Label:
+		id: continue_lbl
+		text: ''
+		color: (1, .2, .2, 1)
+		pos_hint: {'center_x': .5, 'y': .115}
+		size_hint: .3, .05
+
+    ContinueButton:
+    	id: continue_bttn
         text: 'Continue'
         pos_hint: {'center_x': .5, 'y': .015}
         size_hint: .3, .1
-        on_release:
-            root.manager.navigate_next()
 
     Image:
         size_hint: .1875, .09
