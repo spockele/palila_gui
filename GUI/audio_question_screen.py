@@ -155,6 +155,7 @@ class QuestionManager(BoxLayout):
             check_bool = check_bool and state
 
         if check_bool:
+            self.parent.parent.reset_continue_label()
             self.parent.parent.ids.continue_bttn.unlock()
         else:
             self.parent.parent.ids.continue_bttn.lock()

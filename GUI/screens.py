@@ -1,5 +1,6 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
+from kivy.clock import Clock
 
 
 __all__ = ['PalilaScreen', 'WelcomeScreen']
@@ -19,6 +20,7 @@ class ContinueButton(Button):
                 self.parent.manager.navigate_next()
         else:
             self.parent.ids.continue_lbl.text = 'Complete this screen before continuing'
+            Clock.schedule_once(self.parent.reset_continue_label, 5)
 
     def unlock(self):
         self.locked = False
@@ -43,6 +45,9 @@ class PalilaScreen(Screen):
 
     def pre_navigation(self):
         return True
+
+    def reset_continue_label(self, *_):
+        self.ids.continue_lbl.text = ''
 
 
 class WelcomeScreen(PalilaScreen):
@@ -70,6 +75,7 @@ class WelcomeScreen(PalilaScreen):
 
     def check_lock(self, input_text: str):
         if input_text:
+            self.reset_continue_label()
             self.ids.continue_bttn.unlock()
         else:
             self.ids.continue_bttn.lock()
