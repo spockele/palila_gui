@@ -19,6 +19,19 @@
             size: self.size
 
 
+<Screen>
+    Image:
+        size_hint: .1, .09
+        pos_hint: {'x': .05, 'y': .02}
+        source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
+
+    Image:
+        fit_mode: 'contain'
+        size_hint: .07, .09
+        pos_hint: {'x': .88, 'y': .02}
+        source: 'GUI/assets/PALILA.png'
+
+
 <PalilaScreen>
 	Label:
 		id: continue_lbl
@@ -34,16 +47,6 @@
         pos_hint: {'center_x': .5, 'y': .015}
         size_hint: .3, .1
 
-    Image:
-        size_hint: .1, .09
-        pos_hint: {'x': .05, 'y': .02}
-        source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
-
-    Image:
-        fit_mode: 'contain'
-        size_hint: .07, .09
-        pos_hint: {'x': .88, 'y': .02}
-        source: 'GUI/assets/PALILA.png'
 
 <WelcomeScreen>
 	BoxLayout:
