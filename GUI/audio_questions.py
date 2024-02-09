@@ -1,16 +1,8 @@
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.lang import Builder
 
 Builder.load_file('GUI/audio_questions.kv')
-
-
-class Filler(Widget):
-    """
-    Empty widget to be used as a custom filler
-    """
-    pass
 
 
 class ChoiceButton(Button):

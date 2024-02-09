@@ -1,9 +1,17 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
+from kivy.uix.widget import Widget
 from kivy.clock import Clock
 
 
-__all__ = ['PalilaScreen', 'WelcomeScreen']
+__all__ = ['PalilaScreen', 'WelcomeScreen', 'Filler']
+
+
+class Filler(Widget):
+    """
+    Empty widget to be used as a custom filler
+    """
+    pass
 
 
 class ContinueButton(Button):

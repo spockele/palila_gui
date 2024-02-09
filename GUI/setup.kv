@@ -10,6 +10,15 @@
     background_down: 'gui/assets/background_down.png'
 
 
+<Filler>:
+    canvas.before:
+        Color:
+            rgba: .6, .6, .6, 1
+        Rectangle:
+            pos: self.pos
+            size: `self.size
+
+
 <PalilaScreen>
 	Label:
 		id: continue_lbl
