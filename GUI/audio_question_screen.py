@@ -6,7 +6,7 @@ from kivy.lang import Builder
 import threading
 import time
 
-from .screens import PalilaScreen
+from .screens import PalilaScreen, Filler
 from . import audio_questions
 
 
@@ -151,7 +151,7 @@ class QuestionManager(BoxLayout):
         if filler:
             # Add filler widgets in the leftover space
             for ii in range(self.n_max - self.n_question):
-                self.add_widget(audio_questions.Filler())
+                self.add_widget(Filler())
 
     def unlock(self):
         for question in self.question_dict.values():
