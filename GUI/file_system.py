@@ -99,12 +99,17 @@ class PalilaExperiment(ConfigObj):
 
         # Add the start screen to the previous property of the initial questionnaire
         self['questionnaire']['previous'] = 'welcome'
+        if 'default' in self['questionnaire'].keys():
+            self['questionnaire']['default'] = self['questionnaire'].as_bool('default')
 
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
             # Randomise the audios in this part if so desired
             if self[part].as_bool('randomise'):
                 random.shuffle(self[part]['audios'])
+
+            if 'default' in self[part]['questionnaire'].keys():
+                self[part]['questionnaire']['default'] = self[part]['questionnaire'].as_bool('default')
 
             # Loop over the audios
             for ia, audio in enumerate(self[part]['audios']):

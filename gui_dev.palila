@@ -3,11 +3,17 @@ welcome = '''Welcome to this listening experiment.'''
 #	Please enter your participant ID:'''
 
 [questionnaire]
+default = yes
+
+	[[question 1]]
+		type = FreeNum
+		text = 'You can type stuff here'
 
 [part 1]
 	randomise = no
 
 	[[questionnaire]]
+	default = yes
 
 	[[audio 0]]
 		filename = 'tone500Hz.wav'
@@ -31,8 +37,8 @@ welcome = '''Welcome to this listening experiment.'''
 
 		[[[question 2]]]
 			type = NumScale
-			text = """But really:
-				How good is this question?"""
+			text = '''But really:
+				How good is this question?'''
 
 			left note = Very bad
 			right note = Very good
@@ -47,8 +53,8 @@ welcome = '''Welcome to this listening experiment.'''
 
 		[[[question 1]]]
 			type = PointCompass
-			text = """Serious question:
-				Where is this sound coming from?"""
+			text = '''Serious question:
+				Where is this sound coming from?'''
 
     # [[audio 3]]
     #     filename = 'tone500Hz.wav'
