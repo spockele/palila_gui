@@ -4,6 +4,7 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
 from .audio_question_screen import *
+from .questionnaire import *
 from .file_system import *
 from .screens import *
 
@@ -33,7 +34,7 @@ class PalilaScreenManager(ScreenManager):
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
         prev, nxt = self.experiment['questionnaire']['previous'], self.experiment['questionnaire']['next']
-        self.add_widget(PalilaScreen(prev, nxt, name='questionnaire'))
+        self.add_widget(QuestionnaireScreen(prev, nxt, name='questionnaire'))
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
@@ -49,7 +50,7 @@ class PalilaScreenManager(ScreenManager):
 
             # End the final questionnaire if it is present
             prev, nxt = self.experiment[part]['questionnaire']['previous'], self.experiment[part]['questionnaire']['next']
-            self.add_widget(PalilaScreen(prev, nxt, name=f'{part}-questionnaire'))
+            self.add_widget(QuestionnaireScreen(prev, nxt, name=f'{part}-questionnaire'))
 
         self.add_widget(PalilaScreen('', '', name='end'))
 
