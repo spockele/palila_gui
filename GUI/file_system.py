@@ -23,11 +23,15 @@ class PalilaExperiment(ConfigObj):
         self.question_id_list = []
         # Create list of parts in the overall dict
         self['parts'] = [part for part in self.sections if 'part' in part]
-
+        # Create a list of the questionnaire questions in the questionnaire dict
+        self['questionnaire']['questions'] = [question for question in self['questionnaire'].sections
+                                              if 'question' in question]
         for part in self['parts']:
             # Create a list of audios in the part dict
             self[part]['audios'] = [audio for audio in self[part] if 'audio' in audio]
-
+            # Create a list of the questionnaire questions in the questionnaire dict
+            self[part]['questionnaire']['questions'] = [question for question in self[part]['questionnaire'].sections
+                                                        if 'question' in question]
             for audio in self[part]['audios']:
                 # Create a list of questions in the audio dict
                 self[part][audio]['questions'] = [question for question in self[part][audio].sections]
@@ -102,6 +106,9 @@ class PalilaExperiment(ConfigObj):
         if 'default' in self['questionnaire'].keys():
             self['questionnaire']['default'] = self['questionnaire'].as_bool('default')
 
+        for iq, question in enumerate(self['questionnaire']['questions']):
+            self['questionnaire'][question]['text'] = self['questionnaire'][question]['text'].replace('\t', '')
+
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
             # Randomise the audios in this part if so desired
@@ -110,6 +117,9 @@ class PalilaExperiment(ConfigObj):
 
             if 'default' in self[part]['questionnaire'].keys():
                 self[part]['questionnaire']['default'] = self[part]['questionnaire'].as_bool('default')
+
+            for iq, question in enumerate(self[part]['questionnaire']['questions']):
+                self[part]['questionnaire'][question]['text'] = self[part]['questionnaire'][question]['text'].replace('\t', '')
 
             # Loop over the audios
             for ia, audio in enumerate(self[part]['audios']):
