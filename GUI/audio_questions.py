@@ -30,7 +30,7 @@ class ChoiceButton(Button):
             self.parent.parent.select_choice(self)
 
 
-class PalilaQuestion(BoxLayout):
+class AudioQuestion(BoxLayout):
     """
     Class to manage the general functions of a question
     """
@@ -78,7 +78,7 @@ class PalilaQuestion(BoxLayout):
             button.unlock()
 
 
-class TextQuestion(PalilaQuestion):
+class TextQuestion(AudioQuestion):
     """
     Question type to just display text
     """
@@ -91,7 +91,7 @@ class TextQuestion(PalilaQuestion):
         self.parent.question_answered(self.qid, True)
 
 
-class MultipleChoiceQuestion(PalilaQuestion):
+class MultipleChoiceQuestion(AudioQuestion):
     """
     Question type for multiple choice
     """
@@ -104,7 +104,7 @@ class MultipleChoiceQuestion(PalilaQuestion):
             self.ids.answer_options.add_widget(button)
 
 
-class NumScaleQuestion(PalilaQuestion):
+class NumScaleQuestion(AudioQuestion):
     """
     Numerical scale question type
     """
@@ -137,7 +137,7 @@ class NumScaleQuestion(PalilaQuestion):
             button.pos_hint = {'center_x': (.175 + button_width / 2) + (bi * button_width), 'center_y': .5}
 
 
-class PointCompassQuestion(PalilaQuestion):
+class PointCompassQuestion(AudioQuestion):
     """
     The compass type question
     """
