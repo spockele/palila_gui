@@ -3,7 +3,6 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
-from .answer_system import PalilaAnswers
 from .audio_question_screen import *
 from .file_system import *
 from .screens import *

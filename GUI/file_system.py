@@ -5,7 +5,7 @@ import random
 import os
 
 
-__all__ = ['PalilaExperiment']
+__all__ = ['PalilaExperiment', 'PalilaAnswers']
 
 
 class PalilaExperiment(ConfigObj):
