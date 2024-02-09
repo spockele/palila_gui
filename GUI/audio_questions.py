@@ -19,16 +19,23 @@ class ChoiceButton(Button):
     """
     def __init__(self, text: str = '', **kwargs):
         super().__init__(text=text, **kwargs)
+        self.locked = True
+        self.background_color = [.5, .5, .5, 1.]
+
+    def unlock(self):
+        self.locked = False
+        self.background_color = [1., 1., 1., 1.]
 
     def select(self) -> None:
-        self.background_color = [.5, 1, .5, 1]
+        self.background_color = [.5, 1., .5, 1.]
 
     def deselect(self) -> None:
-        self.background_color = [1, 1, 1, 1]
+        self.background_color = [1., 1., 1., 1.]
 
     def on_release(self):
-        self.select()
-        self.parent.parent.select_choice(self)
+        if not self.locked:
+            self.select()
+            self.parent.parent.select_choice(self)
 
 
 class PalilaQuestion(BoxLayout):
@@ -44,6 +51,7 @@ class PalilaQuestion(BoxLayout):
         self.ids.question_text.text = question_dict['text']
         # Initialise variable to store current answer
         self.current_answer = None
+        self.options = []
 
     def select_choice(self, choice: ChoiceButton):
         """
@@ -73,6 +81,10 @@ class PalilaQuestion(BoxLayout):
         else:
             return 'NA'
 
+    def unlock(self):
+        for button in self.options:
+            button.unlock()
+
 
 class TextQuestion(PalilaQuestion):
     """
@@ -95,7 +107,9 @@ class MultipleChoiceQuestion(PalilaQuestion):
         super().__init__(question_dict, **kwargs)
         # Add the choices from the input file
         for choice in self.question_dict['choices']:
-            self.ids.answer_options.add_widget(ChoiceButton(choice))
+            button = ChoiceButton(choice)
+            self.options.append(button)
+            self.ids.answer_options.add_widget(button)
 
 
 class NumScaleQuestion(PalilaQuestion):
@@ -122,6 +136,7 @@ class NumScaleQuestion(PalilaQuestion):
         for bi, bv in enumerate(range(self.min, self.max + 1)):
             # Create the button and add it to the Layout
             button = ChoiceButton(str(bv))
+            self.options.append(button)
             self.ids.answer_options.add_widget(button)
             # Set the x and y size of the buttons (specific to 16:10 aspect ratio)
             button.size_hint_x = .8 * button_width
@@ -137,6 +152,10 @@ class PointCompassQuestion(PalilaQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
         self.ids.question_text.size_hint_y = .2
+
+        for widget_id in self.ids:
+            if 'choice' in widget_id:
+                self.options.append(self.ids[widget_id])
 
     def on_size(self, *_):
         # When triggered, set the question manager to only accept one question

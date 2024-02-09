@@ -105,6 +105,10 @@ class AudioManager(BoxLayout):
             self.ids.bttn.background_color = [.5, 1, .5, 1]
             self.ids.txt.text = ''
 
+        if self.count == 1:
+            self.parent.parent.ids.question_manager.unlock()
+            self.parent.parent.unlock_check(audio_state=True, )
+
 
 class QuestionManager(BoxLayout):
     """
@@ -117,6 +121,7 @@ class QuestionManager(BoxLayout):
         self.n_question = 0
         self.question_dict = {}
         self.answered = {}
+        self.locked = True
 
     def add_question(self, question_dict: dict) -> None:
         """
@@ -148,25 +153,27 @@ class QuestionManager(BoxLayout):
             for ii in range(self.n_max - self.n_question):
                 self.add_widget(audio_questions.Filler())
 
-    def question_answered(self, question_id: str, answered: bool):
-        """
-        Function to set and check the state of the questions
-        """
-        # Firstly set the state of the question
-        self.answered[question_id] = answered
+    def unlock(self):
+        for question in self.question_dict.values():
+            question.unlock()
+        self.locked = False
+
+    def get_state(self):
         # Start a variable to store the total state
         total_state = True
         for state in self.answered.values():
             # Update the total state via the boolean "and" operator
             total_state = total_state and state
 
-        if total_state:
-            # If all questions are answered: unlock the continue button
-            self.parent.parent.reset_continue_label()
-            self.parent.parent.ids.continue_bttn.unlock()
-        else:
-            # Make sure the continue button is locked if not
-            self.parent.parent.ids.continue_bttn.lock()
+        return total_state
+
+    def question_answered(self, question_id: str, answered: bool):
+        """
+        Function to set and check the state of the questions
+        """
+        # Firstly set the state of the question
+        self.answered[question_id] = answered
+        self.parent.parent.unlock_check(question_state=self.get_state() and not self.locked)
 
 
 class AudioQuestionScreen(PalilaScreen):
@@ -193,3 +200,22 @@ class AudioQuestionScreen(PalilaScreen):
         for qid, question in self.ids.question_manager.question_dict.items():
             # Store the answers, question by question
             self.manager.store_answer(qid, question.return_answer())
+
+    def unlock_check(self, audio_state: bool = None, question_state: bool = None):
+        """
+
+        """
+        if audio_state is None:
+            audio_state = self.ids.audio_manager.count >= 1
+
+        if question_state is None:
+            question_state = self.ids.question_manager.get_state()
+
+        if audio_state and question_state:
+            # If all questions are answered and the audio is listened to: unlock the continue button
+            self.reset_continue_label()
+            self.ids.continue_bttn.unlock()
+        else:
+            # Make sure the continue button is locked if not
+            self.ids.continue_bttn.lock()
+
