@@ -5,7 +5,7 @@ from kivy.lang import Builder
 Builder.load_file('GUI/audio_questions.kv')
 
 
-class ChoiceButton(Button):
+class AudioChoiceButton(Button):
     """
     Button with ability to store a state and interact with PalilaQuestion
     """
@@ -45,7 +45,7 @@ class AudioQuestion(BoxLayout):
         self.answer = None
         self.options = []
 
-    def select_choice(self, choice: ChoiceButton):
+    def select_choice(self, choice: AudioChoiceButton):
         """
         Sets the current answer, based on the input ChoiceButton
         """
@@ -82,7 +82,7 @@ class TextQuestion(AudioQuestion):
         self.parent.question_answered(self.qid, True)
 
 
-class MultipleChoiceQuestion(AudioQuestion):
+class AudioMCQuestion(AudioQuestion):
     """
     Question type for multiple choice
     """
@@ -90,7 +90,7 @@ class MultipleChoiceQuestion(AudioQuestion):
         super().__init__(question_dict, **kwargs)
         # Add the choices from the input file
         for choice in self.question_dict['choices']:
-            button = ChoiceButton(choice)
+            button = AudioChoiceButton(choice)
             self.options.append(button)
             self.ids.answer_options.add_widget(button)
 
@@ -118,7 +118,7 @@ class NumScaleQuestion(AudioQuestion):
         # Add buttons at integer intervals
         for bi, bv in enumerate(range(self.min, self.max + 1)):
             # Create the button and add it to the Layout
-            button = ChoiceButton(str(bv))
+            button = AudioChoiceButton(str(bv))
             self.options.append(button)
             self.ids.answer_options.add_widget(button)
             # Set the x and y size of the buttons (specific to 16:10 aspect ratio)

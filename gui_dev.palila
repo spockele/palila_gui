@@ -25,7 +25,7 @@ default = yes
 		max replays = 5
 
 		[[[question 1]]]
-			type = MultipleChoice
+			type = AudioMC
 			text = '''I have to check:
 				Is this a question?'''
 
