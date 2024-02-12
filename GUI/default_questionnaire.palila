@@ -14,7 +14,8 @@ default = yes
 [question education]
 	id = 'education'
 	type = Spinner
-	text = 'Highest completed level of school/education: '
+	text = '''Highest completed level
+		of school/education: '''
 	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
 
 [question employment]
@@ -22,3 +23,44 @@ default = yes
 	type = Spinner
 	text = 'Current employment status: '
 	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work or unable to work'
+
+[question wt_attitude]
+	id = 'wt_attitude'
+	type = QuestionnaireMC
+	text = '''How would you rate your attitude
+		towards wind turbines?'''
+	choices = 'Very Positive', 'Positive', 'Neutral', 'Negative', 'Very Negative'
+
+[question wt_exposure]
+	id = 'wt_exposure'
+	type = QuestionnaireMC
+	text = '''Have you ever heard a wind turbine
+		before this experiment?'''
+	choices = 'Yes', 'No'
+
+[question ear_disease]
+	id = 'ear_disease'
+	type = QuestionnaireMC
+	text = '''Are you currently suffering
+		from any ear disease?'''
+	choices = 'Yes', 'No'
+
+[question accident]
+	id = 'accident'
+	type = QuestionnaireMC
+	text = '''Have you had an accident that
+		affected your hearing?'''
+	choices = 'Yes', 'No'
+
+[question hearing_aid]
+	id = 'hearing_aid'
+	type = QuestionnaireMC
+	text = 'Do you use a hearing aid?'
+	choices = 'Yes', 'No'
+
+[question how_found]
+	id = 'how_found'
+	type = Spinner
+	text = '''How did you find out about
+	 	this experiment?'''
+	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Other'
