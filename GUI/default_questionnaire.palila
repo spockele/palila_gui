@@ -7,4 +7,9 @@ default = yes
 [question 2]
 	type = Spinner
 	text = 'Testing: '
-	options = 'a', 'b', 'c'
+	choices = 'a', 'b', 'c'
+
+[question 3]
+	type = QuestionnaireMC
+	text = 'Gender identity:'
+	choices = 'Man', 'Woman', 'Other', 'Prefer not to say'
