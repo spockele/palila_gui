@@ -3,7 +3,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 from kivy.lang import Builder
 
-from .screens import PalilaScreen, Filler
+from .screens import PalilaScreen, Filler, BackButton
 
 
 __all__ = ['QuestionnaireScreen']
@@ -124,7 +124,7 @@ class QuestionnaireScreen(PalilaScreen):
 
     """
     def __init__(self, questionnaire_dict: dict, manager: ScreenManager, extra_screen_start: int = 0, **kwargs):
-        super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], superinit=True, **kwargs)
+        super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], superinit=False, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
 
@@ -132,6 +132,15 @@ class QuestionnaireScreen(PalilaScreen):
         if 'screen_count' not in self.questionnaire_dict.keys():
             self.questionnaire_dict['screen_count'] = 1
         else:
+            self.ids.continue_bttn.size_hint_x -= .065
+            self.ids.continue_bttn.pos_hint = {'x': .415, 'y': .015}
+
+            back_button = BackButton()
+            back_button.pos_hint = {'x': .35, 'y': .015}
+            back_button.size_hint = (.0625, .1)
+            back_button.on_release = manager.navigate_previous
+            self.add_widget(back_button)
+
             self.questionnaire_dict['screen_count'] += 1
 
         self.questions = []
@@ -158,7 +167,7 @@ class QuestionnaireScreen(PalilaScreen):
             extra_screen.next_screen = self.next_screen
             self.next_screen = extra_screen.name
 
-        self.unlock_check()
+        # self.unlock_check()
 
     def get_state(self):
         # Start a variable to store the total state

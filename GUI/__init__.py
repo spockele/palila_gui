@@ -54,9 +54,11 @@ class PalilaScreenManager(ScreenManager):
         self.add_widget(PalilaScreen('', '', name='end'))
 
     def navigate_next(self):
+        self.transition.direction = 'left'
         self.current = self.current_screen.next_screen
 
     def navigate_previous(self):
+        self.transition.direction = 'right'
         self.current = self.current_screen.previous_screen
 
     def set_pid(self, pid: str):

@@ -14,6 +14,10 @@ class Filler(Widget):
     pass
 
 
+class BackButton(Button):
+    pass
+
+
 class ContinueButton(Button):
     """
     Button subclass with special functionality for the continue function
