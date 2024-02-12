@@ -1,4 +1,5 @@
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.button import Button
 from kivy.lang import Builder
 
 from .screens import PalilaScreen, Filler
@@ -18,6 +19,9 @@ class QuestionnaireQuestion(FloatLayout):
 
         if len(question_dict['text'].split('\n')) > 1:
             self.ids.question_text.font_size = 36
+
+    def check_input(self):
+        self.parent.parent.unlock_check()
 
 
 class FreeNumQuestion(QuestionnaireQuestion):
@@ -41,22 +45,78 @@ class FreeNumQuestion(QuestionnaireQuestion):
             self.answer = None
             self.ids.question_input_overlay.text = 'Enter a number here.'
 
-        self.parent.parent.unlock_check()
+        super().check_input()
 
 
 class SpinnerQuestion(QuestionnaireQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
-        self.ids.question_input.values = question_dict['options']
+        self.ids.question_input.values = question_dict['choices']
 
     def check_input(self):
         if self.ids.question_input.text:
             self.answer = self.ids.question_input.text
-
         else:
             self.answer = None
 
-        self.parent.parent.unlock_check()
+        super().check_input()
+
+
+class QuestionnaireChoiceButton(Button):
+    """
+    Button with ability to store a state and interact with QuestionnaireQuestion
+    """
+    def __init__(self, text: str = '', **kwargs):
+        super().__init__(text=text, **kwargs)
+
+    def select(self) -> None:
+        self.background_color = [.5, 1., .5, 1.]
+
+    def deselect(self) -> None:
+        self.background_color = [1., 1., 1., 1.]
+
+    def on_release(self):
+        self.select()
+        self.parent.parent.select_choice(self)
+
+
+class QuestionnaireMCQuestion(QuestionnaireQuestion):
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(question_dict, **kwargs)
+        self.choice = None
+
+        # Add every choice as a button and track their word lengths
+        choices = []
+        lengths = []
+        for choice in question_dict['choices']:
+            choice_button = QuestionnaireChoiceButton(choice)
+            choices.append(choice_button)
+            self.ids.question_input.add_widget(choice_button)
+            lengths.append(len(choice))
+        # Resize proportional to the root of the word lengths
+        total = sum(lengths)
+        for ii, length in enumerate(lengths):
+            choices[ii].size_hint_x = length ** .5 / total
+
+
+    def select_choice(self, choice: QuestionnaireChoiceButton):
+        """
+        Sets the current answer, based on the input ChoiceButton
+        """
+        if self.choice is not None:
+            # Deselect the current answer if there is one
+            self.choice.deselect()
+
+        if self.choice == choice:
+            # Remove the current answer if the same button is pressed
+            self.choice = None
+            self.answer = None
+        else:
+            # Set the current answer to the entered button otherwhise
+            self.choice = choice
+            self.answer = choice.text
+
+        super().check_input()
 
 
 class QuestionnaireScreen(PalilaScreen):
@@ -102,3 +162,4 @@ class QuestionnaireScreen(PalilaScreen):
         for question_instance in self.questions:
             if question_instance.answer is not None:
                 self.manager.store_answer(question_instance.qid, question_instance.answer)
+                # print(question_instance.qid, question_instance.answer)
