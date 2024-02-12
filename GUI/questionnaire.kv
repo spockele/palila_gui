@@ -27,9 +27,8 @@
 		size_hint: .6, 1.
 		pos_hint: {'x': .4, 'y': 0.}
 
-
 		on_text:
-			self.parent.check_answer(self.text)
+			self.parent.check_input()
 
 	Label:
 		id: question_input_overlay
