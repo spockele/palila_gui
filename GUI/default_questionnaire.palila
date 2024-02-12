@@ -1,15 +1,24 @@
 default = yes
 
-[question 1]
+[question age]
+	id = 'age'
 	type = FreeNum
 	text = 'Age: '
 
-[question 2]
-	type = Spinner
-	text = 'Testing: '
-	choices = 'a', 'b', 'c'
-
-[question 3]
+[question gender]
+	id = 'gender'
 	type = QuestionnaireMC
 	text = 'Gender identity:'
 	choices = 'Man', 'Woman', 'Other', 'Prefer not to say'
+
+[question education]
+	id = 'education'
+	type = Spinner
+	text = 'Highest completed level of school/education: '
+	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
+
+[question employment]
+	id = 'employment'
+	type = Spinner
+	text = 'Current employment status: '
+	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work or unable to work'
