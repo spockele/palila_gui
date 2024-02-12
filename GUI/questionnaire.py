@@ -98,7 +98,6 @@ class QuestionnaireMCQuestion(QuestionnaireQuestion):
         for ii, length in enumerate(lengths):
             choices[ii].size_hint_x = length ** .5 / total
 
-
     def select_choice(self, choice: QuestionnaireChoiceButton):
         """
         Sets the current answer, based on the input ChoiceButton
@@ -138,6 +137,8 @@ class QuestionnaireScreen(PalilaScreen):
 
         for ii in range(7 - len(self.questions)):
             self.ids.questions.add_widget(Filler())
+
+        self.unlock_check()
 
     def get_state(self):
         # Start a variable to store the total state
