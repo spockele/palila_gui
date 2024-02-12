@@ -4,29 +4,67 @@
 
 		text: ''
 
-		size_hint: .4, 1.
+		size_hint: .39, 1.
 		pos_hint: {'x': 0., 'y': 0.}
 		text_size: .95 * self.size[0], self.size[1]
-		font_size: 36
 
 		halign: 'right'
 		valign: 'center'
 
 		canvas.before:
 			Color:
-				rgba: .6, .6, .6, 1.
+				rgba: .6, .6, .6, .1
 			Rectangle:
 				size: self.size
 				pos: self.pos
 
 
-#<FreeNumQuestion>
+<FreeNumQuestion>
+	TextInput:
+		id: question_input
+		text: ''
+
+		size_hint: .6, 1.
+		pos_hint: {'x': .4, 'y': 0.}
+
+
+		on_text:
+			self.parent.check_answer(self.text)
+
+	Label:
+		id: question_input_overlay
+		text: 'Enter a number here'
+		color: (.7, .7, .7, 1.)
+
+		size_hint: .6, 1.
+		pos_hint: {'x': .4, 'y': 0.}
+		text_size: .98 * self.size[0], self.size[1]
+		halign: 'left'
+		valign: 'center'
 
 
 <QuestionnaireScreen>
+	Label:
+		id: top_text
+		text: 'Please fill out this questionnaire: '
+
+        pos_hint: {'center_x': .5, 'y': .875}
+        size_hint: 1., .1
+
+        text_size: .95 * self.size[0], self.size[1]
+        valign: 'center'
+
+        canvas.before:
+        	Color:
+        		rgba: (0 / 255, 166 / 255, 214 / 255, .7)
+
+        	Rectangle:
+        		size: self.size
+        		pos: self.pos
+
 	BoxLayout:
 		id: questions
         pos_hint: {'center_x': .5, 'y': .16}
-        size_hint: .95, .8
+        size_hint: .95, .7
         orientation: 'vertical'
         spacing: 20
