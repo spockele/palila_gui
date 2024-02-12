@@ -5,15 +5,11 @@ welcome = '''Welcome to this listening experiment.'''
 [questionnaire]
 default = yes
 
-	[[question 1]]
-		type = FreeNum
-		text = '''You can type numbers here: '''
 
 [part 1]
 	randomise = no
 
 	[[questionnaire]]
-	default = yes
 
 	[[audio 0]]
 		filename = 'tone500Hz.wav'
@@ -46,6 +42,7 @@ default = yes
 			min = 0
 			max = 4
 
+
 	[[audio 2]]
 		filename = 'tone500Hz.wav'
 		max replays = 1
@@ -55,7 +52,3 @@ default = yes
 			type = PointCompass
 			text = '''Serious question:
 				Where is this sound coming from?'''
-
-    # [[audio 3]]
-    #     filename = 'tone500Hz.wav'
-    #     max replays = 3
