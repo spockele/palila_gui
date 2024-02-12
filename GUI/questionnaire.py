@@ -1,7 +1,7 @@
 from kivy.uix.floatlayout import FloatLayout
 from kivy.lang import Builder
 
-from .screens import PalilaScreen
+from .screens import PalilaScreen, Filler
 
 
 __all__ = ['QuestionnaireScreen']
@@ -13,6 +13,7 @@ class QuestionnaireQuestion(FloatLayout):
         super().__init__(**kwargs)
         self.question_dict = question_dict
         self.ids.question_text.text = question_dict['text']
+        self.qid = question_dict['id']
 
         if len(question_dict['text'].split('\n')) > 1:
             self.ids.question_text.font_size = 36
@@ -47,13 +48,11 @@ class QuestionnaireScreen(PalilaScreen):
 
     """
     def __init__(self, questionnaire_dict: dict, **kwargs):
-        super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], **kwargs)
+        super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], superinit=True, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
-        if self.questionnaire_dict['default']:
-            self._default_setup()
-
         self.questions = []
+
         for question in self.questionnaire_dict['questions']:
             question_type = globals()[f'{questionnaire_dict[question]["type"]}Question']
             question_instance = question_type(questionnaire_dict[question])
@@ -62,7 +61,4 @@ class QuestionnaireScreen(PalilaScreen):
             self.questions.append(question_instance)
 
         for ii in range(7 - len(self.questions)):
-            self.ids.questions.add_widget(QuestionnaireQuestion({'text': ''}))
-
-    def _default_setup(self):
-        pass
+            self.ids.questions.add_widget(Filler())
