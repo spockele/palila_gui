@@ -44,6 +44,21 @@ class FreeNumQuestion(QuestionnaireQuestion):
         self.parent.parent.unlock_check()
 
 
+class SpinnerQuestion(QuestionnaireQuestion):
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(question_dict, **kwargs)
+        self.ids.question_input.values = question_dict['options']
+
+    def check_input(self):
+        if self.ids.question_input.text:
+            self.answer = self.ids.question_input.text
+
+        else:
+            self.answer = None
+
+        self.parent.parent.unlock_check()
+
+
 class QuestionnaireScreen(PalilaScreen):
     """
 
@@ -82,3 +97,8 @@ class QuestionnaireScreen(PalilaScreen):
         else:
             # Make sure the continue button is locked if not
             self.ids.continue_bttn.lock()
+
+    def on_pre_leave(self, *args):
+        for question_instance in self.questions:
+            if question_instance.answer is not None:
+                self.manager.store_answer(question_instance.qid, question_instance.answer)

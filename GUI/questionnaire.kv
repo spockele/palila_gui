@@ -41,6 +41,33 @@
 		halign: 'left'
 		valign: 'center'
 
+<SpinnerQuestion>
+	Spinner:
+		id: question_input
+		text: ''
+		values: []
+
+		size_hint: .6, 1.
+		pos_hint: {'x': .4, 'y': 0.}
+
+		on_text:
+			self.parent.check_input()
+
+	Image:
+		source: 'GUI/assets/arrow.png'
+		size_hint: None, .5
+		pos_hint: {'right': 1., 'y': .25}
+
+		canvas.before:
+			PushMatrix
+			Rotate:
+				axis: 0, 0, 1
+				angle: -90
+				origin: self.center
+
+		canvas.after:
+			PopMatrix
+
 
 <QuestionnaireScreen>
 	Label:

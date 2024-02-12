@@ -3,3 +3,8 @@ default = yes
 [question 1]
 	type = FreeNum
 	text = 'Age: '
+
+[question 2]
+	type = Spinner
+	text = 'Testing: '
+	options = 'a', 'b', 'c'
