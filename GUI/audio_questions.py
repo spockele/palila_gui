@@ -7,7 +7,7 @@ Builder.load_file('GUI/audio_questions.kv')
 
 class AudioChoiceButton(Button):
     """
-    Button with ability to store a state and interact with PalilaQuestion
+    Button with ability to store a state and interact with AudioQuestion
     """
     def __init__(self, text: str = '', **kwargs):
         super().__init__(text=text, **kwargs)
