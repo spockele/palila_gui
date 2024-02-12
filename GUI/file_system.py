@@ -101,28 +101,39 @@ class PalilaExperiment(ConfigObj):
         previous_audio = ''
         previous_name = ''
 
-        self['questionnaire']['previous'] = 'welcome'
+        # Check for the default keyword in the main questionnaire
         if 'default' in self['questionnaire'].keys():
+            # Convert the default setting to a boolean
             self['questionnaire']['default'] = self['questionnaire'].as_bool('default')
         else:
+            # Or assign False if it is not defined
             self['questionnaire']['default'] = False
-
+        # Get the default questionnaire setup if that is set
         if self['questionnaire']['default']:
-            pass
-        else:
-            for iq, question in enumerate(self['questionnaire']['questions']):
-                self['questionnaire'][question]['text'] = self['questionnaire'][question]['text'].replace('\t', '')
-                # Extract the id to the overall question id list
-                if 'id' in self['questionnaire'][question]:
-                    self.question_id_list.append(self['questionnaire'][question]['id'])
-                # Generate a not-so-nice (but standardised) id when it's not defined explicitly
-                else:
-                    # Extract the user input part, audio and question names from the brackets
-                    question_id = question.replace('question ', '')
-                    # Put those together and add to the list
-                    qid = f'main-questionnaire-{question_id.zfill(2)}'
-                    self.question_id_list.append(qid)
-                    self['questionnaire'][question]['id'] = qid
+            self['questionnaire'].clear()
+            # Load the configfile
+            self['questionnaire'].update(ConfigObj(os.path.join(os.path.abspath('GUI'), 'default_questionnaire.palila')))
+            # Create a list of the questionnaire questions in the questionnaire dict
+            self['questionnaire']['questions'] = [question for question in self['questionnaire'].sections
+                                                  if 'question' in question]
+        print(self['questionnaire'])
+        # Setup the questionnaire dictionary
+        self['questionnaire']['previous'] = 'welcome'
+        for iq, question in enumerate(self['questionnaire']['questions']):
+            # Replace tab characters in the question text
+            self['questionnaire'][question]['text'] = self['questionnaire'][question]['text'].replace('\t', '')
+
+            # Extract the id to the overall question id list
+            if 'id' in self['questionnaire'][question]:
+                self.question_id_list.append(self['questionnaire'][question]['id'])
+            # Generate a not-so-nice (but standardised) id when it's not defined explicitly
+            else:
+                # Extract the user input part, audio and question names from the brackets
+                question_id = question.replace('question ', '')
+                # Put those together and add to the list
+                qid = f'main-questionnaire-{question_id.zfill(2)}'
+                self.question_id_list.append(qid)
+                self['questionnaire'][question]['id'] = qid
 
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
@@ -202,8 +213,6 @@ class PalilaExperiment(ConfigObj):
 
         # Add the end screen as the next of the last questionnaire
         self[previous_part]['questionnaire']['next'] = 'end'
-
-
 
 
 class PalilaAnswers:

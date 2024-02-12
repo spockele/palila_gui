@@ -1,0 +1,5 @@
+default = yes
+
+[question 1]
+	type = FreeNum
+	text = 'Age: '
