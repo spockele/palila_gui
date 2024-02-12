@@ -199,7 +199,8 @@ class AudioQuestionScreen(PalilaScreen):
         """
         for qid, question in self.ids.question_manager.question_dict.items():
             # Store the answers, question by question
-            self.manager.store_answer(qid, question.return_answer())
+            if question.answer is not None:
+                self.manager.store_answer(qid, question.answer)
 
     def unlock_check(self, audio_state: bool = None, question_state: bool = None):
         """

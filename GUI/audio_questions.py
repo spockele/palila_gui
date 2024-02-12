@@ -42,36 +42,27 @@ class AudioQuestion(BoxLayout):
         self.qid = question_dict['id']
         self.ids.question_text.text = question_dict['text']
         # Initialise variable to store current answer
-        self.current_answer = None
+        self.answer = None
         self.options = []
 
     def select_choice(self, choice: ChoiceButton):
         """
         Sets the current answer, based on the input ChoiceButton
         """
-        if self.current_answer is not None:
+        if self.answer is not None:
             # Deselect the current answer if there is one
-            self.current_answer.deselect()
+            self.answer.deselect()
 
-        if self.current_answer == choice:
+        if self.answer == choice:
             # Remove the current answer if the same button is pressed
-            self.current_answer = None
+            self.answer = None
             # Don't forget to communicate with the QuestionManager
             self.parent.question_answered(self.qid, False)
         else:
             # Set the current answer to the entered button otherwhise
-            self.current_answer = choice
+            self.answer = choice
             # Don't forget to communicate with the QuestionManager
             self.parent.question_answered(self.qid, True)
-
-    def return_answer(self):
-        """
-        Return the text of the current answer button on request
-        """
-        if self.current_answer is not None:
-            return self.current_answer.text
-        else:
-            return 'NA'
 
     def unlock(self):
         for button in self.options:
