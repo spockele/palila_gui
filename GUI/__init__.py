@@ -25,6 +25,7 @@ class PalilaScreenManager(ScreenManager):
 
         self.add_widget(WelcomeScreen(self.experiment['pid'], self.experiment['welcome'], '', 'questionnaire',
                                       name='welcome'))
+        self.current = 'welcome'
 
         # Go about initialising the Screens based on the input file
         self._initialise_screens()
@@ -33,7 +34,7 @@ class PalilaScreenManager(ScreenManager):
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
-        self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], name='questionnaire'))
+        self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self, name='questionnaire'))
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
@@ -48,7 +49,7 @@ class PalilaScreenManager(ScreenManager):
                 self.add_widget(new_screen)
 
             # Add the final questionnaire if it is present
-            self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'], name=f'{part}-questionnaire'))
+            self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'], self, name=f'{part}-questionnaire'))
 
         self.add_widget(PalilaScreen('', '', name='end'))
 

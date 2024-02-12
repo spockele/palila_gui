@@ -1,3 +1,4 @@
+from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 from kivy.lang import Builder
@@ -122,21 +123,40 @@ class QuestionnaireScreen(PalilaScreen):
     """
 
     """
-    def __init__(self, questionnaire_dict: dict, **kwargs):
+    def __init__(self, questionnaire_dict: dict, manager: ScreenManager, extra_screen_start: int = 0, **kwargs):
         super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], superinit=True, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
+
+        # Keep a count of the number of screens in this questionnaire
+        if 'screen_count' not in self.questionnaire_dict.keys():
+            self.questionnaire_dict['screen_count'] = 1
+        else:
+            self.questionnaire_dict['screen_count'] += 1
+
         self.questions = []
 
-        for question in self.questionnaire_dict['questions']:
-            question_type = globals()[f'{questionnaire_dict[question]["type"]}Question']
-            question_instance: QuestionnaireQuestion = question_type(questionnaire_dict[question])
+        for qi in range(7):
+            if qi >= len(self.questionnaire_dict['questions'][extra_screen_start:]):
+                self.ids.questions.add_widget(Filler())
 
-            self.ids.questions.add_widget(question_instance)
-            self.questions.append(question_instance)
+            else:
+                question = self.questionnaire_dict['questions'][extra_screen_start:][qi]
+                question_type = globals()[f'{questionnaire_dict[question]["type"]}Question']
+                question_instance: QuestionnaireQuestion = question_type(questionnaire_dict[question])
 
-        for ii in range(7 - len(self.questions)):
-            self.ids.questions.add_widget(Filler())
+                self.ids.questions.add_widget(question_instance)
+                self.questions.append(question_instance)
+
+        if len(self.questionnaire_dict['questions'][extra_screen_start:]) > 7:
+            extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager,
+                                               extra_screen_start=extra_screen_start + 7,
+                                               name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
+            manager.add_widget(extra_screen)
+
+            extra_screen.previous_screen = self.name
+            extra_screen.next_screen = self.next_screen
+            self.next_screen = extra_screen.name
 
         self.unlock_check()
 
