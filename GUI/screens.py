@@ -25,38 +25,33 @@ class ContinueButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Button is always locked initially
-        self.locked = False
-        self.background_color = [.5, .5, .5, 1.]
+        self.disabled = True
 
     def on_release(self):
         """
         Click action button to do the navigation if the button is unlocked
         """
-        if not self.locked:
-            # Have the parent screen do its pre-navigation actions (which should return a boolean)
-            # The pre-navigation should do any messaging towards the user
-            ready = self.parent.pre_navigation()
-            # When the screen is ready, navigate
-            if ready:
-                self.parent.manager.navigate_next()
-        else:
-            # If the button is locked, show a message for 5 seconds
-            self.parent.ids.continue_lbl.text = 'Complete this screen before continuing'
-            Clock.schedule_once(self.parent.reset_continue_label, 5)
+
+        # Have the parent screen do its pre-navigation actions (which should return a boolean)
+        # The pre-navigation should do any messaging towards the user
+        ready = self.parent.pre_navigation()
+        # When the screen is ready, navigate
+        if ready:
+            self.parent.manager.navigate_next()
 
     def unlock(self):
         """
         Set the button state to unlocked
         """
-        self.locked = False
-        self.background_color = [1., 1., 1., 1.]
+        self.disabled = False
+        self.parent.ids.continue_lbl.text = ''
 
     def lock(self):
         """
         Set the button state to locked
         """
-        self.locked = False
-        self.background_color = [.5, .5, .5, 1.]
+        self.disabled = True
+        self.parent.ids.continue_lbl.text = 'Complete this screen before continuing'
 
 
 class PalilaScreen(Screen):

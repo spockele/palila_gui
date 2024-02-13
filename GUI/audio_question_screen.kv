@@ -4,22 +4,23 @@
 
     Button:
         id: bttn
-
-        size_hint_x: .15
+		pos: self.pos[0], self.parent.y + self.parent.size[1] * .02
+		size_hint_y: .95
+        size_hint_x: .2
 
         on_release:
             root.play()
 
         Image:
             id: bttn_image
-            pos: self.parent.x + self.parent.size[0] * .1, self.parent.y + self.parent.size[1] * .1
-            size: self.parent.size[0] * .8, self.parent.size[1] * .8
+            pos: self.parent.x + self.parent.size[0] * .05, self.parent.y + self.parent.size[1] * .05
+            size: self.parent.size[0] * .9, self.parent.size[1] * .9
             fit_mode: 'contain'
             source: 'GUI/assets/play.png'
 
     BoxLayout:
         orientation: 'vertical'
-        size_hint_x: .85
+        size_hint_x: .8
 
         Label:
             id: txt
@@ -53,6 +54,7 @@
         AudioManager:
             id: audio_manager
             size_hint_y: .2
+            size_hint_x: .7
 
         QuestionManager:
             id: question_manager

@@ -9,15 +9,13 @@ class AudioChoiceButton(Button):
     """
     Button with ability to store a state and interact with AudioQuestion
     """
-    def __init__(self, text: str = '', **kwargs):
+    def __init__(self, text: str = '', font_size: int = 72, **kwargs):
         super().__init__(text=text, **kwargs)
-        self.locked = True
-        self.font_size = 72
-        self.background_color = [.5, .5, .5, 1.]
+        self.disabled = True
+        self.font_size = font_size
 
     def unlock(self):
-        self.locked = False
-        self.background_color = [1., 1., 1., 1.]
+        self.disabled = False
 
     def select(self) -> None:
         self.background_color = [.5, 1., .5, 1.]
@@ -26,9 +24,8 @@ class AudioChoiceButton(Button):
         self.background_color = [1., 1., 1., 1.]
 
     def on_release(self):
-        if not self.locked:
-            self.select()
-            self.parent.parent.select_choice(self)
+        self.select()
+        self.parent.parent.select_choice(self)
 
 
 class AudioQuestion(BoxLayout):
@@ -93,7 +90,7 @@ class AudioMCQuestion(AudioQuestion):
         super().__init__(question_dict, **kwargs)
         # Add the choices from the input file
         for choice in self.question_dict['choices']:
-            button = AudioChoiceButton(choice)
+            button = AudioChoiceButton(choice, font_size=48)
             self.options.append(button)
             self.ids.answer_options.add_widget(button)
 
