@@ -1,4 +1,5 @@
 from kivy.uix.screenmanager import ScreenManager
+from kivy.properties import Property
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 from kivy.lang import Builder
@@ -18,9 +19,6 @@ class QuestionnaireQuestion(FloatLayout):
         self.qid = question_dict['id']
         self.answer = None
 
-        if len(question_dict['text'].split('\n')) > 1:
-            self.ids.question_text.font_size = 36
-
     def check_input(self):
         self.parent.parent.unlock_check()
 
@@ -38,12 +36,17 @@ class FreeNumQuestion(QuestionnaireQuestion):
                 self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
 
             except ValueError:
-                self.ids.question_input.text = str(self.answer) if self.answer is not None else ''
-                self.ids.question_input_overlay.color = (1., .2, .2, 1.)
-                self.ids.question_input.background_color = (1., .7, .7, 1.)
+                if self.answer is not None:
+                    self.ids.question_input.text = str(self.answer)
+                else:
+                    self.ids.question_input.text = ''
+                    self.ids.question_input_overlay.color = (1., .2, .2, 1.)
+                    self.ids.question_input.background_color = (1., .7, .7, 1.)
 
         else:
             self.answer = None
+            self.ids.question_input.background_color = (1., 1., 1., 1.)
+            self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
             self.ids.question_input_overlay.text = 'Enter a number here.'
 
         super().check_input()
@@ -234,4 +237,3 @@ class QuestionnaireScreen(PalilaScreen):
         for question_instance in self.questions:
             if question_instance.answer is not None:
                 self.manager.store_answer(question_instance.qid, question_instance.answer)
-                # print(question_instance.qid, question_instance.answer)

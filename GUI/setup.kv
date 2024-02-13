@@ -1,7 +1,7 @@
 <Label>
     color: 0, 0, 0, 1
-    font_name: 'Arial'
-    font_size: 48
+    font_name: 'verdana'
+    font_size: 32
     line_height: 1.2
 
 
@@ -11,7 +11,7 @@
 
 
 <TextInput>
-	font_size: 48
+	font_size: 36
 	line_height: 1.2
 	padding: [.01 * self.width, self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 6., 0.]
 
@@ -62,13 +62,13 @@
 		id: continue_lbl
 		text: ''
 		color: (1, .2, .2, 1)
-		font_size: 36
 		pos_hint: {'center_x': .5, 'y': .115}
 		size_hint: .3, .05
 
     ContinueButton:
     	id: continue_bttn
         text: 'Continue'
+        font_size: 48
         pos_hint: {'center_x': .5, 'y': .015}
         size_hint: .3, .1
 

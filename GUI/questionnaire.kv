@@ -41,6 +41,17 @@
 		halign: 'left'
 		valign: 'center'
 
+<Dropdown>
+	auto_width: False
+	width: '900dp'
+
+<SpinnerOption>
+	text_size: .95 * self.size[0], self.size[1]
+	halign: 'left'
+	valign: 'center'
+
+	height: '70dp'
+
 <SpinnerQuestion>
 	Spinner:
 		id: question_input
@@ -88,6 +99,7 @@
         size_hint: 1., .1
 
         text_size: .95 * self.size[0], self.size[1]
+        font_size: 48
         valign: 'center'
 
         canvas.before:
