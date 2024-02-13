@@ -4,19 +4,19 @@
 
 		text: ''
 
-		size_hint: .39, 1.
+		size_hint: .44, 1.
 		pos_hint: {'x': 0., 'y': 0.}
 		text_size: .95 * self.size[0], self.size[1]
 
 		halign: 'right'
 		valign: 'center'
 
-		canvas.before:
-			Color:
-				rgba: .6, .6, .6, .1
-			Rectangle:
-				size: self.size
-				pos: self.pos
+#		canvas.before:
+#			Color:
+#				rgba: .6, .6, .6, .1
+#			Rectangle:
+#				size: self.size
+#				pos: self.pos
 
 
 <FreeNumQuestion>
@@ -24,8 +24,8 @@
 		id: question_input
 		text: ''
 
-		size_hint: .6, 1.
-		pos_hint: {'x': .4, 'y': 0.}
+		size_hint: .55, 1.
+		pos_hint: {'right': 1, 'y': 0.}
 
 		on_text:
 			self.parent.check_input()
@@ -35,9 +35,9 @@
 		text: 'Enter a number here'
 		color: (.7, .7, .7, 1.)
 
-		size_hint: .6, 1.
-		pos_hint: {'x': .4, 'y': 0.}
-		text_size: .98 * self.size[0], self.size[1]
+		size_hint: .55, 1.
+		pos_hint: {'right': 1, 'y': 0.}
+		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
 		valign: 'center'
 
@@ -58,8 +58,11 @@
 		text: ''
 		values: []
 
-		size_hint: .6, 1.
-		pos_hint: {'x': .4, 'y': 0.}
+		size_hint: .55, 1.
+		pos_hint: {'right': 1, 'y': 0.}
+		text_size: .96 * self.size[0], self.size[1]
+		halign: 'left'
+		valign: 'center'
 
 		on_text:
 			self.parent.check_input()
@@ -86,8 +89,8 @@
 
 		orientation: 'horizontal'
 		spacing: 10
-		size_hint: .6, 1.
-		pos_hint: {'x': .4, 'y': 0.}
+		size_hint: .55, 1.
+		pos_hint: {'right': 1, 'y': 0.}
 
 
 <QuestionnaireScreen>

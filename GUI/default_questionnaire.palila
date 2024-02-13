@@ -17,8 +17,7 @@ manual_split = yes
 [question education]
 	id = 'education'
 	type = Spinner
-	text = '''Highest completed level
-		of school/education: '''
+	text = 'Highest completed level of school/education: '
 	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
 	manual_screen = 1
 
@@ -71,7 +70,6 @@ manual_split = yes
 [question how_found]
 	id = 'how_found'
 	type = Spinner
-	text = '''How did you find out about
-	 	this experiment?'''
+	text = 'How did you find out about this experiment?'
 	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Other'
 	manual_screen = 1

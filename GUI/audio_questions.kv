@@ -63,9 +63,10 @@
             canvas.after:
                 Color:
                     rgba: .6, .6, .6, 1
-                Rectangle:
+                RoundedRectangle:
                     pos: self.pos
                     size: self.size
+                    radius: [self.size[1] / 2.5]
 
 
 <PointCompassQuestion>
@@ -86,6 +87,7 @@
 			id: choice_f
         	text: 'front'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix
@@ -110,6 +112,7 @@
 			id: choice_r
         	text: 'right'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix
@@ -134,6 +137,7 @@
 			id: choice_re
         	text: 'rear'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix
@@ -158,6 +162,7 @@
 			id: choice_l
         	text: 'left'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix
@@ -182,6 +187,7 @@
 			id: choice_fr
         	text: 'front right'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix
@@ -206,6 +212,7 @@
 			id: choice_rr
         	text: 'rear right'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix
@@ -230,6 +237,7 @@
 			id: choice_rl
         	text: 'rear left'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix
@@ -254,6 +262,7 @@
 			id: choice_fl
         	text: 'front left'
         	color: 0, 0, 0, 0
+        	disabled_color: 0, 0, 0, 0
 
 			canvas.before:
 				PushMatrix

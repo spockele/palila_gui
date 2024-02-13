@@ -26,15 +26,13 @@ default = yes
 
 		[[[question 1]]]
 			type = AudioMC
-			text = '''I have to check:
-				Is this a question?'''
+			text = 'Is this a question?'
 
 			choices = yes, no, maybe, n/a, lol
 
 		[[[question 2]]]
 			type = NumScale
-			text = '''But really:
-				How good is this question?'''
+			text = 'How good is this question?'
 
 			left note = Very bad
 			right note = Very good
