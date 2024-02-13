@@ -11,11 +11,7 @@ class AudioChoiceButton(Button):
     """
     def __init__(self, text: str = '', font_size: int = 72, **kwargs):
         super().__init__(text=text, **kwargs)
-        self.disabled = True
         self.font_size = font_size
-
-    def unlock(self):
-        self.disabled = False
 
     def select(self) -> None:
         self.background_color = [.5, 1., .5, 1.]
@@ -34,7 +30,7 @@ class AudioQuestion(BoxLayout):
     """
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(**kwargs)
-
+        self.disabled = True
         # Store the input information
         self.question_dict = question_dict
         self.qid = question_dict['id']
@@ -65,8 +61,7 @@ class AudioQuestion(BoxLayout):
             self.parent.question_answered(self.qid, True)
 
     def unlock(self):
-        for button in self.options:
-            button.unlock()
+        self.disabled = False
 
 
 class TextQuestion(AudioQuestion):
