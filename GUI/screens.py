@@ -25,7 +25,7 @@ class ContinueButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Button is always locked initially
-        self.locked = True
+        self.locked = False
         self.background_color = [.5, .5, .5, 1.]
 
     def on_release(self):
@@ -55,7 +55,7 @@ class ContinueButton(Button):
         """
         Set the button state to locked
         """
-        self.locked = True
+        self.locked = False
         self.background_color = [.5, .5, .5, 1.]
 
 

@@ -12,6 +12,7 @@ class AudioChoiceButton(Button):
     def __init__(self, text: str = '', **kwargs):
         super().__init__(text=text, **kwargs)
         self.locked = True
+        self.font_size = 72
         self.background_color = [.5, .5, .5, 1.]
 
     def unlock(self):
@@ -41,6 +42,8 @@ class AudioQuestion(BoxLayout):
         self.question_dict = question_dict
         self.qid = question_dict['id']
         self.ids.question_text.text = question_dict['text']
+        if '\n' in question_dict['text']:
+            self.ids.question_text.font_size = 42
         # Initialise variable to store current answer
         self.answer = None
         self.options = []
@@ -122,8 +125,8 @@ class NumScaleQuestion(AudioQuestion):
             self.options.append(button)
             self.ids.answer_options.add_widget(button)
             # Set the x and y size of the buttons (specific to 16:10 aspect ratio)
-            button.size_hint_x = .8 * button_width
-            button.size_hint_y = .8 * button_width * 9
+            button.size_hint_x = .65 * (button_width ** .95)
+            button.size_hint_y = .65 * (button_width ** .95) * 9
             # Determine their positions
             button.pos_hint = {'center_x': (.175 + button_width / 2) + (bi * button_width), 'center_y': .5}
 
