@@ -52,6 +52,17 @@ class PalilaExperiment(ConfigObj):
         if 'questionnaire' not in self.sections:
             raise SyntaxError(f'Experiment does not contain a startup questionnaire.')
 
+        # Check if the questionnaire is split properly
+        if 'manual_split' in self['questionnaire']:
+            self['questionnaire']['manual_split'] = self['questionnaire'].as_bool('manual_split')
+            if self['questionnaire']['manual_split']:
+                for question in self['questionnaire'].sections:
+                    if 'manual_screen' not in self['questionnaire'][question]:
+                        raise SyntaxError('If manual split is set, each questionnaire question requires '
+                                          'an assigned screen.')
+        else:
+            self['questionnaire']['manual_split'] = False
+
         # Check for the presence of experiment parts
         if not self['parts']:
             raise SyntaxError(f'Experiment does not contain any parts.')
@@ -78,6 +89,17 @@ class PalilaExperiment(ConfigObj):
         # Check for the presence of a questionnaire.
         if 'questionnaire' not in self[part].sections:
             raise SyntaxError(f'Experiment {part} does not contain a final questionnaire.')
+
+        # Check if the questionnaire is split properly
+        if 'manual_split' in self[part]['questionnaire']:
+            self[part]['questionnaire']['manual_split'] = self[part]['questionnaire'].as_bool('manual_split')
+            if self[part]['questionnaire']['manual_split']:
+                for question in self[part]['questionnaire'].sections:
+                    if 'manual_screen' not in self[part]['questionnaire'][question]:
+                        raise SyntaxError('If manual split is set, each questionnaire question requires '
+                                          'an assigned screen.')
+        else:
+            self[part]['questionnaire']['manual_split'] = False
 
         # Check the individual audios in the experiment part
         for audio in self[part]['audios']:
@@ -116,7 +138,7 @@ class PalilaExperiment(ConfigObj):
             # Create a list of the questionnaire questions in the questionnaire dict
             self['questionnaire']['questions'] = [question for question in self['questionnaire'].sections
                                                   if 'question' in question]
-        print(self['questionnaire'])
+
         # Setup the questionnaire dictionary
         self['questionnaire']['previous'] = 'welcome'
         for iq, question in enumerate(self['questionnaire']['questions']):

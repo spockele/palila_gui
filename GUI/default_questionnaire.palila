@@ -1,15 +1,18 @@
 default = yes
+manual_split = yes
 
 [question age]
 	id = 'age'
 	type = FreeNum
 	text = 'Age: '
+	manual_screen = 1
 
 [question gender]
 	id = 'gender'
 	type = QuestionnaireMC
 	text = 'Gender identity:'
 	choices = 'Man', 'Woman', 'Other', 'Prefer not to say'
+	manual_screen = 1
 
 [question education]
 	id = 'education'
@@ -17,19 +20,22 @@ default = yes
 	text = '''Highest completed level
 		of school/education: '''
 	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
+	manual_screen = 1
 
 [question employment]
 	id = 'employment'
 	type = Spinner
 	text = 'Current employment status: '
 	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work or unable to work'
+	manual_screen = 1
 
 [question wt_attitude]
 	id = 'wt_attitude'
 	type = QuestionnaireMC
 	text = '''How would you rate your attitude
 		towards wind turbines?'''
-	choices = 'Very Positive', 'Positive', 'Neutral', 'Negative', 'Very Negative'
+	choices = ' ++ ', ' + ', ' 0 ', ' - ', ' -- '
+	manual_screen = 2
 
 [question wt_exposure]
 	id = 'wt_exposure'
@@ -37,6 +43,7 @@ default = yes
 	text = '''Have you ever heard a wind turbine
 		before this experiment?'''
 	choices = 'Yes', 'No'
+	manual_screen = 2
 
 [question ear_disease]
 	id = 'ear_disease'
@@ -44,6 +51,7 @@ default = yes
 	text = '''Are you currently suffering
 		from any ear disease?'''
 	choices = 'Yes', 'No'
+	manual_screen = 2
 
 [question accident]
 	id = 'accident'
@@ -51,12 +59,14 @@ default = yes
 	text = '''Have you had an accident that
 		affected your hearing?'''
 	choices = 'Yes', 'No'
+	manual_screen = 2
 
 [question hearing_aid]
 	id = 'hearing_aid'
 	type = QuestionnaireMC
 	text = 'Do you use a hearing aid?'
 	choices = 'Yes', 'No'
+	manual_screen = 2
 
 [question how_found]
 	id = 'how_found'
@@ -64,3 +74,4 @@ default = yes
 	text = '''How did you find out about
 	 	this experiment?'''
 	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Other'
+	manual_screen = 1

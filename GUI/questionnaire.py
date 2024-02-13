@@ -130,29 +130,73 @@ class QuestionnaireScreen(PalilaScreen):
 
         # Keep a count of the number of screens in this questionnaire
         if 'screen_count' not in self.questionnaire_dict.keys():
+            # In case it's the first screen, set the count to 1
             self.questionnaire_dict['screen_count'] = 1
         else:
+            # In case it's not the first screen, set up the back button
+            # First readjust the continue button
             self.ids.continue_bttn.size_hint_x -= .065
             self.ids.continue_bttn.pos_hint = {'x': .415, 'y': .015}
-
+            # Create the back button and pass all information to it
             back_button = BackButton()
             back_button.pos_hint = {'x': .35, 'y': .015}
             back_button.size_hint = (.0625, .1)
             back_button.on_release = manager.navigate_previous
+            # Add the button to the screen
             self.add_widget(back_button)
-
+            # Up the screen count
             self.questionnaire_dict['screen_count'] += 1
 
+        # Start a list to store all questions in this screen
         self.questions = []
+        # Split the questions according to the input file
+        if self.questionnaire_dict['manual_split']:
+            self._manual_splitting(manager, extra_screen_start)
+        else:
+            self._automatic_splitting(manager, extra_screen_start)
 
+        self.unlock_check()
+
+    def _manual_splitting(self, manager, extra_screen_start):
+        to_add = [question for question in self.questionnaire_dict['questions']
+                  if int(self.questionnaire_dict[question]['manual_screen']) == self.questionnaire_dict['screen_count']]
+        remaining = [question for question in self.questionnaire_dict['questions']
+                     if int(self.questionnaire_dict[question]['manual_screen']) > self.questionnaire_dict['screen_count']]
+
+        if len(to_add) > 7:
+            raise SyntaxError(f'In case of manual splitting, ensure no more than 7 questions per questionnaire screen.'
+                              f'Currently attempting to add {len(to_add)}.')
+
+        for qi in range(7):
+            if qi >= len(to_add):
+                self.ids.questions.add_widget(Filler())
+            else:
+                question = to_add[qi]
+                question_type = globals()[f'{self.questionnaire_dict[question]["type"]}Question']
+                question_instance: QuestionnaireQuestion = question_type(self.questionnaire_dict[question])
+
+                self.ids.questions.add_widget(question_instance)
+                self.questions.append(question_instance)
+
+        if remaining:
+            extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager,
+                                               extra_screen_start=extra_screen_start + 7,
+                                               name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
+            manager.add_widget(extra_screen)
+
+            extra_screen.previous_screen = self.name
+            extra_screen.next_screen = self.next_screen
+            self.next_screen = extra_screen.name
+
+    def _automatic_splitting(self, manager, extra_screen_start):
         for qi in range(7):
             if qi >= len(self.questionnaire_dict['questions'][extra_screen_start:]):
                 self.ids.questions.add_widget(Filler())
 
             else:
                 question = self.questionnaire_dict['questions'][extra_screen_start:][qi]
-                question_type = globals()[f'{questionnaire_dict[question]["type"]}Question']
-                question_instance: QuestionnaireQuestion = question_type(questionnaire_dict[question])
+                question_type = globals()[f'{self.questionnaire_dict[question]["type"]}Question']
+                question_instance: QuestionnaireQuestion = question_type(self.questionnaire_dict[question])
 
                 self.ids.questions.add_widget(question_instance)
                 self.questions.append(question_instance)
@@ -166,8 +210,6 @@ class QuestionnaireScreen(PalilaScreen):
             extra_screen.previous_screen = self.name
             extra_screen.next_screen = self.next_screen
             self.next_screen = extra_screen.name
-
-        # self.unlock_check()
 
     def get_state(self):
         # Start a variable to store the total state
