@@ -1,10 +1,11 @@
 from kivy.uix.screenmanager import ScreenManager
-from kivy.properties import Property
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.lang import Builder
 
 from .screens import PalilaScreen, Filler, BackButton
+from .numpad_bubble import NumPadBubble
 
 
 __all__ = ['QuestionnaireScreen']
@@ -23,9 +24,18 @@ class QuestionnaireQuestion(FloatLayout):
         self.parent.parent.unlock_check()
 
 
+class FreeNumTextInput(TextInput):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def on_focus(self, instance, focus):
+        self.parent.numpad(instance, focus)
+
+
 class FreeNumQuestion(QuestionnaireQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
+        self.bubble = None
 
     def check_input(self):
         if self.ids.question_input.text:
@@ -50,6 +60,14 @@ class FreeNumQuestion(QuestionnaireQuestion):
             self.ids.question_input_overlay.text = 'Enter a number here.'
 
         super().check_input()
+
+    def numpad(self, instance, focus):
+        if focus:
+            if self.bubble is None:
+                self.bubble = NumPadBubble(instance)
+
+            if self.bubble.parent is None:
+                self.parent.parent.add_widget(self.bubble)
 
 
 class SpinnerQuestion(QuestionnaireQuestion):
@@ -85,6 +103,9 @@ class QuestionnaireChoiceButton(Button):
 
 
 class QuestionnaireMCQuestion(QuestionnaireQuestion):
+    """
+
+    """
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
         self.choice = None

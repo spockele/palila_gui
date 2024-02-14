@@ -13,12 +13,14 @@
 
 
 <FreeNumQuestion>
-	TextInput:
+	FreeNumTextInput:
 		id: question_input
 		text: ''
 
 		size_hint: .55, 1.
 		pos_hint: {'right': 1, 'y': 0.}
+
+		multiline: False
 
 		on_text:
 			self.parent.check_input()

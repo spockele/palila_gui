@@ -4,7 +4,7 @@ from kivy.uix.widget import Widget
 from kivy.clock import Clock
 
 
-__all__ = ['PalilaScreen', 'WelcomeScreen', 'Filler']
+__all__ = ['PalilaScreen', 'WelcomeScreen', 'Filler', 'BackButton']
 
 
 class Filler(Widget):
