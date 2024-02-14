@@ -11,15 +11,14 @@ class NumPadBubble(Bubble):
     def __init__(self, coupled_widget: Widget, **kwargs):
         super().__init__(**kwargs)
         self.coupled_widget = coupled_widget
-
-    def on_touch_up(self, touch):
-        if not (self.collide_point(*touch.pos) or self.coupled_widget.collide_point(*touch.pos)):
-            self.parent.remove_widget(self)
-        super().on_touch_up(touch)
+        self.active = False
 
     def on_touch_down(self, touch):
-        if self.collide_point(*touch.pos) or self.coupled_widget.collide_point(*touch.pos):
+        if self.collide_point(*touch.pos):
             FocusBehavior.ignored_touch.append(touch)
+        else:
+            self.parent.remove_widget(self)
+            
         super().on_touch_down(touch)
 
     def add_text(self, value: str):

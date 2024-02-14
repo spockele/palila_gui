@@ -30,8 +30,14 @@ class FreeNumTextInput(TextInput):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def on_focus(self, instance, focus):
-        self.parent.numpad(instance, focus)
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            self.parent.numpad(self)
+        
+        else:
+            self.parent.bubble.active = False
+            
+        super().on_touch_down(touch)
 
 
 class FreeNumQuestion(QuestionnaireQuestion):
@@ -63,13 +69,15 @@ class FreeNumQuestion(QuestionnaireQuestion):
 
         super().check_input()
 
-    def numpad(self, instance, focus):
-        if focus:
-            if self.bubble is None:
-                self.bubble = NumPadBubble(instance)
-
-            if self.bubble.parent is None:
-                self.parent.parent.add_widget(self.bubble)
+    def numpad(self, instance):
+        if self.bubble is None:
+            self.bubble = NumPadBubble(instance)
+            
+        if not self.bubble.active:
+            self.parent.parent.add_widget(self.bubble)
+            self.bubble.active = True
+        else:
+            self.bubble.active = False
 
 
 class SpinnerQuestion(QuestionnaireQuestion):
