@@ -1,3 +1,4 @@
+from kivy.uix.behaviors.focus import FocusBehavior
 from kivy.uix.widget import Widget
 from kivy.uix.bubble import Bubble
 from kivy.lang import Builder
@@ -14,10 +15,12 @@ class NumPadBubble(Bubble):
     def on_touch_up(self, touch):
         if not (self.collide_point(*touch.pos) or self.coupled_widget.collide_point(*touch.pos)):
             self.parent.remove_widget(self)
-            self.coupled_widget.focus = False
+        super().on_touch_up(touch)
 
-        else:
-            self.coupled_widget.focus = True
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos) or self.coupled_widget.collide_point(*touch.pos):
+            FocusBehavior.ignored_touch.append(touch)
+        super().on_touch_down(touch)
 
     def add_text(self, value: str):
         self.coupled_widget.text += value
