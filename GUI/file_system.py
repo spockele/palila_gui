@@ -149,9 +149,12 @@ class PalilaExperiment(ConfigObj):
 
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
+            if 'intro' not in self[part].sections:
+                self[part]['intro'] = {'text': f'You have reached part {ip + 1} of the experiment.\n'
+                                               f'Press "Continue" below to resume the experiment.'}
             # Set up the intro screen
             self[part]['intro']['previous'] = previous_name
-            # And set the intro as the last added screen
+            # And set the intro as the current added screen
             current_audio = 'intro'
             current_name = f'{part}-intro'
             # In case this is the first part, set the intro as the next of the questionnaire
@@ -161,6 +164,7 @@ class PalilaExperiment(ConfigObj):
             else:
                 self[previous_part][previous_audio]['next'] = current_name
 
+            # And set the intro as the previously added screen
             previous_name = current_name
             previous_audio = current_audio
 
