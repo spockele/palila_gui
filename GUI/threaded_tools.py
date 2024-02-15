@@ -4,6 +4,9 @@ import time
 from kivy.uix.progressbar import ProgressBar
 
 
+__all__ = ['ProgressBarThread', ]
+
+
 class ProgressBarThread(threading.Thread):
     """
     Thread subclass to manage the ProgressBar that times audio

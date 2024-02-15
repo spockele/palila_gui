@@ -39,7 +39,7 @@ class PalilaScreenManager(ScreenManager):
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
-            self.add_widget(PartIntroScreen(self.experiment[part]['intro']['text'],
+            self.add_widget(PartIntroScreen(self.experiment[part]['intro']['text'], 5.,
                                             self.experiment[part]['intro']['previous'],
                                             self.experiment[part]['intro']['next'],
                                             name=f'{part}-intro'))

@@ -1,6 +1,9 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
+from kivy.clock import Clock
+
+from .threaded_tools import ProgressBarThread
 
 
 __all__ = ['PalilaScreen', 'WelcomeScreen', 'PartIntroScreen', 'Filler', 'BackButton']
@@ -30,6 +33,9 @@ class ContinueButton(Button):
         self.disabled = True
 
     def set_arrow(self):
+        """
+
+        """
         self.text = ''
         self.ids.continue_bttn_image.source = 'GUI/assets/arrow.png'
         self.ids.continue_bttn_image.opacity = 1.
@@ -45,14 +51,14 @@ class ContinueButton(Button):
         if ready:
             self.parent.manager.navigate_next()
 
-    def unlock(self):
+    def unlock(self, *_):
         """
         Set the button state to unlocked
         """
         self.disabled = False
         self.parent.ids.continue_lbl.text = ''
 
-    def lock(self):
+    def lock(self, *_):
         """
         Set the button state to locked
         """
@@ -129,7 +135,16 @@ class WelcomeScreen(PalilaScreen):
 
 
 class PartIntroScreen(PalilaScreen):
-    def __init__(self, intro_text: str, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, intro_text: str, timer_time: float, *args, **kwargs):
+        super().__init__(*args, lock=True, **kwargs)
 
         self.ids.intro_text.text = intro_text
+
+        self.ids.timer.max = timer_time
+        self.timing_thread = ProgressBarThread(self.ids.timer)
+
+        self.ids.continue_lbl.text = ''
+
+    def on_enter(self, *_):
+        self.timing_thread.start()
+        Clock.schedule_once(self.ids.continue_bttn.unlock, self.ids.timer.max)
