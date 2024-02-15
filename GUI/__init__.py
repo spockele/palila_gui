@@ -59,17 +59,29 @@ class PalilaScreenManager(ScreenManager):
         self.add_widget(PalilaScreen('', '', name='end'))
 
     def navigate_next(self):
+        """
+
+        """
         self.transition.direction = 'left'
         self.current = self.current_screen.next_screen
 
     def navigate_previous(self):
+        """
+
+        """
         self.transition.direction = 'right'
         self.current = self.current_screen.previous_screen
 
     def set_pid(self, pid: str):
+        """
+
+        """
         return self.answers.set_pid(pid)
 
     def store_answer(self, key: str, value):
+        """
+
+        """
         self.answers.out.loc['response', key] = value
 
 
@@ -103,5 +115,8 @@ class PalilaApp(App):
         return manager
 
     def on_stop(self):
+        """
+
+        """
         if self.experiment.name != 'gui_dev':
             self.answers.out.to_csv(self.answers.out_path)

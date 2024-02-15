@@ -13,7 +13,13 @@ Builder.load_file('GUI/questionnaire.kv')
 
 
 class QuestionnaireQuestion(FloatLayout):
+    """
+
+    """
     def __init__(self, question_dict: dict, **kwargs):
+        """
+
+        """
         super().__init__(**kwargs)
         self.question_dict = question_dict
         self.ids.question_text.text = question_dict['text']
@@ -23,14 +29,23 @@ class QuestionnaireQuestion(FloatLayout):
         self.answer = None
 
     def check_input(self):
+        """
+
+        """
         self.parent.parent.unlock_check()
 
 
 class FreeNumTextInput(TextInput):
+    """
+
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def on_touch_down(self, touch):
+        """
+
+        """
         if self.collide_point(*touch.pos):
             self.parent.trigger_numpad(self)
 
@@ -38,11 +53,20 @@ class FreeNumTextInput(TextInput):
 
 
 class FreeNumQuestion(QuestionnaireQuestion):
+    """
+
+    """
     def __init__(self, question_dict: dict, **kwargs):
+        """
+
+        """
         super().__init__(question_dict, **kwargs)
         self.numpad = NumPadBubble()
 
     def check_input(self):
+        """
+
+        """
         if self.ids.question_input.text:
             try:
                 self.answer = int(self.ids.question_input.text)
@@ -67,6 +91,9 @@ class FreeNumQuestion(QuestionnaireQuestion):
         super().check_input()
 
     def trigger_numpad(self, called_with):
+        """
+
+        """
         if self.numpad.parent is None:
             self.parent.parent.add_widget(self.numpad)
             self.numpad.coupled_widget = called_with
@@ -76,11 +103,20 @@ class FreeNumQuestion(QuestionnaireQuestion):
 
 
 class SpinnerQuestion(QuestionnaireQuestion):
+    """
+
+    """
     def __init__(self, question_dict: dict, **kwargs):
+        """
+
+        """
         super().__init__(question_dict, **kwargs)
         self.ids.question_input.values = question_dict['choices']
 
     def check_input(self):
+        """
+
+        """
         if self.ids.question_input.text:
             self.answer = self.ids.question_input.text
         else:
@@ -94,15 +130,27 @@ class QuestionnaireChoiceButton(Button):
     Button with ability to store a state and interact with QuestionnaireQuestion
     """
     def __init__(self, text: str = '', **kwargs):
+        """
+
+        """
         super().__init__(text=text, **kwargs)
 
     def select(self) -> None:
+        """
+
+        """
         self.background_color = [.5, 1., .5, 1.]
 
     def deselect(self) -> None:
+        """
+
+        """
         self.background_color = [1., 1., 1., 1.]
 
     def on_release(self):
+        """
+
+        """
         self.select()
         self.parent.parent.select_choice(self)
 
@@ -112,6 +160,9 @@ class QuestionnaireMCQuestion(QuestionnaireQuestion):
 
     """
     def __init__(self, question_dict: dict, **kwargs):
+        """
+
+        """
         super().__init__(question_dict, **kwargs)
         self.choice = None
 
@@ -190,6 +241,9 @@ class QuestionnaireScreen(PalilaScreen):
         self.unlock_check()
 
     def _manual_splitting(self, manager, extra_screen_start):
+        """
+
+        """
         to_add = [question for question in self.questionnaire_dict['questions']
                   if int(self.questionnaire_dict[question]['manual_screen']) == self.questionnaire_dict['screen_count']]
         remaining = [question for question in self.questionnaire_dict['questions']
@@ -214,6 +268,9 @@ class QuestionnaireScreen(PalilaScreen):
             self._add_extra_screen(manager, extra_screen_start)
 
     def _automatic_splitting(self, manager, extra_screen_start):
+        """
+
+        """
         for qi in range(7):
             if qi >= len(self.questionnaire_dict['questions'][extra_screen_start:]):
                 self.ids.questions.add_widget(Filler())
@@ -230,6 +287,9 @@ class QuestionnaireScreen(PalilaScreen):
             self._add_extra_screen(manager, extra_screen_start)
 
     def _add_extra_screen(self, manager, extra_screen_start):
+        """
+
+        """
         if self.all_screens is None:
             self.all_screens = [self, ]
 
@@ -247,6 +307,9 @@ class QuestionnaireScreen(PalilaScreen):
         self.state_override = True
 
     def get_state(self):
+        """
+
+        """
         # Start a variable to store the total state
         total_state = True
         if self.all_screens is None:
@@ -264,6 +327,9 @@ class QuestionnaireScreen(PalilaScreen):
         return total_state or self.state_override
 
     def unlock_check(self):
+        """
+
+        """
         if self.get_state():
             # If all questions are answered: unlock the continue button
             self.reset_continue_label()
@@ -273,10 +339,16 @@ class QuestionnaireScreen(PalilaScreen):
             self.ids.continue_bttn.lock()
 
     def on_pre_leave(self, *_):
+        """
+
+        """
         for question_instance in self.questions:
             if question_instance.answer is not None:
                 self.manager.store_answer(question_instance.qid, question_instance.answer)
 
     def on_pre_enter(self, *_):
+        """
+
+        """
         self.unlock_check()
         super().on_pre_enter(*_)

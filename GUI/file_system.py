@@ -9,7 +9,13 @@ __all__ = ['PalilaExperiment', 'PalilaAnswers']
 
 
 class PalilaExperiment(ConfigObj):
+    """
+
+    """
     def __init__(self, name: str):
+        """
+
+        """
         super().__init__(os.path.abspath(f'{name}.palila'))
         self.name = name
         self.path = os.path.abspath(f'{name}')
@@ -26,12 +32,12 @@ class PalilaExperiment(ConfigObj):
         # Create a list of the questionnaire questions in the questionnaire dict
         self['questionnaire']['questions'] = [question for question in self['questionnaire'].sections
                                               if 'question' in question]
-        for part in self['parts']:
-            # Create a list of audios in the part dict
-            self[part]['audios'] = [audio for audio in self[part] if 'audio' in audio]
 
+        # Create a list of audios in each part dict
+        for part in self['parts']:
+            self[part]['audios'] = [audio for audio in self[part] if 'audio' in audio]
+            # Create a list of questions in each audio dict
             for audio in self[part]['audios']:
-                # Create a list of questions in the audio dict
                 self[part][audio]['questions'] = [question for question in self[part][audio].sections]
 
         # Verify and prepare for the GUI
@@ -65,6 +71,7 @@ class PalilaExperiment(ConfigObj):
         if not self['parts']:
             raise SyntaxError(f'Experiment does not contain any parts.')
 
+        # Verify the individual experiment parts
         for part in self['parts']:
             self._verify_part(part)
 

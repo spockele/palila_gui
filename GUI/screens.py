@@ -28,6 +28,9 @@ class ContinueButton(Button):
     Button subclass with special functionality to continue
     """
     def __init__(self, **kwargs):
+        """
+
+        """
         super().__init__(**kwargs)
         # Button is always locked initially
         self.disabled = True
@@ -71,6 +74,9 @@ class PalilaScreen(Screen):
     Subclass of Screen that saves the previous and next screen for the ScreenManager
     """
     def __init__(self, previous_screen: str, next_screen: str, lock: bool = False, **kwargs):
+        """
+
+        """
         super().__init__(**kwargs)
         self.previous_screen = previous_screen
         self.next_screen = next_screen
@@ -96,6 +102,9 @@ class WelcomeScreen(PalilaScreen):
     A screen to welcome participants and set the PID
     """
     def __init__(self, pid_mode: str, welcome_text: str, *args, **kwargs):
+        """
+
+        """
         super().__init__(*args, lock=True, **kwargs)
 
         if pid_mode == 'auto':
@@ -135,7 +144,13 @@ class WelcomeScreen(PalilaScreen):
 
 
 class PartIntroScreen(PalilaScreen):
+    """
+
+    """
     def __init__(self, intro_text: str, timer_time: float, *args, **kwargs):
+        """
+
+        """
         super().__init__(*args, lock=True, **kwargs)
 
         self.ids.intro_text.text = intro_text
@@ -146,5 +161,8 @@ class PartIntroScreen(PalilaScreen):
         self.ids.continue_lbl.text = ''
 
     def on_enter(self, *_):
+        """
+
+        """
         self.timing_thread.start()
         Clock.schedule_once(self.ids.continue_bttn.unlock, self.ids.timer.max)

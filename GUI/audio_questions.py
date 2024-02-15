@@ -10,16 +10,28 @@ class AudioChoiceButton(Button):
     Button with ability to store a state and interact with AudioQuestion
     """
     def __init__(self, text: str = '', font_size: int = 72, **kwargs):
+        """
+
+        """
         super().__init__(text=text, **kwargs)
         self.font_size = font_size
 
     def select(self) -> None:
+        """
+
+        """
         self.background_color = [.5, 1., .5, 1.]
 
     def deselect(self) -> None:
+        """
+
+        """
         self.background_color = [1., 1., 1., 1.]
 
     def on_release(self):
+        """
+
+        """
         self.select()
         self.parent.parent.select_choice(self)
 

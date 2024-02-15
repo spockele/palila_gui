@@ -129,11 +129,17 @@ class QuestionManager(BoxLayout):
                 self.add_widget(Filler())
 
     def unlock(self):
+        """
+
+        """
         for question in self.question_dict.values():
             question.unlock()
         self.locked = False
 
     def get_state(self):
+        """
+
+        """
         # Start a variable to store the total state
         total_state = True
         for state in self.answered.values():
