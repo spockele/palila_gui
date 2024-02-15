@@ -39,12 +39,6 @@ class FreeNumTextInput(TextInput):
             
         super().on_touch_down(touch)
 
-    def _on_focus(self, instance, value, *_):
-        if not value:
-            self.parent.numpad(self, value)
-
-        super()._on_focus(instance, value)
-
 
 class FreeNumQuestion(QuestionnaireQuestion):
     def __init__(self, question_dict: dict, **kwargs):
@@ -75,16 +69,17 @@ class FreeNumQuestion(QuestionnaireQuestion):
 
         super().check_input()
 
-    def numpad(self, instance, focus: bool = True):
+    def remove_numpad(self):
+        self.parent.parent.remove_widget(self.bubble)
+        self.bubble.active = False
+
+    def numpad(self, instance):
         if self.bubble is None:
             self.bubble = NumPadBubble(instance)
             
-        if not self.bubble.active:
+        if not (self.bubble.active and self.bubble.parent is None):
             self.parent.parent.add_widget(self.bubble)
             self.bubble.active = True
-        elif not focus:
-            self.parent.parent.remove_widget(self.bubble)
-            self.bubble.active = False
         else:
             self.bubble.active = False
 
@@ -166,10 +161,13 @@ class QuestionnaireScreen(PalilaScreen):
     """
 
     """
-    def __init__(self, questionnaire_dict: dict, manager: ScreenManager, extra_screen_start: int = 0, **kwargs):
+    def __init__(self, questionnaire_dict: dict, manager: ScreenManager,
+                 extra_screen_start: int = 0, all_screens: list = None, **kwargs):
         super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], superinit=False, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
+        self.state_override = False
+        self.all_screens = all_screens
 
         # Keep a count of the number of screens in this questionnaire
         if 'screen_count' not in self.questionnaire_dict.keys():
@@ -222,14 +220,7 @@ class QuestionnaireScreen(PalilaScreen):
                 self.questions.append(question_instance)
 
         if remaining:
-            extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager,
-                                               extra_screen_start=extra_screen_start + 7,
-                                               name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
-            manager.add_widget(extra_screen)
-
-            extra_screen.previous_screen = self.name
-            extra_screen.next_screen = self.next_screen
-            self.next_screen = extra_screen.name
+            self._add_extra_screen(manager, extra_screen_start)
 
     def _automatic_splitting(self, manager, extra_screen_start):
         for qi in range(7):
@@ -245,24 +236,42 @@ class QuestionnaireScreen(PalilaScreen):
                 self.questions.append(question_instance)
 
         if len(self.questionnaire_dict['questions'][extra_screen_start:]) > 7:
-            extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager,
-                                               extra_screen_start=extra_screen_start + 7,
-                                               name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
-            manager.add_widget(extra_screen)
+            self._add_extra_screen(manager, extra_screen_start)
 
-            extra_screen.previous_screen = self.name
-            extra_screen.next_screen = self.next_screen
-            self.next_screen = extra_screen.name
+    def _add_extra_screen(self, manager, extra_screen_start):
+        if self.all_screens is None:
+            self.all_screens = [self, ]
+
+        extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager,
+                                           extra_screen_start=extra_screen_start + 7, all_screens=self.all_screens,
+                                           name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
+        self.all_screens.append(extra_screen)
+        manager.add_widget(extra_screen)
+
+        extra_screen.previous_screen = self.name
+        extra_screen.next_screen = self.next_screen
+        self.next_screen = extra_screen.name
+
+        self.ids.continue_bttn.set_arrow()
+        self.ids.continue_bttn.unlock()
+        self.state_override = True
 
     def get_state(self):
         # Start a variable to store the total state
         total_state = True
-        for question_instance in self.questions:
-            state = question_instance.answer is not None
-            # Update the total state via the boolean "and" operator
-            total_state = total_state and state
+        if self.all_screens is None:
+            all_screens = [self, ]
+        else:
+            all_screens = self.all_screens
 
-        return total_state
+        for screen in all_screens:
+            screen: QuestionnaireScreen
+            for question_instance in screen.questions:
+                state = question_instance.answer is not None
+                # Update the total state via the boolean "and" operator
+                total_state = total_state and state
+
+        return total_state or self.state_override
 
     def unlock_check(self):
         if self.get_state():
@@ -273,7 +282,10 @@ class QuestionnaireScreen(PalilaScreen):
             # Make sure the continue button is locked if not
             self.ids.continue_bttn.lock()
 
-    def on_pre_leave(self, *args):
+    def on_pre_leave(self, *_):
         for question_instance in self.questions:
             if question_instance.answer is not None:
                 self.manager.store_answer(question_instance.qid, question_instance.answer)
+
+    def on_pre_enter(self, *_):
+        self.unlock_check()

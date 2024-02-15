@@ -27,6 +27,25 @@
 	padding: [.02 * self.width, self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 6., 6.]
 
 
+<ContinueButton>
+	Image:
+		id: continue_bttn_image
+		source: ''
+		opacity: 0
+		size: self.parent.size
+		pos: self.parent.pos
+
+		canvas.before:
+			PushMatrix
+			Rotate:
+				axis: 0, 0, 1
+				angle: 0
+				origin: self.center
+
+		canvas.after:
+			PopMatrix
+
+
 <BackButton>
 	text: ''
 

@@ -1,7 +1,6 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
-from kivy.clock import Clock
 
 
 __all__ = ['PalilaScreen', 'WelcomeScreen', 'Filler', 'BackButton']
@@ -26,6 +25,12 @@ class ContinueButton(Button):
         super().__init__(**kwargs)
         # Button is always locked initially
         self.disabled = True
+
+    def set_arrow(self):
+        print(self.ids)
+        self.text = ''
+        self.ids.continue_bttn_image.source = 'GUI/assets/arrow.png'
+        self.ids.continue_bttn_image.opacity = 1.
 
     def on_release(self):
         """
