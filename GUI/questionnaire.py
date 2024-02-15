@@ -249,7 +249,6 @@ class QuestionnaireScreen(PalilaScreen):
         manager.add_widget(extra_screen)
 
         extra_screen.previous_screen = self.name
-        extra_screen.next_screen = self.next_screen
         self.next_screen = extra_screen.name
 
         self.ids.continue_bttn.set_arrow()
@@ -289,3 +288,4 @@ class QuestionnaireScreen(PalilaScreen):
 
     def on_pre_enter(self, *_):
         self.unlock_check()
+        super().on_pre_enter(*_)

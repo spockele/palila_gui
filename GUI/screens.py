@@ -27,7 +27,6 @@ class ContinueButton(Button):
         self.disabled = True
 
     def set_arrow(self):
-        print(self.ids)
         self.text = ''
         self.ids.continue_bttn_image.source = 'GUI/assets/arrow.png'
         self.ids.continue_bttn_image.opacity = 1.
@@ -36,7 +35,6 @@ class ContinueButton(Button):
         """
         Click action button to do the navigation if the button is unlocked
         """
-
         # Have the parent screen do its pre-navigation actions (which should return a boolean)
         # The pre-navigation should do any messaging towards the user
         ready = self.parent.pre_navigation()

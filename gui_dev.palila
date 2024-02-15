@@ -5,6 +5,22 @@ welcome = '''Welcome to this listening experiment.'''
 [questionnaire]
 default = yes
 
+	[[question wt_attitude]]
+		id = 'wt_attitude'
+		type = QuestionnaireMC
+		text = '''How would you rate your attitude
+			towards wind turbines?'''
+		choices = ' ++ ', ' + ', ' 0 ', ' - ', ' -- '
+		manual_screen = 3
+
+	[[question wt_exposure]]
+		id = 'wt_exposure'
+		type = QuestionnaireMC
+		text = '''Have you ever heard a wind turbine
+			before this experiment?'''
+		choices = 'Yes', 'No'
+		manual_screen = 3
+
 
 [part 1]
 	randomise = no

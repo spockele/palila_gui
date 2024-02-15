@@ -132,7 +132,7 @@ class PalilaExperiment(ConfigObj):
             self['questionnaire']['default'] = False
         # Get the default questionnaire setup if that is set
         if self['questionnaire']['default']:
-            self['questionnaire'].clear()
+            # self['questionnaire'].clear()
             # Load the configfile
             self['questionnaire'].update(ConfigObj(os.path.join(os.path.abspath('GUI'), 'default_questionnaire.palila')))
             # Create a list of the questionnaire questions in the questionnaire dict

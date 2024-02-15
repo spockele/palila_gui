@@ -28,22 +28,6 @@ manual_split = yes
 	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work or unable to work'
 	manual_screen = 1
 
-[question wt_attitude]
-	id = 'wt_attitude'
-	type = QuestionnaireMC
-	text = '''How would you rate your attitude
-		towards wind turbines?'''
-	choices = ' ++ ', ' + ', ' 0 ', ' - ', ' -- '
-	manual_screen = 2
-
-[question wt_exposure]
-	id = 'wt_exposure'
-	type = QuestionnaireMC
-	text = '''Have you ever heard a wind turbine
-		before this experiment?'''
-	choices = 'Yes', 'No'
-	manual_screen = 2
-
 [question ear_disease]
 	id = 'ear_disease'
 	type = QuestionnaireMC
