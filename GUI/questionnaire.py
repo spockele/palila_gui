@@ -32,18 +32,15 @@ class FreeNumTextInput(TextInput):
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-            self.parent.numpad(self)
-        
-        elif self.parent.bubble is not None:
-            self.parent.bubble.active = False
-            
+            self.parent.trigger_numpad(self)
+
         super().on_touch_down(touch)
 
 
 class FreeNumQuestion(QuestionnaireQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
-        self.bubble = None
+        self.numpad = NumPadBubble()
 
     def check_input(self):
         if self.ids.question_input.text:
@@ -69,19 +66,13 @@ class FreeNumQuestion(QuestionnaireQuestion):
 
         super().check_input()
 
-    def remove_numpad(self):
-        self.parent.parent.remove_widget(self.bubble)
-        self.bubble.active = False
-
-    def numpad(self, instance):
-        if self.bubble is None:
-            self.bubble = NumPadBubble(instance)
-            
-        if not (self.bubble.active and self.bubble.parent is None):
-            self.parent.parent.add_widget(self.bubble)
-            self.bubble.active = True
+    def trigger_numpad(self, called_with):
+        if self.numpad.parent is None:
+            self.parent.parent.add_widget(self.numpad)
+            self.numpad.coupled_widget = called_with
         else:
-            self.bubble.active = False
+            self.parent.parent.remove_widget(self.numpad)
+            self.numpad.coupled_widget = None
 
 
 class SpinnerQuestion(QuestionnaireQuestion):
