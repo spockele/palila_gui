@@ -13,8 +13,6 @@
     background_disabled_down: 'gui/assets/Rounded_button_disabled_down.png'
     border: 30, 30, 30, 30
 
-#    background_color: 1, 1, 1, 1
-
 
 <TextInput>
 	background_normal: 'gui/assets/Rounded_button_normal.png'
@@ -119,3 +117,11 @@
 
 			on_text:
 				self.parent.parent.check_lock(self.text)
+
+
+<PartIntroScreen>
+	Label:
+		id: intro_text
+		pos_hint: {'center_x': .5, 'center_y': .6}
+		size_hint: .7, .2
+		text: ''

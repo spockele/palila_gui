@@ -3,7 +3,7 @@ from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 
 
-__all__ = ['PalilaScreen', 'WelcomeScreen', 'Filler', 'BackButton']
+__all__ = ['PalilaScreen', 'WelcomeScreen', 'PartIntroScreen', 'Filler', 'BackButton']
 
 
 class Filler(Widget):
@@ -14,12 +14,15 @@ class Filler(Widget):
 
 
 class BackButton(Button):
+    """
+    Button subclass with special functionality to go back
+    """
     pass
 
 
 class ContinueButton(Button):
     """
-    Button subclass with special functionality for the continue function
+    Button subclass with special functionality to continue
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -61,12 +64,12 @@ class PalilaScreen(Screen):
     """
     Subclass of Screen that saves the previous and next screen for the ScreenManager
     """
-    def __init__(self, previous_screen: str, next_screen: str, superinit: bool = False, **kwargs):
+    def __init__(self, previous_screen: str, next_screen: str, lock: bool = False, **kwargs):
         super().__init__(**kwargs)
         self.previous_screen = previous_screen
         self.next_screen = next_screen
 
-        if not superinit:
+        if not lock:
             self.ids.continue_bttn.unlock()
 
     def pre_navigation(self):
@@ -87,7 +90,7 @@ class WelcomeScreen(PalilaScreen):
     A screen to welcome participants and set the PID
     """
     def __init__(self, pid_mode: str, welcome_text: str, *args, **kwargs):
-        super().__init__(*args, superinit=True, **kwargs)
+        super().__init__(*args, lock=True, **kwargs)
 
         if pid_mode == 'auto':
             self.ids.pid_entry.text = 'Your participant ID is set automatically.'
@@ -123,3 +126,10 @@ class WelcomeScreen(PalilaScreen):
         else:
             # Lock the button in case there is no text in the box
             self.ids.continue_bttn.lock()
+
+
+class PartIntroScreen(PalilaScreen):
+    def __init__(self, intro_text: str, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.ids.intro_text.text = intro_text

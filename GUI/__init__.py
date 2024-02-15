@@ -23,8 +23,8 @@ class PalilaScreenManager(ScreenManager):
         self.experiment = experiment
         self.answers = answers
 
-        self.add_widget(WelcomeScreen(self.experiment['pid'], self.experiment['welcome'], '', 'questionnaire',
-                                      name='welcome'))
+        self.add_widget(WelcomeScreen(self.experiment['pid'], self.experiment['welcome'],
+                                      '', 'main-questionnaire', name='welcome'))
         self.current = 'welcome'
 
         # Go about initialising the Screens based on the input file
@@ -34,22 +34,26 @@ class PalilaScreenManager(ScreenManager):
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
-        self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self, name='questionnaire'))
+        # Add the initial questionnaire
+        self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self, name='main-questionnaire'))
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
+            self.add_widget(PartIntroScreen(self.experiment[part]['intro']['text'],
+                                            self.experiment[part]['intro']['previous'],
+                                            self.experiment[part]['intro']['next'],
+                                            name=f'{part}-intro'))
             # Within each part, loop over the audios
             for ia, audio in enumerate(self.experiment[part]['audios']):
                 # Gather the corresponding configuration dictionary and add the general audio path of the experiment
                 audio_config_dict = self.experiment[part][audio]
 
                 # Create the screen
-                new_screen = AudioQuestionScreen(audio_config_dict, name=f'{part}-{audio}')
-
-                self.add_widget(new_screen)
+                self.add_widget(AudioQuestionScreen(audio_config_dict, name=f'{part}-{audio}'))
 
             # Add the final questionnaire if it is present
-            self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'], self, name=f'{part}-questionnaire'))
+            self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
+                                                manager=self, name=f'{part}-questionnaire'))
 
         self.add_widget(PalilaScreen('', '', name='end'))
 

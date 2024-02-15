@@ -181,7 +181,7 @@ class AudioQuestionScreen(PalilaScreen):
     Class that defines the overall audio question screens
     """
     def __init__(self, config_dict: dict, **kwargs):
-        super().__init__(config_dict['previous'], config_dict['next'], superinit=True, **kwargs)
+        super().__init__(config_dict['previous'], config_dict['next'], lock=True, **kwargs)
         self.config_dict = config_dict
 
         # Initialise the audio manager with the audio defined in the input file

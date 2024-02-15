@@ -78,10 +78,6 @@ class PalilaExperiment(ConfigObj):
         if not self[part].sections:
             raise SyntaxError(f'Empty experiment part ("{part}") found in input file {self.name}.palila')
 
-        # Check for the "randomise" trigger
-        if 'randomise' not in self[part].keys():
-            self[part]['randomise'] = 'No'
-
         # Check that the part contains audio questions.
         if not self[part]['audios']:
             raise SyntaxError(f'Experiment {part} does not contain any audio questions.')
@@ -103,26 +99,16 @@ class PalilaExperiment(ConfigObj):
 
         # Check the individual audios in the experiment part
         for audio in self[part]['audios']:
-            if 'max replays' not in self[part][audio].keys():
-                self[part][audio]['max replays'] = '1'
-
             if 'filename' not in self[part][audio].keys():
                 raise SyntaxError(f'No filename found for {part}: {audio}.')
 
             if not os.path.isfile(os.path.join(self.path, self[part][audio]['filename'])):
                 raise FileNotFoundError(f'Audio file {self[part][audio]["filename"]} not found for {part}: {audio}.')
 
-            if 'filler' not in self[part][audio].keys():
-                self[part][audio]['filler'] = 'yes'
-
     def _prepare_experiment(self):
         """
         Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
         """
-        previous_part = ''
-        previous_audio = ''
-        previous_name = ''
-
         # Check for the default keyword in the main questionnaire
         if 'default' in self['questionnaire'].keys():
             # Convert the default setting to a boolean
@@ -157,34 +143,57 @@ class PalilaExperiment(ConfigObj):
                 self.question_id_list.append(qid)
                 self['questionnaire'][question]['id'] = qid
 
+        previous_part = ''
+        previous_audio = ''
+        previous_name = 'main-questionnaire'
+
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
+            # Set up the intro screen
+            self[part]['intro']['previous'] = previous_name
+            # And set the intro as the last added screen
+            current_audio = 'intro'
+            current_name = f'{part}-intro'
+            # In case this is the first part, set the intro as the next of the questionnaire
+            if not ip:
+                self['questionnaire']['next'] = current_name
+            # Otherwise, set the intro as the next of the last part's questionnaire
+            else:
+                self[previous_part][previous_audio]['next'] = current_name
+
+            previous_name = current_name
+            previous_audio = current_audio
+
             # Randomise the audios in this part if so desired
-            if self[part].as_bool('randomise'):
+            if 'randomise' in self[part].keys() and self[part].as_bool('randomise'):
                 random.shuffle(self[part]['audios'])
 
             # Loop over the audios
             for ia, audio in enumerate(self[part]['audios']):
                 # Define the screen name
                 current_name = f'{part}-{audio}'
+                if not ia:
+                    self[part]['intro']['next'] = current_name
+
+                # Define this as following the previous
+                self[part][previous_audio]['next'] = current_name
+                # Define the previous as the previous of this audio
+                self[part][audio]['previous'] = previous_name
+
                 # Define the full filepath of the audio
                 self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
 
-                self[part][audio]['filler'] = self[part][audio].as_bool('filler')
+                # Define the max number of replays
+                if 'max replays' not in self[part][audio].keys():
+                    self[part][audio]['max replays'] = '1'
 
-                # If this is the first audio ever
-                if previous_part == '' and previous_audio == '':
-                    # Set this one as the one following the initial questionnaire
-                    self['questionnaire']['next'] = current_name
-                    # Set the initial questionnaire as the previous of this audio
-                    self[part][audio]['previous'] = 'questionnaire'
-                # In all other cases
+                # Extract the filler option
+                if 'filler' not in self[part][audio].keys():
+                    self[part][audio]['filler'] = True
                 else:
-                    # Define this as following the previous
-                    self[part][previous_audio]['next'] = current_name
-                    # Define the previous as the previous of this audio
-                    self[part][audio]['previous'] = previous_name
+                    self[part][audio]['filler'] = self[part][audio].as_bool('filler')
 
+                # Set up all the questions in this audio
                 for question in self[part][audio]['questions']:
                     # Remove tabs from the input file in the question text
                     self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
@@ -207,6 +216,10 @@ class PalilaExperiment(ConfigObj):
                 previous_name = current_name
                 previous_audio = audio
 
+            # After setting up all audios of a part, set up the part questionnaire
+            self[part][previous_audio]['next'] = f'{part}-questionnaire'
+            self[part]['questionnaire']['previous'] = previous_name
+
             # Set up the part questionnaire questions
             for iq, question in enumerate(self[part]['questionnaire']['questions']):
                 self[part]['questionnaire'][question]['text'] = self[part]['questionnaire'][question]['text'].replace('\t', '')
@@ -223,10 +236,6 @@ class PalilaExperiment(ConfigObj):
                     qid = f'{part_id.zfill(2)}-questionnaire-{question_id.zfill(2)}'
                     self.question_id_list.append(qid)
                     self[part]['questionnaire'][question]['id'] = qid
-
-            # After setting up all audios of a part, set up the part questionnaire
-            self[part][previous_audio]['next'] = f'{part}-questionnaire'
-            self[part]['questionnaire']['previous'] = previous_name
 
             # Keep track of the last screen name and associated part
             previous_name = f'{part}-questionnaire'

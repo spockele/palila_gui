@@ -154,7 +154,7 @@ class QuestionnaireScreen(PalilaScreen):
     """
     def __init__(self, questionnaire_dict: dict, manager: ScreenManager,
                  extra_screen_start: int = 0, all_screens: list = None, **kwargs):
-        super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], superinit=False, **kwargs)
+        super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], lock=False, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
         self.state_override = False
