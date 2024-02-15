@@ -161,6 +161,8 @@ class PalilaExperiment(ConfigObj):
             if 'intro' not in self[part].sections:
                 self[part]['intro'] = {'text': f'You have reached part {ip + 1} of the experiment.\n'
                                                f'Press "Continue" below to resume the experiment.'}
+
+            self[part]['intro']['text'] = self[part]['intro']['text'].replace('\t', '')
             # Set the intro screen's 'previous'
             self[part]['intro']['previous'] = previous_name
             # In case this is the first part, set the intro as the 'next' of the questionnaire
