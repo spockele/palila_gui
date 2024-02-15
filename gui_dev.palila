@@ -29,7 +29,7 @@ default = yes
 		text = '''This first part will have some fun questions.
 			Answer them truthfully or you will dye :)'''
 
-	[[questionnaire]]
+#	[[questionnaire]]
 
 	[[audio 0]]
 		filename = 'tone500Hz.wav'
@@ -72,19 +72,19 @@ default = yes
 				Where is this sound coming from?'''
 
 
-[part 2]
-	randomise = no
-
-	[[intro]]
-		text = '''This second part will have some fun questions.
-			Answer them truthfully or you will dye :)'''
-
-	[[questionnaire]]
-
-	[[audio 0]]
-		filename = 'tone500Hz.wav'
-		max replays = 5
-
-		[[[question 1]]]
-			type = Text
-			text = 'This is not a question, just text'
+#[part 2]
+#	randomise = no
+#
+#	[[intro]]
+#		text = '''This second part will have some fun questions.
+#			Answer them truthfully or you will dye :)'''
+#
+#	[[questionnaire]]
+#
+#	[[audio 0]]
+#		filename = 'tone500Hz.wav'
+#		max replays = 5
+#
+#		[[[question 1]]]
+#			type = Text
+#			text = 'This is not a question, just text'

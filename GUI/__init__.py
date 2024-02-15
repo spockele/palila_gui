@@ -52,8 +52,9 @@ class PalilaScreenManager(ScreenManager):
                 self.add_widget(AudioQuestionScreen(audio_config_dict, name=f'{part}-{audio}'))
 
             # Add the final questionnaire if it is present
-            self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
-                                                manager=self, name=f'{part}-questionnaire'))
+            if 'questionnaire' in self.experiment[part].sections:
+                self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
+                                                    manager=self, name=f'{part}-questionnaire'))
 
         self.add_widget(PalilaScreen('', '', name='end'))
 
