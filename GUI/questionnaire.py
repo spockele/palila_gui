@@ -34,10 +34,16 @@ class FreeNumTextInput(TextInput):
         if self.collide_point(*touch.pos):
             self.parent.numpad(self)
         
-        else:
+        elif self.parent.bubble is not None:
             self.parent.bubble.active = False
             
         super().on_touch_down(touch)
+
+    def _on_focus(self, instance, value, *_):
+        if not value:
+            self.parent.numpad(self, value)
+
+        super()._on_focus(instance, value)
 
 
 class FreeNumQuestion(QuestionnaireQuestion):
@@ -69,13 +75,16 @@ class FreeNumQuestion(QuestionnaireQuestion):
 
         super().check_input()
 
-    def numpad(self, instance):
+    def numpad(self, instance, focus: bool = True):
         if self.bubble is None:
             self.bubble = NumPadBubble(instance)
             
         if not self.bubble.active:
             self.parent.parent.add_widget(self.bubble)
             self.bubble.active = True
+        elif not focus:
+            self.parent.parent.remove_widget(self.bubble)
+            self.bubble.active = False
         else:
             self.bubble.active = False
 
