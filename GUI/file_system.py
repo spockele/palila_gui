@@ -87,6 +87,13 @@ class PalilaExperiment(ConfigObj):
         if not self[part]['audios']:
             raise SyntaxError(f'Experiment {part} does not contain any audio questions.')
 
+        # Check the intro section if it exists
+        if 'intro' in self[part].sections:
+            if 'text' not in self[part]['intro']:
+                raise SyntaxError(f'Experiment {part} intro does not contain "text" variable.')
+            if 'time' not in self[part]['intro']:
+                raise SyntaxError(f'Experiment {part} intro does not contain "time" variable.')
+
         # Check if the questionnaire is split properly
         if 'questionnaire' in self[part].sections:
             if 'manual split' in self[part]['questionnaire']:
@@ -167,6 +174,10 @@ class PalilaExperiment(ConfigObj):
 
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
+            # ==========================================================================================================
+            # PREPARATION OF THE PART INTRO
+            # ==========================================================================================================
+
             # Set the intro as the current added screen
             audio = 'intro'
             current_name = f'{part}-intro'
@@ -174,8 +185,10 @@ class PalilaExperiment(ConfigObj):
             # Add the default intro if it's not in the config file
             if 'intro' not in self[part].sections:
                 self[part]['intro'] = {'text': f'You have reached part {ip + 1} of the experiment.\n'
-                                               f'Press "Continue" below to resume the experiment.'}
+                                               f'Press "Continue" below to resume the experiment.',
+                                       'time': '3.'}
 
+            # Fix up the introduction text
             self[part]['intro']['text'] = self[part]['intro']['text'].replace('\t', '')
             # Set the intro screen's 'previous'
             self[part]['intro']['previous'] = previous_name

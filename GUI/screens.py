@@ -147,15 +147,15 @@ class PartIntroScreen(PalilaScreen):
     """
 
     """
-    def __init__(self, intro_text: str, timer_time: float, *args, **kwargs):
+    def __init__(self, intro_dict: dict, **kwargs):
         """
 
         """
-        super().__init__(*args, lock=True, **kwargs)
+        super().__init__(intro_dict['previous'], intro_dict['next'], lock=True, **kwargs)
 
-        self.ids.intro_text.text = intro_text
+        self.ids.intro_text.text = intro_dict['text']
 
-        self.ids.timer.max = timer_time
+        self.ids.timer.max = float(intro_dict['time'])
         self.timing_thread = ProgressBarThread(self.ids.timer)
 
         self.ids.continue_lbl.text = ''

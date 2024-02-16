@@ -39,10 +39,7 @@ class PalilaScreenManager(ScreenManager):
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
-            self.add_widget(PartIntroScreen(self.experiment[part]['intro']['text'], 5.,
-                                            self.experiment[part]['intro']['previous'],
-                                            self.experiment[part]['intro']['next'],
-                                            name=f'{part}-intro'))
+            self.add_widget(PartIntroScreen(self.experiment[part]['intro'], name=f'{part}-intro'))
             # Within each part, loop over the audios
             for ia, audio in enumerate(self.experiment[part]['audios']):
                 # Gather the corresponding configuration dictionary and add the general audio path of the experiment

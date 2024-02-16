@@ -68,6 +68,7 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
     
     [[intro]] (optional)                # -> Optional introduction message to the experiment part.
         text = <string>                     # -> Introduction message text.
+        time = <float>                      # -> Duration of the intro timer in seconds.
     
     [[audio <string>]]                  # -> SubSection defining the screen for one audio sample.
                                         #   Multiple audios per part are allowed
