@@ -1,3 +1,6 @@
+"""
+Module containing the classes that manage the interactions with files during the experiment.
+"""
 from configobj import ConfigObj
 import pandas as pd
 import datetime
