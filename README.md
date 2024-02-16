@@ -126,11 +126,17 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 Results from an experiment will be output as individual ```.csv``` files in the directory ```.\<experiment name>\responses\```.\
 The ```.csv``` files contain a table which is formated as follows:
 
-|                        | ```<question ID>``` | ```<question ID>``` | ... |
-|-----------------------:|:-------------------:|:-------------------:|-----|
-| ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... |
+| ```<experiment_name>``` | ```<question ID>``` | ```<question ID>``` | ... |
+|------------------------:|:-------------------:|:-------------------:|-----|
+|  ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... |
 
-A script will be included to merge these individual tables into one ```.csv``` file, with a row per participant ID.
+A script will be included to merge these individual tables into one ```.csv``` file, with a row per participant ID:
+
+| ```<experiment_name>``` | ```<question ID>``` | ```<question ID>``` | ... |
+|:-----------------------:|:-------------------:|:-------------------:|-----|
+| ```<Participant ID>```  |   ```<answer>```    |  ``` <answer> ```   | ... |
+| ```<Participant ID>```  |   ```<answer>```    |  ``` <answer> ```   | ... |
+|           ...           |         ...         |         ...         | ... |
 
 [//]: # (---)
 
