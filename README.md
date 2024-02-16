@@ -4,6 +4,7 @@ Graphical user interface for listening experiments inside
 [PALILA](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf) [1].\
 Developed for touchscreen devices with a 16:10 screen ratio. Other screen ratios may result in 
 suboptimal visual quality.
+
 ---
 Developed by:
 - [ir. Josephine Siebert Pockelé](https://orcid.org/0009-0002-5152-9986)
