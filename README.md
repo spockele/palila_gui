@@ -1,20 +1,27 @@
-# <u> PALILA GUI </u>
+# PALILA GUI
 
-Graphical user interface for listening experiments inside 
+Graphical user interface for listening experiments inside
 [PALILA](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf) [1].\
-Developed for touchscreen devices with a 16:10 screen ratio. Other screen ratios may result in 
+Developed for touchscreen devices with a 16:10 screen ratio. Other screen ratios may result in
 suboptimal visual quality.
----
-Developed by:
+
+### Developed by:
 - [ir. Josephine Siebert Pockelé](https://orcid.org/0009-0002-5152-9986)
   - PhD Candidate, [TU Delft Aircraft Noise and Climate Effects Section](https://www.tudelft.nl/lr/organisatie/afdelingen/control-and-operations/aircraft-noise-and-climate-effects-ance).
-  - E: [j.s.pockele@tudelft.nl](mailto:j.s.pockele@tudelft.nl)
-
+  - Email: [j.s.pockele@tudelft.nl](mailto:j.s.pockele@tudelft.nl)
+  - LinkedIn: [Josephine (Fien) Pockelé](https://www.linkedin.com/in/josephine-pockele)
 ---
+### Requirements
+- Windows 10 or 11
+- [Python](https://www.python.org/) version 3.11 or newer
 
-## Installation instructions
-1. Install [Python](https://www.python.org/) version 3.11 or newer
+### Installation
+1. Download this software to the desired location, either:
+   - through git
+   - by downloading the zip file and unpacking it
 2. Run ```setup.bat```
+
+Now you can run the GUI with ```PALILA.bat```
 
 ---
 
@@ -47,6 +54,7 @@ randomise = <boolean> (optional)    # -> Switch to randomise the parts of the ex
                                         #    put the question. Has no effect if manual_split = no.
         
 [part <string>]                     # -> Required section defining a part of the experiment (grouping of audios).
+    
 ```
 
 
@@ -60,14 +68,13 @@ randomise = <boolean> (optional)    # -> Switch to randomise the parts of the ex
 
 
 ### The questionnaire question types:
-- ```FreeNum```: Question asking for a freely entered numerical value
-  - Requires no extra input.
-- ```QuestionnaireMC```: multiple choice question with buttons (recommended limit of 4-5 choices).
-  - Requires:\
-  ```choices = <string>, <string>, ...``` Which defines the choice buttons.
+- ```FreeNum```: Question asking for a freely entered numerical value.
+    - Requires no extra input.
+- ```QuestionnaireMC```: multiple choice question with buttons.
+    - Requires: ```choices = <string>, <string>, ...``` Which defines the choice buttons.
+    - Recommended limit of 4-5 choices.
 - ```Spinner```: multiple choice question with a dropdown menu.
-  - Requires:\
-  ```choices = <string>, <string>, ...``` Which defines the dropdown items.
+    - Requires: ```choices = <string>, <string>, ...``` Which defines the dropdown items.
 
 ### Standardised question IDs
 - In the main questionnaire: ```main-questionnaire-{question name}```.
@@ -87,7 +94,7 @@ The ```.csv``` files contain a table which is formated as follows:
 A script will be included to merge these individual tables into one ```.csv``` file, with a row per participant ID.
 
 ---
-## Used in the following works:
+## Used by
 
 ---
 ## References
