@@ -10,12 +10,25 @@ __all__ = ['PalilaExperiment', 'PalilaAnswers']
 
 class PalilaExperiment(ConfigObj):
     """
+    Subclass of ConfigObj. Stores the full configuration of the experiment. Responsible for verification and
+    pre-processing of the config file information.
 
+    Parameters
+    ----------
+    name : str
+        Name of the listening experiment config file (<name>.palila) and directory.
+
+    Attributes
+    ----------
+    name : str
+        Name of the listening experiment config file (<name>.palila).
+    path : str
+        Path to the listening experiment directory with all the files.
+    question_id_list : list of str
+        List of question IDs present in the experiment.
     """
-    def __init__(self, name: str):
-        """
 
-        """
+    def __init__(self, name: str):
         super().__init__(os.path.abspath(f'{name}.palila'))
         self.name = name
         self.path = os.path.abspath(f'{name}')
@@ -41,12 +54,17 @@ class PalilaExperiment(ConfigObj):
                 self[part][audio]['questions'] = [question for question in self[part][audio].sections]
 
         # Verify and prepare for the GUI
-        self.verify_experiment()
+        self._verify_experiment()
         self._prepare_experiment()
 
-    def verify_experiment(self):
+    def _verify_experiment(self):
         """
         Verification of the experiment input file to check if everything is present.
+
+        Raises
+        ------
+        SyntaxError :
+            If anything in the config file is wrong.
         """
         # Check that the experiment is not completely empty
         if not self.sections:
@@ -78,6 +96,14 @@ class PalilaExperiment(ConfigObj):
     def _verify_part(self, part: str):
         """
         Verification of the experiment part from the input file to check if everything is present.
+
+        Raises
+        ------
+        SyntaxError :
+            If anything in the config file is wrong.
+
+        FileNotFoundError :
+            If an audio file from the config file is not found.
         """
         # Check that the part is not completely empty
         if not self[part].sections:
@@ -310,8 +336,25 @@ class PalilaExperiment(ConfigObj):
 
 class PalilaAnswers:
     """
-    Class managing the participant responses
+    Class managing the participant responses.
+
+    Parameters
+    ----------
+    experiment : PalilaExperiment
+        PalilaExperiment instance to link these answers to.
+
+    Attributes
+    ----------
+    experiment : PalilaExperiment
+        The linked PalilaExperiment instance.
+    pid_mode: str
+        Mode of setting the participant ID. Either 'auto' or 'input'.
+    out: pandas.DataFrame
+        The DataFrame in which the experiment answers are stored for exporting at the end.
+    out_path: str
+        Path defining the output file location.
     """
+
     def __init__(self, experiment: PalilaExperiment):
         # Store the experiment inside this class
         self.experiment = experiment
@@ -329,12 +372,17 @@ class PalilaAnswers:
     def set_pid(self, pid: str) -> None:
         """
         Function to set the participant ID from GUI input
+
+        Parameters
+        ----------
+        pid : str
+            The participant ID to be set.
         """
         self.pid = pid
         self.out_path = os.path.join(self.experiment.path, 'responses', f'{self.pid}.csv')
 
     def save_to_file(self) -> None:
         """
-        Save the answers to the set file
+        Save the answers to the pre-determined file.
         """
         self.out.to_csv(self.out_path)
