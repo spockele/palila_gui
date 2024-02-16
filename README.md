@@ -65,7 +65,9 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 [part <string>]                     # -> Required section defining a part of the experiment (grouping of audios).
                                     #   Multiple parts per experiment are allowed.
     randomise = <boolean> (optional)    # -> Switch to randomise the order of the audios within the part.
-    intro = <string> (optional)         # -> Optional introduction message to the experiment part.
+    
+    [[intro]] (optional)                # -> Optional introduction message to the experiment part.
+        text = <string>                     # -> Introduction message text.
     
     [[audio <string>]]                  # -> SubSection defining the screen for one audio sample.
                                         #   Multiple audios per part are allowed
