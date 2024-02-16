@@ -1,7 +1,7 @@
 # PALILA GUI
 
-Graphical user interface for listening experiments in the 
-[<b><u>P</u></b>sycho<b><u>A</u></b>coustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf) 
+Graphical user interface for listening experiments in the
+[<b><u>P</u></b>sycho<b><u>A</u></b>coustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf)
 [[1](#merinomartinez_2023)] at the Delft University of Technology, Faculty of Aerospace Engineering.
 
 ### Developed by:
@@ -14,7 +14,7 @@ Graphical user interface for listening experiments in the
 - Windows 10 or 11.
 - [Python](https://www.python.org/) version 3.11 or newer.
 - A touchscreen device with 16:10 aspect ratio.\
-Other ratios may result in visual artefacts.
+  Other ratios may result in visual artefacts.
 
 ### Installation
 1. Download this software to the desired location, either:
@@ -79,6 +79,9 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
             type = <string>                     # -> Defines the type of question. 
                                                 #   See below for specifics of each types.
             text = <string>                     # -> Defines the question text.
+            
+    [[questionnaire]] (optional)        # -> SubSection defining the optional questionnaire of this experiment part.
+                                        #   See the main questionnaire for syntax. Cannot select default for this one.
 
 # ======================================================================================================================
 ```
@@ -95,27 +98,27 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 
 ### The questionnaire question types:
 - ```FreeNum```: Question asking for a freely entered numerical value.
-    - Requires no additional input.
+  - Requires no additional input.
 - ```QuestionnaireMC```: Multiple choice question with buttons.
-    - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
-    - Recommended limit of 4-5 choices.
+  - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
+  - Recommended limit of 4-5 choices.
 - ```Spinner```: Multiple choice question with a dropdown menu.
-    - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
+  - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
 
 ### The audio question types:
 - ```Text```: Just text, no question.
-    - Requires no additional input.
+  - Requires no additional input.
 - ```AudioMC```: Multiple choice question with buttons.
-    - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
-    - Recommended limit of 4-5 choices.
+  - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
+  - Recommended limit of 4-5 choices.
 - ```NumScale```: Rating question with an integer numerical scale.
-    - Requires:\
-```min = <integer>``` -> Defines the minimum value of the scale\
-```max = <integer>``` -> Defines the minimum value of the scale
-    - Recommended range: ```4 <= (max - min) <= 10```
-    - Optional:\
-```left note = <string>``` -> Defines the text on the left side of the scale\
-```right note = <string>``` -> Defines the text on the right side of the scale
+  - Requires:\
+    ```min = <integer>``` -> Defines the minimum value of the scale\
+    ```max = <integer>``` -> Defines the minimum value of the scale
+  - Recommended range: ```4 <= (max - min) <= 10```
+  - Optional:\
+    ```left note = <string>``` -> Defines the text on the left side of the scale\
+    ```right note = <string>``` -> Defines the text on the right side of the scale
 
 ### Standardised question IDs
 - In the main questionnaire: ```main-questionnaire-{question name}```.
