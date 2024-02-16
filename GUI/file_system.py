@@ -57,15 +57,15 @@ class PalilaExperiment(ConfigObj):
             raise SyntaxError(f'Experiment does not contain a startup questionnaire.')
 
         # Check if the questionnaire is split properly
-        if 'manual_split' in self['questionnaire']:
-            self['questionnaire']['manual_split'] = self['questionnaire'].as_bool('manual_split')
-            if self['questionnaire']['manual_split']:
+        if 'manual split' in self['questionnaire']:
+            self['questionnaire']['manual split'] = self['questionnaire'].as_bool('manual split')
+            if self['questionnaire']['manual split']:
                 for question in self['questionnaire'].sections:
-                    if 'manual_screen' not in self['questionnaire'][question]:
+                    if 'manual screen' not in self['questionnaire'][question]:
                         raise SyntaxError('If manual split is set, each questionnaire question requires '
                                           'an assigned screen.')
         else:
-            self['questionnaire']['manual_split'] = False
+            self['questionnaire']['manual split'] = False
 
         # Check for the presence of experiment parts
         if not self['parts']:
@@ -89,15 +89,15 @@ class PalilaExperiment(ConfigObj):
 
         # Check if the questionnaire is split properly
         if 'questionnaire' in self[part].sections:
-            if 'manual_split' in self[part]['questionnaire']:
-                self[part]['questionnaire']['manual_split'] = self[part]['questionnaire'].as_bool('manual_split')
-                if self[part]['questionnaire']['manual_split']:
+            if 'manual split' in self[part]['questionnaire']:
+                self[part]['questionnaire']['manual split'] = self[part]['questionnaire'].as_bool('manual split')
+                if self[part]['questionnaire']['manual split']:
                     for question in self[part]['questionnaire'].sections:
-                        if 'manual_screen' not in self[part]['questionnaire'][question]:
+                        if 'manual screen' not in self[part]['questionnaire'][question]:
                             raise SyntaxError('If manual split is set, each questionnaire question requires '
                                               'an assigned screen.')
             else:
-                self[part]['questionnaire']['manual_split'] = False
+                self[part]['questionnaire']['manual split'] = False
 
         # Check the individual audios in the experiment part
         for audio in self[part]['audios']:
@@ -252,6 +252,7 @@ class PalilaExperiment(ConfigObj):
             # ==========================================================================================================
             # PREPARATION OF THE PART QUESTIONNAIRE
             # ==========================================================================================================
+
             # Set the intro as the current added screen
             current_name = f'{part}-questionnaire'
             audio = 'questionnaire'

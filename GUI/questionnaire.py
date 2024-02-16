@@ -233,7 +233,7 @@ class QuestionnaireScreen(PalilaScreen):
         # Start a list to store all questions in this screen
         self.questions = []
         # Split the questions according to the input file
-        if self.questionnaire_dict['manual_split']:
+        if self.questionnaire_dict['manual split']:
             self._manual_splitting(manager, extra_screen_start)
         else:
             self._automatic_splitting(manager, extra_screen_start)
@@ -245,9 +245,9 @@ class QuestionnaireScreen(PalilaScreen):
 
         """
         to_add = [question for question in self.questionnaire_dict['questions']
-                  if int(self.questionnaire_dict[question]['manual_screen']) == self.questionnaire_dict['screen_count']]
+                  if int(self.questionnaire_dict[question]['manual screen']) == self.questionnaire_dict['screen_count']]
         remaining = [question for question in self.questionnaire_dict['questions']
-                     if int(self.questionnaire_dict[question]['manual_screen']) > self.questionnaire_dict['screen_count']]
+                     if int(self.questionnaire_dict[question]['manual screen']) > self.questionnaire_dict['screen_count']]
 
         if len(to_add) > 7:
             raise SyntaxError(f'In case of manual splitting, ensure no more than 7 questions per questionnaire screen.'

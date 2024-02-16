@@ -9,7 +9,7 @@ default = yes
 		text = '''How would you rate your attitude
 			towards wind turbines?'''
 		choices = ' ++ ', ' + ', ' 0 ', ' - ', ' -- '
-		manual_screen = 3
+		manual screen = 3
 
 	[[question wt_exposure]]
 		id = 'wt_exposure'
@@ -17,7 +17,7 @@ default = yes
 		text = '''Have you ever heard a wind turbine
 			before this experiment?'''
 		choices = 'Yes', 'No'
-		manual_screen = 3
+		manual screen = 3
 
 
 [part 1]

@@ -47,9 +47,9 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
                                     #   Will always show up, but if empty: there will only be a default message.
     default = <boolean> (optional)      # -> Switch to set up the questionnaire with default questions.
                                         #   Extra questions can be added to the default list, be aware they require 
-                                        #   a manual_screen value.
-    manual_split = <boolean> (optional) # -> Switch to set manual splitting of the questions over the screens.
-                                        #   In case of manual splitting, each question requires a manual_screen value.
+                                        #   a manual screen value.
+    manual split = <boolean> (optional) # -> Switch to set manual splitting of the questions over the screens.
+                                        #   In case of manual splitting, each question requires a manual screen value.
                                         
     [[question <string>]] (optional)    # -> SubSection defining a question in the questionnaire. 
                                         #   <string> defines the name.
@@ -57,8 +57,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
                                             #   If not defined, a standardised ID will be assigned
         type = <string>                     # -> Defines the type of question. See below for specifics of each types.
         text = <string>                     # -> Defines the question text.
-        manual_screen = <integer>           # -> In case of manual_split = yes, this defines the screen to 
-                                            #   put the question. Has no effect if manual_split = no.
+        manual screen = <integer>           # -> In case of manual split = yes, this defines the screen to 
+                                            #   put the question. Has no effect if manual split = no.
 
 # ======================================================================================================================
         
