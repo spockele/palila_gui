@@ -1,6 +1,4 @@
 pid = auto
-welcome = '''Welcome to this listening experiment.
-	Please enter your participant ID:'''
 
 [questionnaire]
 default = yes

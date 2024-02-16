@@ -115,6 +115,12 @@ class PalilaExperiment(ConfigObj):
         # PREPARATION OF THE MAIN QUESTIONNAIRE
         # ==============================================================================================================
 
+        if 'welcome' not in self.keys():
+            self['welcome'] = 'Welcome to this listening experiment.\nPlease enter your participant ID:'
+        else:
+            # Fix the welcome message.
+            self['welcome'] = self['welcome'].replace('\t', '')
+
         # Check for the default keyword in the main questionnaire
         if 'default' in self['questionnaire'].keys():
             self['questionnaire']['default'] = self['questionnaire'].as_bool('default')
@@ -132,6 +138,7 @@ class PalilaExperiment(ConfigObj):
 
         # Set the questionnaire's 'previous' to the welcome screen
         self['questionnaire']['previous'] = 'welcome'
+
         # Loop over the questionnaire questions
         for iq, question in enumerate(self['questionnaire']['questions']):
             # Replace tab characters in the question text
