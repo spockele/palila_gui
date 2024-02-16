@@ -1,7 +1,7 @@
 # PALILA GUI
 
 Graphical user interface for listening experiments in the 
-[<b><u>P</u></b>sychoAcoustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf) [1]\
+[<b><u>P</u></b>sycho<b><u>A</u></b>coustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf) [1]\
 at the Delft University of Technology, Faculty of Aerospace Engineering.
 
 ### Developed by:
