@@ -28,7 +28,7 @@ class PalilaExperiment(ConfigObj):
         List of question IDs present in the experiment.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         super().__init__(os.path.abspath(f'{name}.palila'))
         self.name = name
         self.path = os.path.abspath(f'{name}')
@@ -57,7 +57,7 @@ class PalilaExperiment(ConfigObj):
         self._verify_experiment()
         self._prepare_experiment()
 
-    def _verify_experiment(self):
+    def _verify_experiment(self) -> None:
         """
         Verification of the experiment input file to check if everything is present.
 
@@ -93,7 +93,7 @@ class PalilaExperiment(ConfigObj):
         for part in self['parts']:
             self._verify_part(part)
 
-    def _verify_part(self, part: str):
+    def _verify_part(self, part: str) -> None:
         """
         Verification of the experiment part from the input file to check if everything is present.
 
@@ -140,7 +140,7 @@ class PalilaExperiment(ConfigObj):
             if not os.path.isfile(os.path.join(self.path, self[part][audio]['filename'])):
                 raise FileNotFoundError(f'Audio file {self[part][audio]["filename"]} not found for {part}: {audio}.')
 
-    def _prepare_experiment(self):
+    def _prepare_experiment(self) -> None:
         """
         Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
         """
@@ -355,7 +355,7 @@ class PalilaAnswers:
         Path defining the output file location.
     """
 
-    def __init__(self, experiment: PalilaExperiment):
+    def __init__(self, experiment: PalilaExperiment) -> None:
         # Store the experiment inside this class
         self.experiment = experiment
         self.pid_mode = self.experiment['pid']
