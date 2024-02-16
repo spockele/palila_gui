@@ -1,8 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
-from kivy.lang import Builder
-
-Builder.load_file('GUI/audio_questions.kv')
 
 
 class AudioChoiceButton(Button):
@@ -42,7 +39,6 @@ class AudioQuestion(BoxLayout):
     """
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(**kwargs)
-        self.disabled = True
         # Store the input information
         self.question_dict = question_dict
         self.qid = question_dict['id']

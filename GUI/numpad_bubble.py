@@ -1,9 +1,5 @@
 from kivy.uix.behaviors.focus import FocusBehavior
 from kivy.uix.bubble import Bubble
-from kivy.lang import Builder
-
-
-Builder.load_file('GUI/numpad_bubble.kv')
 
 
 class NumPadBubble(Bubble):

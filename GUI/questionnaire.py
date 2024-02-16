@@ -2,14 +2,12 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-from kivy.lang import Builder
 
 from .screens import PalilaScreen, Filler, BackButton
 from .numpad_bubble import NumPadBubble
 
 
 __all__ = ['QuestionnaireScreen']
-Builder.load_file('GUI/questionnaire.kv')
 
 
 class QuestionnaireQuestion(FloatLayout):
