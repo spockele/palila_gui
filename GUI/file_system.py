@@ -61,42 +61,6 @@ class PalilaExperiment(ConfigObj):
         self._verify_experiment()
         self._prepare_experiment()
 
-    def _verify_experiment(self) -> None:
-        """
-        Verification of the experiment input file to check if everything is present.
-
-        Raises
-        ------
-        SyntaxError :
-            If anything in the config file is wrong.
-        """
-        # Check that the experiment is not completely empty
-        if not self.sections:
-            raise SyntaxError(f'Empty experiment in input file {self.name}.palila')
-
-        # Check for the presence of a startup questionnaire.
-        if 'questionnaire' not in self.sections:
-            raise SyntaxError(f'Experiment does not contain a startup questionnaire.')
-
-        # Check if the questionnaire is split properly
-        if 'manual split' in self['questionnaire']:
-            self['questionnaire']['manual split'] = self['questionnaire'].as_bool('manual split')
-            if self['questionnaire']['manual split']:
-                for question in self['questionnaire'].sections:
-                    if 'manual screen' not in self['questionnaire'][question]:
-                        raise SyntaxError('If manual split is set, each questionnaire question requires '
-                                          'an assigned screen.')
-        else:
-            self['questionnaire']['manual split'] = False
-
-        # Check for the presence of experiment parts
-        if not self['parts']:
-            raise SyntaxError(f'Experiment does not contain any parts.')
-
-        # Verify the individual experiment parts
-        for part in self['parts']:
-            self._verify_part(part)
-
     def _verify_part(self, part: str) -> None:
         """
         Verification of the experiment part from the input file to check if everything is present.
@@ -144,31 +108,58 @@ class PalilaExperiment(ConfigObj):
             if not os.path.isfile(os.path.join(self.path, self[part][audio]['filename'])):
                 raise FileNotFoundError(f'Audio file {self[part][audio]["filename"]} not found for {part}: {audio}.')
 
-    def _prepare_experiment(self) -> None:
+    def _verify_experiment(self) -> None:
         """
-        Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
-        """
-        # ==============================================================================================================
-        # PREPARATION OF THE MAIN QUESTIONNAIRE
-        # ==============================================================================================================
+        Verification of the experiment input file to check if everything is present.
 
-        if 'welcome' not in self.keys():
-            self['welcome'] = 'Welcome to this listening experiment.\nPlease enter your participant ID:'
+        Raises
+        ------
+        SyntaxError :
+            If anything in the config file is wrong.
+        """
+        # Check that the experiment is not completely empty
+        if not self.sections:
+            raise SyntaxError(f'Empty experiment in input file {self.name}.palila')
+
+        # Check for the presence of a startup questionnaire.
+        if 'questionnaire' not in self.sections:
+            raise SyntaxError(f'Experiment does not contain a startup questionnaire.')
+
+        # Check if the questionnaire is split properly
+        if 'manual split' in self['questionnaire']:
+            self['questionnaire']['manual split'] = self['questionnaire'].as_bool('manual split')
+            if self['questionnaire']['manual split']:
+                for question in self['questionnaire'].sections:
+                    if 'manual screen' not in self['questionnaire'][question]:
+                        raise SyntaxError('If manual split is set, each questionnaire question requires '
+                                          'an assigned screen.')
         else:
-            # Fix the welcome message.
-            self['welcome'] = self['welcome'].replace('\t', '')
+            self['questionnaire']['manual split'] = False
 
+        # Check for the presence of experiment parts
+        if not self['parts']:
+            raise SyntaxError(f'Experiment does not contain any parts.')
+
+        # Verify the individual experiment parts
+        for part in self['parts']:
+            self._verify_part(part)
+
+    def _prepare_main_questionnaire(self) -> None:
+        """
+        Sets up the main questionnaire dictionary based on the config file.
+        """
         # Check for the default keyword in the main questionnaire
         if 'default' in self['questionnaire'].keys():
             self['questionnaire']['default'] = self['questionnaire'].as_bool('default')
         else:
             self['questionnaire']['default'] = False
+
         # Get the default questionnaire setup if that is set
         if self['questionnaire']['default']:
             # Load the configfile
             self['questionnaire'].update(
                 ConfigObj(os.path.join(os.path.abspath('GUI'), 'default_questionnaire.palila'))
-                )
+            )
             # Create a list of the questionnaire questions in the questionnaire dict
             self['questionnaire']['questions'] = [question for question in self['questionnaire'].sections
                                                   if 'question' in question]
@@ -193,11 +184,227 @@ class PalilaExperiment(ConfigObj):
                 self.question_id_list.append(qid)
                 self['questionnaire'][question]['id'] = qid
 
+    def _prepare_part_audio(self, part: str, audio: str, ):
+        """
+        Prepares a specific audio's dictionary.
+
+        Parameters
+        ----------
+        part : str
+            Index of the part dictionary inside the overall dictionary.
+        audio : str
+            Index of the audio dictionary inside the part dictionary.
+        """
+        # Define the full filepath of the audio
+        self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
+        # Define the max number of replays
+        if 'max replays' not in self[part][audio].keys():
+            self[part][audio]['max replays'] = '1'
+        # Extract the filler option
+        if 'filler' not in self[part][audio].keys():
+            self[part][audio]['filler'] = True
+        else:
+            self[part][audio]['filler'] = self[part][audio].as_bool('filler')
+
+        # Loop over the questions
+        for question in self[part][audio]['questions']:
+            # Remove tabs from the input file in the question text
+            self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
+
+            # Extract the id to the overall question id list
+            if 'id' in self[part][audio][question]:
+                self.question_id_list.append(self[part][audio][question]['id'])
+            # Generate a not-so-nice (but standardised) id when it's not defined explicitly
+            else:
+                # Extract the user input part, audio and question names from the brackets
+                part_id = part.replace('part ', '')
+                audio_id = audio.replace('audio ', '')
+                question_id = question.replace('question ', '')
+                # Put those together and add to the list
+                qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
+                self.question_id_list.append(qid)
+                self[part][audio][question]['id'] = qid
+
+    def _prepare_part_questionnaire(self, part):
+        """
+        Prepares the dictionary of the given part's questionnaire.
+
+        Parameters
+        ----------
+        part : str
+            Index of the part dictionary inside the overall dictionary.
+        """
+        # Create a list of the questionnaire questions in the questionnaire dict
+        self[part]['questionnaire']['questions'] = [question for question in
+                                                    self[part]['questionnaire'].sections
+                                                    if 'question' in question]
+        # Set up the part questionnaire questions
+        for iq, question in enumerate(self[part]['questionnaire']['questions']):
+            # Make sure the text is nice.
+            text_mod = self[part]['questionnaire'][question]['text'].replace('\t', '')
+            self[part]['questionnaire'][question]['text'] = text_mod
+
+            # Extract the id to the overall question id list
+            if 'id' in self[part]['questionnaire'][question]:
+                self.question_id_list.append(self[part]['questionnaire'][question]['id'])
+            # Generate a not-so-nice (but standardised) id when it's not defined explicitly
+            else:
+                # Extract the user input part, audio and question names from the brackets
+                part_id = part.replace('part ', '')
+                question_id = question.replace('question ', '')
+                # Put those together and add to the list
+                qid = f'{part_id.zfill(2)}-questionnaire-{question_id.zfill(2)}'
+                self.question_id_list.append(qid)
+                self[part]['questionnaire'][question]['id'] = qid
+
+    def _prepare_part(self, ip: int, part: str, previous_part: str, previous_audio: str, previous_name: str, ):
+        """
+        Prepares the full dictionary of a part of the experiment.
+
+        Parameters
+        ----------
+        ip : int
+            Index number of the current part inside the preparation loop
+        part : str
+            Index of the part dictionary inside the overall dictionary.
+        previous_part : str
+            Index of the previous part's dictionary inside the overall dictionary.
+        previous_audio : str
+            Index of the last audio (or questionnaire) dictionary inside the previous part's dictionary.
+        previous_name : str
+            Formatted name of the last audio (or questionnaire) of the previous part.
+
+        Returns
+        -------
+        audio : str
+            The index of the last audio (or questionnaire) of this part.
+        current_name: str
+            The formatted name of the last audio (or questionnaire) of this part.
+        """
+
+        # Set the intro as the current added screen
+        audio = 'intro'
+        current_name = f'{part}-intro'
+        # Add the default intro if it's not in the config file
+        if 'intro' not in self[part].sections:
+            self[part]['intro'] = {'text': f'You have reached part {ip + 1} of the experiment.\n'
+                                           f'Press "Continue" below to resume the experiment.',
+                                   'time': '3.'}
+        # Fix up the introduction text
+        self[part]['intro']['text'] = self[part]['intro']['text'].replace('\t', '')
+        # Set the intro screen's 'previous'
+        self[part]['intro']['previous'] = previous_name
+        # In case this is the first part, set the intro as the 'next' of the questionnaire
+        if not ip:
+            self['questionnaire']['next'] = current_name
+        # Otherwise, set the intro as the 'next' of the last part's questionnaire
+        else:
+            self[previous_part][previous_audio]['next'] = current_name
+        # And set the intro as the previously added screen
+        previous_name = current_name
+        previous_audio = audio
+
+        # ==========================================================================================================
+        # PREPARATION OF THE PART BREAKS (BLOCK 1)
+        # ==========================================================================================================
+
+        if 'breaks' in self[part].sections:
+            self[part]['breaks']['after_indices'] = []
+            break_interval = int(self[part]['breaks']['interval'])
+            break_time = int(self[part]['breaks']['time'])
+            if 'text' in self[part]['breaks']:
+                break_text = self[part]['breaks']['text']
+            else:
+                break_text = f'This is a {break_time} s break.'
+            break_count = 1
+        else:
+            self[part]['breaks'] = {'after_indices': [-1, ]}
+            break_interval = 0
+            break_time = 0
+            break_text = ''
+            break_count = 0
+
+        # ==========================================================================================================
+        # PREPARATION OF THE PART AUDIOS
+        # ==========================================================================================================
+
+        # Randomise the audios in this part if so desired
+        if 'randomise' in self[part].keys() and self[part].as_bool('randomise'):
+            random.shuffle(self[part]['audios'])
+
+        # Loop over the audios
+        for ia, audio in enumerate(self[part]['audios']):
+            # Define the screen name
+            current_name = f'{part}-{audio}'
+            # If it's the first, set this audio as the 'next' of the intro
+            if not ia:
+                self[part]['intro']['next'] = current_name
+
+            # Set this audio's 'previous' and the previous audio's next
+            self[part][previous_audio]['next'] = current_name
+            self[part][audio]['previous'] = previous_name
+
+            self._prepare_part_audio(part, audio, )
+
+            # Keep track of the last screen name and associated audio name
+            previous_name = current_name
+            previous_audio = audio
+
+            # ======================================================================================================
+            # PREPARATION OF THE PART BREAKS (BLOCK 2)
+            # ======================================================================================================
+
+            # If a break should be included
+            if (break_interval and not (ia + 1) % break_interval) and ia + 1 < len(self[part]['audios']):
+                # Set the current audio and name accordingly
+                audio = f'break {break_count}'
+                current_name = f'{part}-{audio}'
+                # Set the previous audio's 'next' to this break
+                self[part][previous_audio]['next'] = current_name
+                # Set up the current break dict
+                self[part][audio] = {'text': break_text, 'time': break_time,
+                                     'previous': previous_name}
+                # Add the last audio index to the list of indices
+                self[part]['breaks']['after_indices'].append(ia)
+                # Up the break counter
+                break_count += 1
+                # Keep track of the last screen name and associated audio name
+                previous_name = current_name
+                previous_audio = audio
+
+        # ==========================================================================================================
+        # PREPARATION OF THE PART QUESTIONNAIRE
+        # ==========================================================================================================
+
+        if 'questionnaire' in self[part].sections:
+            current_name = f'{part}-questionnaire'
+            audio = 'questionnaire'
+            # Set the 'previous' and the last question's 'next'
+            self[part][previous_audio]['next'] = current_name
+            self[part][audio]['previous'] = previous_name
+
+            self._prepare_part_questionnaire(part)
+
+        return audio, current_name
+
+    def _prepare_experiment(self) -> None:
+        """
+        Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
+        """
         # ==============================================================================================================
-        # PREPARATION OF THE EXPERIMENT PARTS
+        # PREPARATION OF THE WELCOME MESSAGE
         # ==============================================================================================================
 
-        # Pre-define some values to start the loop
+        if 'welcome' not in self.keys():
+            self['welcome'] = 'Welcome to this listening experiment.\nPlease enter your participant ID:'
+        else:
+            # Fix the welcome message.
+            self['welcome'] = self['welcome'].replace('\t', '')
+
+        # Prepare the main questionnaire
+        self._prepare_main_questionnaire()
+
+        # Pre-define some values to start the parts loop
         previous_part = ''
         previous_audio = ''
         previous_name = 'main-questionnaire'
@@ -208,174 +415,8 @@ class PalilaExperiment(ConfigObj):
 
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
-            # ==========================================================================================================
-            # PREPARATION OF THE PART INTRO
-            # ==========================================================================================================
-
-            # Set the intro as the current added screen
-            audio = 'intro'
-            current_name = f'{part}-intro'
-
-            # Add the default intro if it's not in the config file
-            if 'intro' not in self[part].sections:
-                self[part]['intro'] = {'text': f'You have reached part {ip + 1} of the experiment.\n'
-                                               f'Press "Continue" below to resume the experiment.',
-                                       'time': '3.'}
-
-            # Fix up the introduction text
-            self[part]['intro']['text'] = self[part]['intro']['text'].replace('\t', '')
-            # Set the intro screen's 'previous'
-            self[part]['intro']['previous'] = previous_name
-            # In case this is the first part, set the intro as the 'next' of the questionnaire
-            if not ip:
-                self['questionnaire']['next'] = current_name
-            # Otherwise, set the intro as the 'next' of the last part's questionnaire
-            else:
-                self[previous_part][previous_audio]['next'] = current_name
-
-            # And set the intro as the previously added screen
-            previous_name = current_name
-            previous_audio = audio
-
-            # ==========================================================================================================
-            # PREPARATION OF THE PART BREAKS (BLOCK 1)
-            # ==========================================================================================================
-            if 'breaks' in self[part].sections:
-                self[part]['breaks']['after_indices'] = []
-                break_interval = int(self[part]['breaks']['interval'])
-                break_time = int(self[part]['breaks']['time'])
-                if 'text' in self[part]['breaks']:
-                    break_text = self[part]['breaks']['text']
-                else:
-                    break_text = f'This is a {break_time} s break.'
-                break_count = 1
-            else:
-                self[part]['breaks'] = {'after_indices': [-1, ]}
-                break_interval = 0
-                break_time = 0
-                break_text = ''
-                break_count = 0
-
-            # ==========================================================================================================
-            # PREPARATION OF THE PART AUDIOS
-            # ==========================================================================================================
-
-            # Randomise the audios in this part if so desired
-            if 'randomise' in self[part].keys() and self[part].as_bool('randomise'):
-                random.shuffle(self[part]['audios'])
-
-            # Loop over the audios
-            for ia, audio in enumerate(self[part]['audios']):
-                # Define the screen name
-                current_name = f'{part}-{audio}'
-                # If it's the first, set this audio as the 'next' of the intro
-                if not ia:
-                    self[part]['intro']['next'] = current_name
-
-                # Set this audio's 'previous' and the previous audio's next
-                self[part][previous_audio]['next'] = current_name
-                self[part][audio]['previous'] = previous_name
-
-                # Define the full filepath of the audio
-                self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
-
-                # Define the max number of replays
-                if 'max replays' not in self[part][audio].keys():
-                    self[part][audio]['max replays'] = '1'
-
-                # Extract the filler option
-                if 'filler' not in self[part][audio].keys():
-                    self[part][audio]['filler'] = True
-                else:
-                    self[part][audio]['filler'] = self[part][audio].as_bool('filler')
-
-                # ======================================================================================================
-                # PREPARATION OF THE AUDIO QUESTIONS
-                # ======================================================================================================
-
-                for question in self[part][audio]['questions']:
-                    # Remove tabs from the input file in the question text
-                    self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
-
-                    # Extract the id to the overall question id list
-                    if 'id' in self[part][audio][question]:
-                        self.question_id_list.append(self[part][audio][question]['id'])
-                    # Generate a not-so-nice (but standardised) id when it's not defined explicitly
-                    else:
-                        # Extract the user input part, audio and question names from the brackets
-                        part_id = part.replace('part ', '')
-                        audio_id = audio.replace('audio ', '')
-                        question_id = question.replace('question ', '')
-                        # Put those together and add to the list
-                        qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
-                        self.question_id_list.append(qid)
-                        self[part][audio][question]['id'] = qid
-
-                # Keep track of the last screen name and associated audio name
-                previous_name = current_name
-                previous_audio = audio
-
-                # ======================================================================================================
-                # PREPARATION OF THE PART BREAKS (BLOCK 2)
-                # ======================================================================================================
-
-                # If a break should be included
-                if (break_interval and not (ia + 1) % break_interval) and ia + 1 < len(self[part]['audios']):
-                    # Set the current audio and name accordingly
-                    audio = f'break {break_count}'
-                    current_name = f'{part}-{audio}'
-                    # Set the previous audio's 'next' to this break
-                    self[part][previous_audio]['next'] = current_name
-                    # Set up the current break dict
-                    self[part][audio] = {'text': break_text, 'time': break_time,
-                                         'previous': previous_name}
-                    # Add the last audio index to the list of indices
-                    self[part]['breaks']['after_indices'].append(ia)
-                    # Up the break counter
-                    break_count += 1
-                    # Keep track of the last screen name and associated audio name
-                    previous_name = current_name
-                    previous_audio = audio
-
-            # ==========================================================================================================
-            # PREPARATION OF THE PART QUESTIONNAIRE
-            # ==========================================================================================================
-
-            # Set the intro as the current added screen
-            current_name = f'{part}-questionnaire'
-            audio = 'questionnaire'
-
-            if 'questionnaire' in self[part].sections:
-                # Set the 'previous' and the last question's 'next'
-                self[part][previous_audio]['next'] = current_name
-                self[part][audio]['previous'] = previous_name
-
-                # Create a list of the questionnaire questions in the questionnaire dict
-                self[part]['questionnaire']['questions'] = [question for question in
-                                                            self[part]['questionnaire'].sections
-                                                            if 'question' in question]
-
-                # Set up the part questionnaire questions
-                for iq, question in enumerate(self[part]['questionnaire']['questions']):
-                    self[part]['questionnaire'][question]['text'] = self[part]['questionnaire'][question]['text'].replace('\t', '')
-
-                    # Extract the id to the overall question id list
-                    if 'id' in self[part]['questionnaire'][question]:
-                        self.question_id_list.append(self[part]['questionnaire'][question]['id'])
-                    # Generate a not-so-nice (but standardised) id when it's not defined explicitly
-                    else:
-                        # Extract the user input part, audio and question names from the brackets
-                        part_id = part.replace('part ', '')
-                        question_id = question.replace('question ', '')
-                        # Put those together and add to the list
-                        qid = f'{part_id.zfill(2)}-questionnaire-{question_id.zfill(2)}'
-                        self.question_id_list.append(qid)
-                        self[part]['questionnaire'][question]['id'] = qid
-
-                # Set the questionnaire as the last screen that was added
-                previous_name = current_name
-                previous_audio = audio
-
+            # Prepare the part
+            previous_audio, previous_name = self._prepare_part(ip, part, previous_part, previous_audio, previous_name, )
             # Set this part as the last that was added
             previous_part = part
 
