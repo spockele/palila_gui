@@ -1,43 +1,72 @@
+"""
+Module with all the code for the modular questions.
+"""
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
 
+__all__ = ['AudioChoiceButton', 'AudioQuestion', 'TextQuestion', 'AudioMCQuestion',
+           'NumScaleQuestion', 'PointCompassQuestion'
+           ]
+
+
 class AudioChoiceButton(Button):
     """
-    Button with ability to store a state and interact with AudioQuestion
-    """
-    def __init__(self, text: str = '', font_size: int = 72, **kwargs):
-        """
+    Button with ability to store a state and interact with AudioQuestion. Subclass of kivy.uix.button.Button.
 
-        """
+    Parameters
+    ----------
+    text : str
+        Text to be displayed on the button.
+    font_size : int, optional
+        Optional font size of the text. Defaults to 72.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.button.Button constructor.
+    """
+    def __init__(self, text: str = '', font_size: int = 72, **kwargs) -> None:
         super().__init__(text=text, **kwargs)
         self.font_size = font_size
 
     def select(self) -> None:
         """
-
+        Make the background color green to indicate this button is selected.
         """
         self.background_color = [.5, 1., .5, 1.]
 
     def deselect(self) -> None:
         """
-
+        Reset the background color to indicate this button is not selected.
         """
         self.background_color = [1., 1., 1., 1.]
 
-    def on_release(self):
+    def on_release(self) -> None:
         """
-
+        Use the AudioQuestion class to do the selection.
         """
-        self.select()
         self.parent.parent.select_choice(self)
 
 
 class AudioQuestion(BoxLayout):
     """
-    Class to manage the general functions of a question
+    Class to manage the general functions of a question. Subclass of kivy.uix.boxlayout.BoxLayout.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
+
+    Attributes
+    ----------
+    question_dict : dict
+        Dictionary with all the information to construct the question.
+    qid : str
+        Question ID for communication with the file system.
+    answer : AudioChoiceButton = None
+        Button of the currently selected answer. None in case no answer is selected.
     """
-    def __init__(self, question_dict: dict, **kwargs):
+    def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(**kwargs)
         # Store the input information
         self.question_dict = question_dict
@@ -47,62 +76,89 @@ class AudioQuestion(BoxLayout):
             self.ids.question_text.font_size = 42
         # Initialise variable to store current answer
         self.answer = None
-        self.options = []
 
-    def select_choice(self, choice: AudioChoiceButton):
+    def select_choice(self, choice: AudioChoiceButton) -> None:
         """
-        Sets the current answer, based on the input ChoiceButton
+        Sets the current answer in this manager, based on the selected choice.
+
+        Parameters
+        ----------
+        choice : AudioChoiceButton
+            The AudioChoiceButton instance which has triggered the answer selection
         """
+        # Deselect the current answer if there is one
         if self.answer is not None:
-            # Deselect the current answer if there is one
             self.answer.deselect()
 
+        # Remove the current answer if the current answer is pressed again
         if self.answer == choice:
-            # Remove the current answer if the same button is pressed
             self.answer = None
-            # Don't forget to communicate with the QuestionManager
+            # Communicate to the question manager that the question is unanswered.
             self.parent.question_answered(self.qid, False)
+        # Set the current answer to the selected button otherwise
         else:
-            # Set the current answer to the entered button otherwhise
             self.answer = choice
-            # Don't forget to communicate with the QuestionManager
+            self.answer.select()
+            # Communicate to the question manager that the question is answered.
             self.parent.question_answered(self.qid, True)
-
-    def unlock(self):
-        self.disabled = False
 
 
 class TextQuestion(AudioQuestion):
     """
-    Question type to just display text
+    Question type which only displays text. Subclass of GUI.AudioQuestion.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
         self.ids.question_text.valign = 'center'
 
-    def on_size(self, *_):
-        # Upon getting triggered, communicate to QuestionManager this one is answered
+    def on_parent(self, *_):
+        """
+        When the widget gets a parent QuestionManager, this function notifies it that no answer is required here.
+        """
         self.parent.question_answered(self.qid, True)
 
 
 class AudioMCQuestion(AudioQuestion):
     """
-    Question type for multiple choice
+    Question type for multiple choice. Subclass of GUI.AudioQuestion.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question.
+        Should include the following keys: 'id', 'text', 'choices'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
-    def __init__(self, question_dict: dict, **kwargs):
+    def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
         # Add the choices from the input file
         for choice in self.question_dict['choices']:
             button = AudioChoiceButton(choice, font_size=48)
-            self.options.append(button)
+            # self.options.append(button)
             self.ids.answer_options.add_widget(button)
 
 
 class NumScaleQuestion(AudioQuestion):
     """
-    Numerical scale question type
+    Numerical scale question type. Subclass of GUI.AudioQuestion.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question.
+        Should include the following keys: 'id', 'text', 'min', 'max'. Optional keys: 'left note', 'right note'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
-    def __init__(self, question_dict: dict, **kwargs):
+    def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
         # Add the left side note if there is one
         if 'left note' in question_dict.keys():
@@ -122,7 +178,6 @@ class NumScaleQuestion(AudioQuestion):
         for bi, bv in enumerate(range(self.min, self.max + 1)):
             # Create the button and add it to the Layout
             button = AudioChoiceButton(str(bv))
-            self.options.append(button)
             self.ids.answer_options.add_widget(button)
             # Set the x and y size of the buttons (specific to 16:10 aspect ratio)
             button.size_hint_x = .65 * (button_width ** .95)
@@ -133,17 +188,23 @@ class NumScaleQuestion(AudioQuestion):
 
 class PointCompassQuestion(AudioQuestion):
     """
-    The compass type question
+    The compass question type. Subclass of GUI.AudioQuestion.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
-    def __init__(self, question_dict: dict, **kwargs):
+    def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
         self.ids.question_text.size_hint_y = .2
 
-        for widget_id in self.ids:
-            if 'choice' in widget_id:
-                self.options.append(self.ids[widget_id])
-
-    def on_size(self, *_):
+    def on_parent(self, *_) -> None:
+        """
+        When the widget gets a parent QuestionManager, the manager is limited to only one question.
+        """
         # When triggered, set the question manager to only accept one question
         if self.parent.n_question > 1:
             raise OverflowError('PointCompass question takes 2 question slots.')
