@@ -18,7 +18,7 @@ class AudioManager(BoxLayout):
 
     Parameters
     ----------
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
 
     Attributes
@@ -125,7 +125,7 @@ class QuestionManager(BoxLayout):
 
     Parameters
     ----------
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
 
     Attributes
@@ -240,7 +240,7 @@ class AudioQuestionScreen(PalilaScreen):
     ----------
     config_dict : dict
         Dictionary that defines the audio and related questions.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the .screens.PalilaScreen constructor.
 
     Attributes
