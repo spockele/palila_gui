@@ -28,26 +28,16 @@ default = yes
 		interval = 2
 		time = 5
 
-	[[audio 0]]
-		filename = 'tone500Hz.wav'
-		max replays = 5
-
+	[[questions]]
 		[[[question 1]]]
-			type = Text
-			text = 'This is not a question, just text'
-
-
-	[[audio 1]]
-		filename = 'tone500Hz.wav'
-		max replays = 5
-
-		[[[question 1]]]
+			id = 'First Test'
 			type = AudioMC
 			text = 'Is this a question?'
 
 			choices = yes, no, maybe, n/a, lol
 
 		[[[question 2]]]
+			id = 'Second Test'
 			type = NumScale
 			text = 'How good is this question?'
 
@@ -57,13 +47,14 @@ default = yes
 			min = 0
 			max = 4
 
+	[[audio 0]]
+		filename = 'tone500Hz.wav'
+		max replays = 5
+
+	[[audio 1]]
+		filename = 'tone500Hz.wav'
+		max replays = 5
 
 	[[audio 2]]
 		filename = 'tone500Hz.wav'
 		max replays = 1
-		filler = no
-
-		[[[question 1]]]
-			type = PointCompass
-			text = '''Serious question:
-				Where is this sound coming from?'''

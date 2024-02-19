@@ -6,6 +6,7 @@ import pandas as pd
 import datetime
 import random
 import time
+import copy
 import os
 
 
@@ -85,8 +86,22 @@ class PalilaExperiment(ConfigObj):
         if 'intro' in self[part].sections:
             if 'text' not in self[part]['intro']:
                 raise SyntaxError(f'Experiment {part} intro does not contain "text" variable.')
+
             if 'time' not in self[part]['intro']:
                 raise SyntaxError(f'Experiment {part} intro does not contain "time" variable.')
+            elif not self[part]['intro']['time'].isnumeric():
+                raise SyntaxError(f'Experiment {part} intro "time" is not a number.')
+
+        if 'breaks' in self[part].sections:
+            if 'interval' not in self[part]['breaks']:
+                raise SyntaxError(f'Experiment {part} breaks does not contain "interval" variable.')
+            elif not self[part]['breaks']['interval'].isnumeric():
+                raise SyntaxError(f'Experiment {part} breaks "interval" is not a number.')
+
+            if 'time' not in self[part]['breaks']:
+                raise SyntaxError(f'Experiment {part} breaks does not contain "time" variable.')
+            elif not self[part]['breaks']['time'].isnumeric():
+                raise SyntaxError(f'Experiment {part} breaks "time" is not a number.')
 
         # Check if the questionnaire is split properly
         if 'questionnaire' in self[part].sections:
@@ -95,8 +110,11 @@ class PalilaExperiment(ConfigObj):
                 if self[part]['questionnaire']['manual split']:
                     for question in self[part]['questionnaire'].sections:
                         if 'manual screen' not in self[part]['questionnaire'][question]:
-                            raise SyntaxError('If manual split is set, each questionnaire question requires '
-                                              'an assigned screen.')
+                            raise SyntaxError(f'Experiment {part} questionnaire {question} does not contain '
+                                              f'"manual screen" variable.')
+                        elif self[part]['questionnaire'][question]['manual screen'].isnumeric():
+                            raise SyntaxError(f'Experiment {part} questionnaire {question} "manual screen" '
+                                              f'is not a number.')
             else:
                 self[part]['questionnaire']['manual split'] = False
 
@@ -184,7 +202,7 @@ class PalilaExperiment(ConfigObj):
                 self.question_id_list.append(qid)
                 self['questionnaire'][question]['id'] = qid
 
-    def _prepare_part_audio(self, part: str, audio: str, ):
+    def _prepare_part_audio(self, part: str, audio: str, question_overwrite: bool = False):
         """
         Prepares a specific audio's dictionary.
 
@@ -194,6 +212,9 @@ class PalilaExperiment(ConfigObj):
             Index of the part dictionary inside the overall dictionary.
         audio : str
             Index of the audio dictionary inside the part dictionary.
+        question_overwrite : bool, optional
+            If set to True, questions will be obtained from self[part]['questions'] instead of the audio dictionary.
+            Defaults to False.
         """
         # Define the full filepath of the audio
         self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
@@ -206,21 +227,36 @@ class PalilaExperiment(ConfigObj):
         else:
             self[part][audio]['filler'] = self[part][audio].as_bool('filler')
 
+        # Obtain the questions in case of question overwrite from the part
+        if question_overwrite:
+            # First remove the ones that may be in the audio dictionary
+            for question in self[part][audio]['questions']:
+                del self[part][audio][question]
+            # Deep copy the part questions redo the questions list
+            self[part][audio].update(copy.deepcopy(self[part]['questions']))
+            self[part][audio]['questions'] = self[part]['questions'].keys()
+
         # Loop over the questions
         for question in self[part][audio]['questions']:
             # Remove tabs from the input file in the question text
             self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
 
             # Extract the id to the overall question id list
-            if 'id' in self[part][audio][question]:
+            if 'id' in self[part][audio][question] and not question_overwrite:
                 self.question_id_list.append(self[part][audio][question]['id'])
-            # Generate a not-so-nice (but standardised) id when it's not defined explicitly
+            # Generate a standardised id when it's not defined explicitly
             else:
                 # Extract the user input part, audio and question names from the brackets
                 part_id = part.replace('part ', '')
                 audio_id = audio.replace('audio ', '')
-                question_id = question.replace('question ', '')
-                # Put those together and add to the list
+                # In case of questions overwrite, define the ID with a semi-standardised version
+                if question_overwrite:
+                    question_id = self[part][audio][question]['id']
+                # Otherwise, make it ugly as all hell
+                else:
+                    question_id = question.replace('question ', '')
+
+                # Put everything together and add to the list
                 qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
                 self.question_id_list.append(qid)
                 self[part][audio][question]['id'] = qid
@@ -332,6 +368,8 @@ class PalilaExperiment(ConfigObj):
         if 'randomise' in self[part].keys() and self[part].as_bool('randomise'):
             random.shuffle(self[part]['audios'])
 
+        question_overwrite = 'questions' in self[part].sections
+
         # Loop over the audios
         for ia, audio in enumerate(self[part]['audios']):
             # Define the screen name
@@ -344,7 +382,8 @@ class PalilaExperiment(ConfigObj):
             self[part][previous_audio]['next'] = current_name
             self[part][audio]['previous'] = previous_name
 
-            self._prepare_part_audio(part, audio, )
+            # Prepare the current audio.
+            self._prepare_part_audio(part, audio, question_overwrite)
 
             # Keep track of the last screen name and associated audio name
             previous_name = current_name

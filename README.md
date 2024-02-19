@@ -18,8 +18,8 @@ Graphical user interface for listening experiments in the
 
 ### Installation
 1. Download this software to the desired location, either:
-   - through git
-   - by downloading the zip file and unpacking it
+  - through git
+  - by downloading the zip file and unpacking it
 2. Run ```setup.bat```
 
 Now you can run the GUI with ```PALILA.bat```
@@ -74,6 +74,10 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
     [[intro]] (optional)                # -> Optional introduction message to the experiment part.
         text = <string>                     # -> Introduction message text.
         time = <float>                      # -> Duration of the intro timer in seconds.
+        
+    [[questions]] (optional)            # -> Optional SubSection to define the questions for all audios in this part.
+                                        #   See below how to define questions. Questions in [Audio <string>] will be 
+                                        #   ignored if this SubSection is defined.
     
     [[audio <string>]]                  # -> SubSection defining the screen for one audio sample.
                                         #   Multiple audios per part are allowed
