@@ -34,7 +34,7 @@ class PalilaScreenManager(ScreenManager):
         PalilaExperiment instance to link this screen manager to.
     answers : PalilaAnswers
         PalilaAnswers instance to link this screen manager to.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.screenmanager.ScreenManager constructor.
 
     Attributes
@@ -66,14 +66,19 @@ class PalilaScreenManager(ScreenManager):
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
-            self.add_widget(PartIntroScreen(self.experiment[part]['intro'], name=f'{part}-intro'))
+            self.add_widget(TimedTextScreen(self.experiment[part]['intro'], name=f'{part}-intro'))
+            break_count = 1
             # Within each part, loop over the audios
             for ia, audio in enumerate(self.experiment[part]['audios']):
                 # Gather the corresponding configuration dictionary and add the general audio path of the experiment
                 audio_config_dict = self.experiment[part][audio]
-
                 # Create the screen
                 self.add_widget(AudioQuestionScreen(audio_config_dict, name=f'{part}-{audio}'))
+
+                if ia in self.experiment[part]['breaks']['after_indices']:
+                    break_name = f'break {break_count}'
+                    self.add_widget(TimedTextScreen(self.experiment[part][break_name], name=f'{part}-{break_name}'))
+                    break_count += 1
 
             # Add the final questionnaire if it is present
             if 'questionnaire' in self.experiment[part].sections:
@@ -129,7 +134,7 @@ class PalilaApp(App):
     ----------
     experiment_name : str
         Name of the listening experiment config file (<name>.palila) and directory.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.app.App constructor.
 
     Attributes

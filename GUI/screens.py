@@ -6,7 +6,7 @@ from kivy.clock import Clock
 from .threaded_tools import ProgressBarThread
 
 
-__all__ = ['PalilaScreen', 'WelcomeScreen', 'PartIntroScreen', 'Filler', 'BackButton']
+__all__ = ['PalilaScreen', 'WelcomeScreen', 'TimedTextScreen', 'Filler', 'BackButton']
 
 
 class Filler(Widget):
@@ -143,7 +143,7 @@ class WelcomeScreen(PalilaScreen):
             self.ids.continue_bttn.lock()
 
 
-class PartIntroScreen(PalilaScreen):
+class TimedTextScreen(PalilaScreen):
     """
 
     """

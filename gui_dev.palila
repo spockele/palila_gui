@@ -23,6 +23,10 @@ default = yes
 [part 1]
 	randomise = no
 
+	[[breaks]]
+		interval = 2
+		time = 5
+
 	[[audio 0]]
 		filename = 'tone500Hz.wav'
 		max replays = 5

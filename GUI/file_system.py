@@ -233,6 +233,25 @@ class PalilaExperiment(ConfigObj):
             previous_audio = audio
 
             # ==========================================================================================================
+            # PREPARATION OF THE PART BREAKS (BLOCK 1)
+            # ==========================================================================================================
+            if 'breaks' in self[part].sections:
+                self[part]['breaks']['after_indices'] = []
+                break_interval = int(self[part]['breaks']['interval'])
+                break_time = int(self[part]['breaks']['time'])
+                if 'text' in self[part]['breaks']:
+                    break_text = self[part]['breaks']['text']
+                else:
+                    break_text = f'This is a {break_time} s break.'
+                break_count = 1
+            else:
+                self[part]['breaks']['after_indices'] = [-1]
+                break_interval = 0
+                break_time = 0
+                break_text = ''
+                break_count = 0
+
+            # ==========================================================================================================
             # PREPARATION OF THE PART AUDIOS
             # ==========================================================================================================
 
@@ -290,6 +309,28 @@ class PalilaExperiment(ConfigObj):
                 # Keep track of the last screen name and associated audio name
                 previous_name = current_name
                 previous_audio = audio
+
+                # ======================================================================================================
+                # PREPARATION OF THE PART BREAKS (BLOCK 2)
+                # ======================================================================================================
+
+                # If a break should be included
+                if (break_interval and not (ia + 1) % break_interval) and ia + 1 < len(self[part]['audios']):
+                    # Set the current audio and name accordingly
+                    audio = f'break {break_count}'
+                    current_name = f'{part}-{audio}'
+                    # Set the previous audio's 'next' to this break
+                    self[part][previous_audio]['next'] = current_name
+                    # Set up the current break dict
+                    self[part][audio] = {'text': break_text, 'time': break_time,
+                                         'previous': previous_name}
+                    # Add the last audio index to the list of indices
+                    self[part]['breaks']['after_indices'].append(ia)
+                    # Up the break counter
+                    break_count += 1
+                    # Keep track of the last screen name and associated audio name
+                    previous_name = current_name
+                    previous_audio = audio
 
             # ==========================================================================================================
             # PREPARATION OF THE PART QUESTIONNAIRE
