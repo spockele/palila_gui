@@ -9,16 +9,28 @@ __all__ = ['ProgressBarThread', ]
 
 class ProgressBarThread(threading.Thread):
     """
-    Thread subclass to manage the ProgressBar that times audio
+    Thread subclass to manage a timed ProgressBar.
+
+    Parameters
+    ----------
+    progress_bar : ProgressBar
+        ProgressBar instance to keep track of.
+    **kwargs
+        Keyword arguments. These are passed on to the threading.Thread constructor.
+
+    Attributes
+    ----------
+    progress_bar : ProgressBar
+        ProgressBar instance to keep track of.
     """
     def __init__(self, progress_bar: ProgressBar, **kwargs):
-        """
-        @param progress_bar: The ProgressBar object to be timed
-        """
         super().__init__(**kwargs)
         self.progress_bar = progress_bar
 
-    def run(self):
+    def run(self) -> None:
+        """
+        Run function of the Thread. Will update the progress bar every 0.1 seconds until it is full.
+        """
         # Set initial time
         t0 = time.time()
         dt = .1
