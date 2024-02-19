@@ -18,8 +18,8 @@ Graphical user interface for listening experiments in the
 
 ### Installation
 1. Download this software to the desired location, either:
-  - through git
-  - by downloading the zip file and unpacking it
+   - through git
+   - by downloading the zip file and unpacking it
 2. Run ```setup.bat```
 
 Now you can run the GUI with ```PALILA.bat```
@@ -137,17 +137,17 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 Results from an experiment will be output as individual ```.csv``` files in the directory ```.\<experiment name>\responses\```.\
 The ```.csv``` files contain a table which is formated as follows:
 
-|          | ```<question ID>``` | ```<question ID>``` | ... |
-|:--------:|:-------------------:|:-------------------:|-----|
-| response |   ```<answer>```    |  ``` <answer> ```   | ... |
+|          | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
+|:--------:|:-------------------:|:-------------------:|-----|:---------------------------:|
+| response |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
 
 A script will be included to merge these individual tables into one ```.csv``` file, with a row per participant ID:
 
-|                        | ```<question ID>``` | ```<question ID>``` | ... |
-|:----------------------:|:-------------------:|:-------------------:|-----|
-| ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... |
-| ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... |
-|          ...           |         ...         |         ...         | ... |
+|                        | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
+|:----------------------:|:-------------------:|:-------------------:|-----|:---------------------------:|
+| ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
+| ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
+|          ...           |         ...         |         ...         | ... |             ...             |
 
 [//]: # (---)
 

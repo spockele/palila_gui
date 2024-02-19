@@ -5,6 +5,7 @@ from configobj import ConfigObj
 import pandas as pd
 import datetime
 import random
+import time
 import os
 
 
@@ -249,7 +250,7 @@ class PalilaExperiment(ConfigObj):
                     break_text = f'This is a {break_time} s break.'
                 break_count = 1
             else:
-                self[part]['breaks']['after_indices'] = [-1]
+                self[part]['breaks'] = {'after_indices': [-1, ]}
                 break_interval = 0
                 break_time = 0
                 break_text = ''
@@ -408,6 +409,8 @@ class PalilaAnswers:
         self.experiment = experiment
         self.pid_mode = self.experiment['pid mode']
         # Set up the output dataframe
+        columns = self.experiment.question_id_list
+        columns.append('timer')
         self.out = pd.DataFrame(None, index=['response'], columns=self.experiment.question_id_list)
 
         # Initialise the PID in case of auto mode
@@ -434,3 +437,27 @@ class PalilaAnswers:
         Save the answers to the pre-determined file.
         """
         self.out.to_csv(self.out_path)
+
+    def start_timer(self) -> None:
+        """
+        Set the start time of the experiment to later determine the completion time.
+        """
+        print(f'Timer started at {datetime.datetime.now().strftime("%A %d %B %Y - %H:%M")}')
+        self.out.loc['response', 'timer'] = time.time()
+
+    def stop_timer(self) -> None:
+        """
+        Determine the completion time with the previously set start time.
+
+        Raises
+        ------
+        RuntimeError
+            In case the timer value in the PalilaAnswers().out DataFrame was not set before calling this function.
+        """
+        if self.out.loc['response', 'timer'] is None:
+            raise RuntimeError('No start time was set in the timer. Cannot determine completion time.')
+        else:
+            self.out.loc['response', 'timer'] = time.time() - self.out.loc['response', 'timer']
+            print(f'Timer stopped at {datetime.datetime.now().strftime("%A %d %B %Y - %H:%M")}.\n'
+                  f'Elapsed time was {round(self.out.loc["response", "timer"] / 60)}:'
+                  f'{round(self.out.loc["response", "timer"] % 60)} minutes.')
