@@ -18,8 +18,8 @@ Graphical user interface for listening experiments in the
 
 ### Installation
 1. Download this software to the desired location, either:
-   - through git
-   - by downloading the zip file and unpacking it
+  - through git
+  - by downloading the zip file and unpacking it
 2. Run ```setup.bat```
 
 Now you can run the GUI with ```PALILA.bat```
@@ -37,7 +37,7 @@ The experiment configuration consists of two items:
 ```
 # ======================================================================================================================
 
-pid = <string>                      # -> Mode to set the Participant ID (auto, input).
+pid mode = <string>                 # -> Mode to set the Participant ID (auto, input).
 welcome = <string> (optional)       # -> Optional welcome message for the first screen.
 randomise = <boolean> (optional)    # -> Switch to randomise the order of the experiment parts.
 
@@ -66,6 +66,11 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
                                     #   Multiple parts per experiment are allowed.
     randomise = <boolean> (optional)    # -> Switch to randomise the order of the audios within the part.
     
+    [[breaks]] (optional)               # -> Optional breaks to allow for resting in the experiment part.
+        text = <string> (optional)          # -> Optional custom message for during the breaks.
+        interval = <integer>                # -> Number of audios between breaks.
+        time = <integer>                    # -> Duration of the breaks in seconds.
+    
     [[intro]] (optional)                # -> Optional introduction message to the experiment part.
         text = <string>                     # -> Introduction message text.
         time = <float>                      # -> Duration of the intro timer in seconds.
@@ -82,7 +87,7 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
             text = <string>                     # -> Defines the question text.
             
     [[questionnaire]] (optional)        # -> SubSection defining the optional questionnaire of this experiment part.
-                                        #   See the main questionnaire for syntax. Cannot select default for this one.
+                                        #   See the main questionnaire for syntax. Keyword 'default' is disabled.
 
 # ======================================================================================================================
 ```
