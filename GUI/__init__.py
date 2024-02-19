@@ -50,7 +50,7 @@ class PalilaScreenManager(ScreenManager):
         self.experiment = experiment
         self.answers = answers
 
-        self.add_widget(WelcomeScreen(self.experiment['pid'], self.experiment['welcome'],
+        self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
                                       '', 'main-questionnaire', name='welcome'))
         self.current = 'welcome'
 

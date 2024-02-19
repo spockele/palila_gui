@@ -1,4 +1,5 @@
-pid = auto
+pid mode = auto
+randomise = yes
 
 [questionnaire]
 default = yes

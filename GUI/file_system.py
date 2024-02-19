@@ -201,6 +201,10 @@ class PalilaExperiment(ConfigObj):
         previous_audio = ''
         previous_name = 'main-questionnaire'
 
+        # Randomise the parts in this experiment if so desired
+        if 'randomise' in self.keys() and self.as_bool('randomise'):
+            random.shuffle(self['parts'])
+
         # Loop over all the experiment parts
         for ip, part in enumerate(self['parts']):
             # ==========================================================================================================
@@ -402,7 +406,7 @@ class PalilaAnswers:
     def __init__(self, experiment: PalilaExperiment) -> None:
         # Store the experiment inside this class
         self.experiment = experiment
-        self.pid_mode = self.experiment['pid']
+        self.pid_mode = self.experiment['pid mode']
         # Set up the output dataframe
         self.out = pd.DataFrame(None, index=['response'], columns=self.experiment.question_id_list)
 
