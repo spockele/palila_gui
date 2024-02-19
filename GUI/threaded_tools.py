@@ -1,7 +1,9 @@
+"""
+Module containing all the threading.Thread based tools for the GUI.
+"""
+from kivy.uix.progressbar import ProgressBar
 import threading
 import time
-
-from kivy.uix.progressbar import ProgressBar
 
 
 __all__ = ['ProgressBarThread', ]
