@@ -28,9 +28,13 @@ class AudioQuestionScreen(PalilaScreen):
     config_dict : dict
         Dictionary that defines the audio and related questions.
     audio_manager_left : AudioManagerLeft
-        The instance of AudioManager linked to this specific screen.
+        The primary instance of AudioManager linked to this specific screen.
+    audio_manager_right : AudioManagerLeft
+        The secondary instance of AudioManager linked to this specific screen.
     question_manager : QuestionManager
         The instance of QuestionManager linked to this specific screen.
+    audio_block : bool
+        Switch indicating that audio replay should be blocked.
     """
 
     def __init__(self, config_dict: dict, **kwargs) -> None:
@@ -59,6 +63,8 @@ class AudioQuestionScreen(PalilaScreen):
             self.question_manager.add_question(self.config_dict[question])
         # Readjust the question manager after adding all questions
         self.question_manager.readjust(self.config_dict['filler'])
+
+        self.audio_block = False
 
     def on_pre_leave(self, *_) -> None:
         """
@@ -122,7 +128,7 @@ class AudioManager(BoxLayout):
     count : int
         Integer that keeps track of the times the audio has been played.
     parent_screen : AudioQuestionScreen
-
+        Screen on which this manager is present.
     """
 
     def __init__(self, **kwargs) -> None:
@@ -167,7 +173,7 @@ class AudioManager(BoxLayout):
         Function that starts the audio.
         """
         # Check the count and if audio is already playing
-        if self.count < self.n_max and not self.playing:
+        if self.count < self.n_max and not self.playing and not self.parent_screen.audio_block:
             # Set up the ProgressBarThread and the corresponding bar
             self.thread = ProgressBarThread(self.ids.progress)
             self.ids.progress.max = self.audio.length
@@ -175,6 +181,7 @@ class AudioManager(BoxLayout):
             self.thread.start()
             self.audio.play()
             self.playing = True
+            self.parent_screen.audio_block = True
             # Reflect the audio playing in the play button and text
             self.ids.bttn_image.source = 'GUI/assets/hearing.png'
             self.ids.bttn.background_color = [.5, .5, 1, 1]
@@ -191,6 +198,7 @@ class AudioManager(BoxLayout):
         self.thread = None
         # Register that no audio is playing
         self.playing = False
+        self.parent_screen.audio_block = False
         # Check the remaining replay allowance
         remaining = self.n_max - self.count
         # If there is allowance left
