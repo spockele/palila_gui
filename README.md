@@ -2,7 +2,7 @@
 
 Graphical user interface for listening experiments in the
 [<b><u>P</u></b>sycho<b><u>A</u></b>coustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf)
-[[1](#merinomartinez_2023)] at the Delft University of Technology, Faculty of Aerospace Engineering.
+[[1](#merinomartinez_2023)] at the [Delft University of Technology, Faculty of Aerospace Engineering](https://www.tudelft.nl/lr).
 
 ### Developed by:
 - [ir. Josephine Siebert Pockelé](https://orcid.org/0009-0002-5152-9986)
@@ -12,14 +12,15 @@ Graphical user interface for listening experiments in the
 ---
 ### Requirements
 - Windows 10 or 11.
-- [Python](https://www.python.org/) version 3.11 or newer.
-- A touchscreen device with 16:10 aspect ratio.\
-  Other ratios may result in visual artefacts.
+- [Python](https://www.python.org/) version 3.11 or newer. 
+  - Enable <b><u>'Add Python to PATH'</u></b> while installing.
+- A touchscreen device with a resolution of 1920 x 1200.
+  - Other ratios may result in visual artefacts.
 
 ### Installation
 1. Download this software to the desired location, either:
-  - through git
-  - by downloading the zip file and unpacking it
+   - through git
+   - by downloading the zip file and unpacking it
 2. Run ```setup.bat```
 
 Now you can run the GUI with ```PALILA.bat```
