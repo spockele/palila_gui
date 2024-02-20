@@ -126,12 +126,21 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
   - Recommended limit of 4-5 choices.
 - ```NumScale```: Rating question with an integer numerical scale.
   - Requires:\
-    ```min = <integer>``` -> Defines the minimum value of the scale\
-    ```max = <integer>``` -> Defines the minimum value of the scale
+    ```min = <integer>``` -> Defines the minimum value of the scale.\
+    ```max = <integer>``` -> Defines the minimum value of the scale.
   - Recommended range: ```4 <= (max - min) <= 10```
   - Optional:\
-    ```left note = <string>``` -> Defines the text on the left side of the scale\
-    ```right note = <string>``` -> Defines the text on the right side of the scale
+    ```left note = <string>``` -> Defines the text on the left side of the scale.\
+    ```right note = <string>``` -> Defines the text on the right side of the scale.
+- ```Slider```: Rating question with a slider input.
+  - Requires:\
+    ```min = <float>``` -> Defines the minimum value of the scale.\
+    ```max = <float>``` -> Defines the minimum value of the scale.\
+    ```step = <float>``` -> Defines the steps of the slider scale.
+  - Recommended to use only after NumScale does not suffice in resolution.
+  - Optional:\
+    ```left note = <string>``` -> Defines the text on the left side of the scale.\
+    ```right note = <string>``` -> Defines the text on the right side of the scale.
 
 ### Standardised question IDs
 - In the main questionnaire: ```main-questionnaire-{question name}```.
