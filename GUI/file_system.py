@@ -235,7 +235,11 @@ class PalilaExperiment(ConfigObj):
             for question in self[part][audio]['questions']:
                 del self[part][audio][question]
             # Deep copy the part questions redo the questions list
-            self[part][audio].update(copy.deepcopy(self[part]['questions']))
+            for key, value in self[part]['questions'].items():
+                self[part][audio][key] = {}
+                for subkey, sub_value in value.items():
+                    self[part][audio][key][subkey] = copy.deepcopy(sub_value)
+
             self[part][audio]['questions'] = self[part]['questions'].keys()
 
         # Loop over the questions
@@ -484,6 +488,8 @@ class PalilaAnswers:
         The DataFrame in which the experiment answers are stored for exporting at the end.
     out_path: str
         Path defining the output file location.
+    timing : bool
+        Indication that the timer is running.
     """
 
     def __init__(self, experiment: PalilaExperiment) -> None:
@@ -493,7 +499,7 @@ class PalilaAnswers:
         # Set up the output dataframe
         columns = self.experiment.question_id_list
         columns.append('timer')
-        self.out = pd.DataFrame(None, index=['response'], columns=self.experiment.question_id_list)
+        self.out = pd.DataFrame('', index=['response'], columns=self.experiment.question_id_list)
 
         # Initialise the PID in case of auto mode
         if self.pid_mode == 'auto':
@@ -501,6 +507,8 @@ class PalilaAnswers:
             self.out_path = os.path.join(self.experiment.path, 'responses', f'{self.pid}.csv')
         else:
             self.pid = None
+
+        self.timing = False
 
     def set_pid(self, pid: str) -> None:
         """
@@ -525,7 +533,8 @@ class PalilaAnswers:
         Set the start time of the experiment to later determine the completion time.
         """
         print(f'Timer started at {datetime.datetime.now().strftime("%A %d %B %Y - %H:%M")}')
-        self.out.loc['response', 'timer'] = time.time()
+        self.out.loc['response', 'timer'] = str(time.time())
+        self.timing = True
 
     def stop_timer(self) -> None:
         """
@@ -536,10 +545,14 @@ class PalilaAnswers:
         RuntimeError
             In case the timer value in the PalilaAnswers().out DataFrame was not set before calling this function.
         """
-        if self.out.loc['response', 'timer'] is None:
+        if self.out.loc['response', 'timer'] == '':
             raise RuntimeError('No start time was set in the timer. Cannot determine completion time.')
-        else:
-            self.out.loc['response', 'timer'] = time.time() - self.out.loc['response', 'timer']
+        elif self.timing:
+            self.timing = False
+            self.out.loc['response', 'timer'] = str(time.time() - float(self.out.loc['response', 'timer']))
             print(f'Timer stopped at {datetime.datetime.now().strftime("%A %d %B %Y - %H:%M")}.\n'
-                  f'Elapsed time was {round(self.out.loc["response", "timer"] / 60)}:'
-                  f'{round(self.out.loc["response", "timer"] % 60)} minutes.')
+                  f'Elapsed time was {round(float(self.out.loc["response", "timer"]) / 60)}:'
+                  f'{round(float(self.out.loc["response", "timer"]) % 60)} minutes.')
+
+        else:
+            raise RuntimeError('Timer has already stopped.')

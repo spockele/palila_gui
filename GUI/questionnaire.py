@@ -66,15 +66,15 @@ class FreeNumQuestion(QuestionnaireQuestion):
 
         """
         if self.ids.question_input.text:
-            try:
-                self.answer = int(self.ids.question_input.text)
+            if self.ids.question_input.text.isnumeric():
+                self.answer = self.ids.question_input.text
                 self.ids.question_input_overlay.text = ''
                 self.ids.question_input.background_color = (1., 1., 1., 1.)
                 self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
 
-            except ValueError:
+            else:
                 if self.answer is not None:
-                    self.ids.question_input.text = str(self.answer)
+                    self.ids.question_input.text = self.answer
                 else:
                     self.ids.question_input.text = ''
                     self.ids.question_input_overlay.color = (1., .2, .2, 1.)

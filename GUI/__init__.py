@@ -179,4 +179,5 @@ class PalilaApp(App):
         Actions to be taken when the app is stopped.
         """
         if self.experiment.name != 'gui_dev':
+            self.answers.stop_timer()
             self.answers.save_to_file()
