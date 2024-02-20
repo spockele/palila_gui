@@ -1,6 +1,7 @@
 """
 Module with all the code for the modular questions.
 """
+from kivy.properties import NumericProperty, ListProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
@@ -73,7 +74,7 @@ class AudioQuestion(BoxLayout):
         self.qid = question_dict['id']
         self.ids.question_text.text = question_dict['text']
         if '\n' in question_dict['text']:
-            self.ids.question_text.font_size = 42
+            self.ids.question_text.font_size = 38
         # Initialise variable to store current answer
         self.answer = None
 
@@ -210,3 +211,83 @@ class PointCompassQuestion(AudioQuestion):
             raise OverflowError('PointCompass question takes 2 question slots.')
 
         self.parent.n_max = 1
+
+
+class AnswerHolder:
+    """
+
+
+    Attributes
+    ----------
+    text : str
+        Holds the answer text
+    """
+    def __init__(self):
+        self.text: str = ''
+
+
+class SliderQuestion(AudioQuestion):
+    """
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question.
+        Should include the following keys: 'id', 'text', 'min', 'max'. 'step'. Optional keys: 'left note', 'right note'.
+
+    Attributes
+    ----------
+
+    """
+
+    value = NumericProperty(0.)
+    value_normalized = NumericProperty(0.)
+
+    min = NumericProperty(0.)
+    max = NumericProperty(0.)
+    step = NumericProperty(0.)
+
+    slider_color = ListProperty([.8, .8, .8, 1.])
+
+    def __init__(self, question_dict: dict, **kwargs) -> None:
+        super().__init__(question_dict, **kwargs)
+        # Add the left side note if there is one
+        if 'left note' in question_dict.keys():
+            self.ids.left_note.text = question_dict['left note']
+        # Add the right side note if there is one
+        if 'right note' in question_dict.keys():
+            self.ids.right_note.text = question_dict['right note']
+
+        # Make the min and max values into integers
+        self.min = float(question_dict['min'])
+        self.max = float(question_dict['max'])
+        self.step = float(question_dict['step'])
+
+        self.value = (self.max + self.min) / 2.
+        self.value_normalized = self.ids.slider.value_normalized
+
+        self.answer = AnswerHolder()
+
+    def set_value(self, value: float, value_normalized: float) -> None:
+        """
+
+        Parameters
+        ----------
+        value : float
+            The value passed from the slider
+        value_normalized : float
+
+        """
+        if self.answer is not None:
+            if not self.answer.text:
+                self.parent.question_answered(self.qid, True)
+                self.ids.slider.background_color = (.5, 1., .5, 1)
+
+            value = round(value, 9)
+            self.answer.text = str(value)
+            self.value = value
+            self.value_normalized = value_normalized
+
+            self.slider_color = [.9 * .5, .9 * 1., .9 * .5, .9 * 1.]
+            self.ids.slider.background_horizontal = 'GUI/assets/Slider_cursor_answered.png'
+            self.ids.slider.cursor_image = 'GUI/assets/Slider_cursor_answered.png'

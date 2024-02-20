@@ -69,6 +69,131 @@
                     radius: [self.size[1] / 2.5]
 
 
+<SliderQuestion>
+	BoxLayout:
+        size_hint_y: .55
+        id: answer_options
+        orientation: 'horizontal'
+        spacing: 30
+
+        Label:
+            size_hint: .15, 1
+
+            id: left_note
+            text: 'left note'
+
+            text_size: self.size
+            font_size: 48
+            halign: 'right'
+            valign: 'center'
+
+        FloatLayout:
+			size_hint: .7, 1.
+
+        	Widget:
+        		pos_hint: {'center_x': .5, 'y': .20}
+        		size_hint: .01, .6
+
+        		canvas.after:
+        			Color:
+        				rgba: .8, .8, .8, 1.
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+        	Widget:
+        		pos_hint: {'center_x': 0, 'y': .20}
+        		size_hint: .01, .6
+
+        		canvas.after:
+        			Color:
+        				rgba: .8, .8, .8, 1.
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+        	Widget:
+        		pos_hint: {'center_x': 1., 'y': .20}
+        		size_hint: .01, .6
+
+        		canvas.after:
+        			Color:
+        				rgba: .8, .8, .8, 1.
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+			Slider:
+				pos_hint: {'center_x': .5, 'center_y': .5}
+				size_hint: 1., 1.
+				id: slider
+
+				background_disabled_horizontal: 'GUI/assets/Rounded_button_disabled_normal.png'
+				background_horizontal: 'GUI/assets/Rounded_button_normal.png'
+				border_horizontal: 15, 15, 15, 15
+
+				cursor_disabled_image: 'GUI/assets/Slider_cursor_disabled.png'
+				cursor_image: 'GUI/assets/Slider_cursor.png'
+				cursor_height: 100
+				cursor_width: 30
+
+				padding: 0
+				min: root.min
+				max: root.max
+				step: root.step
+				value: root.value
+
+				on_value: root.set_value(self.value, self.value_normalized)
+
+        	Label:
+        		text: str(root.value)
+        		pos_hint: {'center_x': root.value_normalized, 'y': .82}
+        		size_hint: .06, .33
+        		text_size: self.size
+        		halign: 'center'
+        		valign: 'bottom'
+
+        		canvas.before:
+        			Color:
+        				rgba: root.slider_color
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+        	Label:
+        		text: str(root.min)
+        		pos_hint: {'center_x': 0., 'top': .175}
+        		size_hint: .1, .15
+
+        	Label:
+        		text: str((root.max + root.min) / 2.)
+        		pos_hint: {'center_x': .5, 'top': .175}
+        		size_hint: .1, .15
+
+        	Label:
+        		text: str(root.max)
+        		pos_hint: {'center_x': 1., 'top': .175}
+        		size_hint: .1, .15
+
+        Label:
+            size_hint: .15, 1
+
+            id: right_note
+            text: 'right note'
+
+            text_size: self.size
+			font_size: 48
+            halign: 'left'
+            valign: 'center'
+
+    Widget:
+    	size_hint_y: .05
+
+
 <PointCompassQuestion>
     FloatLayout:
         size_hint_y: .8
