@@ -1,61 +1,118 @@
 pid mode = auto
-randomise = yes
+randomise = no
 
 [questionnaire]
-default = yes
-
-	[[question wt_attitude]]
-		id = 'wt_attitude'
-		type = QuestionnaireMC
-		text = '''How would you rate your attitude
-			towards wind turbines?'''
-		choices = ' ++ ', ' + ', ' 0 ', ' - ', ' -- '
-		manual screen = 3
-
-	[[question wt_exposure]]
-		id = 'wt_exposure'
-		type = QuestionnaireMC
-		text = '''Have you ever heard a wind turbine
-			before this experiment?'''
-		choices = 'Yes', 'No'
-		manual screen = 3
+	default = yes
 
 
 [part 1]
 	randomise = no
 
-	[[breaks]]
-		interval = 2
-		time = 5
+	[[intro]]
+		text = '''This is the first part of the PALILA GUI demo. This part showcases audio's with common questions. It also shows multi-audio screens and the replay ability.
+		Press continue, once available, to resume the experiment...'''
+		time = 1
 
 	[[questions]]
 		[[[question 1]]]
-			id = 'First Test'
-			type = AudioMC
-			text = 'Is this a question?'
-
-			choices = yes, no, maybe, n/a, lol
-
-		[[[question 2]]]
-			id = 'Second Test'
+			id = 'NumScale'
 			type = NumScale
-			text = 'How good is this question?'
+			text = 'How good is this question. Please indicate on this scale from 1 to 9.'
 
-			left note = Very bad
-			right note = Very good
+			min = 1
+			max = 9
 
-			min = 0
-			max = 4
+			left note = 'Very Bad'
+			right note = 'Very Good'
 
 	[[audio 0]]
 		filename = 'tone500Hz.wav'
-		filename_2 = 'tone500Hz.wav'
-		max replays = 5
 
 	[[audio 1]]
 		filename = 'tone500Hz.wav'
-		max replays = 5
+		filename_2 = 'tone500Hz.wav'
 
 	[[audio 2]]
 		filename = 'tone500Hz.wav'
-		max replays = 1
+		max replays = 5
+
+
+[part 2]
+	randomise = no
+
+	[[intro]]
+		text = '''This is the second part of the PALILA GUI demo.
+			This part showcases most options in questions.
+			Press continue, once available, to resume the experiment...'''
+		time = 1
+
+	[[breaks]]
+		text = 'Breaks can be put at an interval.'
+		interval = 2
+		time = 1
+
+	[[audio 0]]
+		filename = 'tone500Hz.wav'
+
+		[[[question 0]]]
+			id = 'Custom question ID'
+			type = Text
+			text = '''This is just text, no question asked.
+				If only a text is present, the continue button unlocks after playing audio. Use it wisely.
+				The next screens will showcase all question types.'''
+
+	[[audio 1]]
+		filename = 'tone500Hz.wav'
+
+		[[[question mc]]]
+			text = '''This here is a multiple choice question.
+				Do you like it?'''
+			type = AudioMC
+
+			choices = 'Yes', 'No', 'Not Sure'
+
+	[[audio 2]]
+		filename = 'tone500Hz.wav'
+
+		[[[question ns]]]
+			text = '''This here is a numerical scale question.
+				On a scale from 1 to 5, how nice is it?'''
+			type = NumScale
+
+			min = 1
+			max = 5
+
+		[[[question nsn]]]
+			text = '''This here is a numerical scale question. With side notes this time.
+				On a scale from 1 to 5, how nice is it?'''
+			type = NumScale
+
+			min = 1
+			max = 5
+
+			left note = 'Not so'
+			right note = 'Very'
+
+	[[audio 3]]
+		filename = 'tone500Hz.wav'
+
+		[[[question sl]]]
+			text = '''This here is a slider question.
+				On a scale from 0 to 10, how nice is it?'''
+			type = Slider
+
+			min = 0
+			max = 10
+			step = .5
+
+		[[[question sln]]]
+			text = '''This here is a slider question. With side notes this time.
+				On a scale from 0 to 10, how nice is it?'''
+			type = Slider
+
+			min = 0
+			max = 10
+			step = .5
+
+			left note = 'Not so'
+			right note = 'Very'
