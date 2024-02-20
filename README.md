@@ -74,7 +74,7 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
     
     [[intro]] (optional)                # -> Optional introduction message to the experiment part.
         text = <string>                     # -> Introduction message text.
-        time = <float>                      # -> Duration of the intro timer in seconds.
+        time = <integer>                      # -> Duration of the intro timer in seconds.
         
     [[questions]] (optional)            # -> Optional SubSection to define the questions for all audios in this part.
                                         #   See below how to define questions. Questions in [Audio <string>] will be 
@@ -83,6 +83,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
     [[audio <string>]]                  # -> SubSection defining the screen for one audio sample.
                                         #   Multiple audios per part are allowed
         filename = <string>                 # -> Name of the audio file inside the experiment directory.
+        filename_2 = <string> (optional)    # -> Optional second audio file for comparisons. Will add an extra play 
+                                            #   button to the AudioQuestionScreen.
         max replays = <integer> (optional)  # -> Defines the maximum number of times a sample can be replayed.
                                             #   Defaults to 1.
                                             

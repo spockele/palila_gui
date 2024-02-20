@@ -49,6 +49,7 @@ default = yes
 
 	[[audio 0]]
 		filename = 'tone500Hz.wav'
+		filename_2 = 'tone500Hz.wav'
 		max replays = 5
 
 	[[audio 1]]

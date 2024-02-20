@@ -218,6 +218,8 @@ class PalilaExperiment(ConfigObj):
         """
         # Define the full filepath of the audio
         self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
+        if 'filename_2' in self[part][audio].keys():
+            self[part][audio]['filepath_2'] = os.path.join(self.path, self[part][audio]['filename_2'])
         # Define the max number of replays
         if 'max replays' not in self[part][audio].keys():
             self[part][audio]['max replays'] = '1'

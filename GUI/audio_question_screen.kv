@@ -1,4 +1,4 @@
-<AudioManager>:
+<AudioManagerLeft>:
     orientation: 'horizontal'
     spacing: 10
 
@@ -25,7 +25,7 @@
         Label:
             id: txt
             text: ''
-            font_size: 48
+            font_size: 42
             size_hint_y: .95
             text_size: .98 * self.size[0], self.size[1]
             halign: 'left'
@@ -39,6 +39,47 @@
             size_hint_y: .05
 
 
+<AudioManagerRight>:
+    orientation: 'horizontal'
+    spacing: 10
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: .8
+
+        Label:
+            id: txt
+            text: ''
+            font_size: 42
+            size_hint_y: .95
+            text_size: .98 * self.size[0], self.size[1]
+            halign: 'right'
+            valign: 'bottom'
+
+        ProgressBar:
+            id: progress
+            value: 0
+            max: 1
+
+            size_hint_y: .05
+
+    Button:
+        id: bttn
+		pos: self.pos[0], self.parent.y + self.parent.size[1] * .02
+		size_hint_y: .95
+        size_hint_x: .2
+
+        on_release:
+            root.play()
+
+        Image:
+            id: bttn_image
+            pos: self.parent.x + self.parent.size[0] * .05, self.parent.y + self.parent.size[1] * .05
+            size: self.parent.size[0] * .9, self.parent.size[1] * .9
+            fit_mode: 'contain'
+            source: 'GUI/assets/play.png'
+
+
 <QuestionManager>:
     spacing: 20
     orientation: 'vertical'
@@ -46,15 +87,27 @@
 
 <AudioQuestionScreen>:
     BoxLayout:
-        pos_hint: {'center_x': .5, 'y': .16}
-        size_hint: .95, .8
+        pos_hint: {'center_x': .5, 'y': .15}
+        size_hint: .95, .83
         orientation: 'vertical'
         spacing: 20
 
-        AudioManager:
-            id: audio_manager
-            size_hint_y: .2
-            size_hint_x: .7
+		BoxLayout:
+			id: audio_managers
+			size_hint_x: .7
+			size_hint_y: .19
+			orientation: 'horizontal'
+			spacing: 10
+
+			AudioManagerLeft:
+				id: audio_manager_left
+
+		Label:
+			id: extra_message
+			text: ''
+			font_size: 32
+			size_hint_y: .04
+			color: .7, .5, .5, 1.
 
         QuestionManager:
             id: question_manager

@@ -12,6 +12,94 @@ from . import audio_questions
 __all__ = ['AudioQuestionScreen']
 
 
+class AudioQuestionScreen(PalilaScreen):
+    """
+    Class that defines the overall audio question screens. Subclass of .screens.PalilaScreen.
+
+    Parameters
+    ----------
+    config_dict : dict
+        Dictionary that defines the audio and related questions.
+    **kwargs
+        Keyword arguments. These are passed on to the .screens.PalilaScreen constructor.
+
+    Attributes
+    ----------
+    config_dict : dict
+        Dictionary that defines the audio and related questions.
+    audio_manager_left : AudioManagerLeft
+        The instance of AudioManager linked to this specific screen.
+    question_manager : QuestionManager
+        The instance of QuestionManager linked to this specific screen.
+    """
+
+    def __init__(self, config_dict: dict, **kwargs) -> None:
+        super().__init__(config_dict['previous'], config_dict['next'], lock=True, **kwargs)
+        self.config_dict = config_dict
+
+        # Get better references to the audio and question managers
+        self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left
+        self.audio_manager_right: AudioManagerRight = AudioManagerRight()
+        self.question_manager: QuestionManager = self.ids.question_manager
+
+        # Initialise the audio managers with the audios defined in the input file
+        self.audio_manager_left.initialise_manager(self.config_dict['filepath'],
+                                                   int(self.config_dict['max replays']), self)
+
+        # Add the second audio manager if a second audio file is given, otherwise just leave it alone.
+        if 'filepath_2' in self.config_dict:
+            self.ids.audio_managers.add_widget(self.audio_manager_right)
+            self.ids.audio_managers.size_hint_x = 1.
+            self.audio_manager_right.initialise_manager(self.config_dict['filepath_2'],
+                                                        int(self.config_dict['max replays']), self)
+            self.ids.extra_message.text = 'Listen to both samples at least once before answering the question.'
+
+        # Add the questions from the input file to the question manager
+        for question in self.config_dict['questions']:
+            self.question_manager.add_question(self.config_dict[question])
+        # Readjust the question manager after adding all questions
+        self.question_manager.readjust(self.config_dict['filler'])
+
+    def on_pre_leave(self, *_) -> None:
+        """
+        Store the answers when leaving the screen.
+        """
+        for qid, question in self.ids.question_manager.question_dict.items():
+            # Store the answers, question by question
+            if question.answer is not None:
+                self.manager.store_answer(qid, question.answer.text)
+            else:
+                self.manager.store_answer(qid, 'No Answer')
+
+    def unlock_check(self, question_state: bool = None):
+        """
+        Check whether the continue button can be unlocked.
+
+        Parameters
+        ----------
+        question_state : bool, optional
+            The state of the QuestionManager. Defaults to a check of the QuestionManager state
+        """
+        audio_state_left = self.audio_manager_left.count >= 1
+        audio_state_right = self.audio_manager_right.n_max is None or self.audio_manager_right.count >= 1
+        audio_state = audio_state_left and audio_state_right
+
+        if audio_state:
+            self.question_manager.unlock()
+            self.ids.extra_message.text = ''
+
+            if question_state is None:
+                question_state = self.question_manager.get_state()
+
+            # If all questions are answered and the audio is listened to: unlock the continue button
+            if question_state:
+                self.reset_continue_label()
+                self.ids.continue_bttn.unlock()
+            # Make sure the continue button is locked if not
+            else:
+                self.ids.continue_bttn.lock()
+
+
 class AudioManager(BoxLayout):
     """
     Subclass of kivy.uix.boxlayout.BoxLayout, which manages the audio of the AudioQuestionScreen.
@@ -33,6 +121,8 @@ class AudioManager(BoxLayout):
         Boolean that indicates whether audio is currently playing.
     count : int
         Integer that keeps track of the times the audio has been played.
+    parent_screen : AudioQuestionScreen
+
     """
 
     def __init__(self, **kwargs) -> None:
@@ -46,7 +136,9 @@ class AudioManager(BoxLayout):
         self.playing = False
         self.count = 0
 
-    def initialise_audio(self, audio_path: str, n_max: int):
+        self.parent_screen = None
+
+    def initialise_manager(self, audio_path: str, n_max: int, parent_screen: AudioQuestionScreen) -> None:
         """
         Set up the AudioManager once the necessary information is available.
 
@@ -56,15 +148,19 @@ class AudioManager(BoxLayout):
             Full path to the audio file.
         n_max : int
             The maximum number of replays that will be allowed.
+        parent_screen : AudioQuestionScreen
+            The screen of which this manager is part. To avoid endless .parent.parent chains.
         """
         self.n_max = n_max
         self.audio = SoundLoader.load(audio_path)
         self.audio.on_stop = self._done_playing
         # Set the text next to the play button
         if self.n_max == 1:
-            self.ids.txt.text = f'Listen to the audio sample\nYou can play the sample {self.n_max} time'
+            self.ids.txt.text = f'Listen to this audio sample\nYou can play this sample {self.n_max} time'
         else:
-            self.ids.txt.text = f'Listen to the audio sample\nYou can play the sample {self.n_max} times'
+            self.ids.txt.text = f'Listen to this audio sample\nYou can play this sample {self.n_max} times'
+
+        self.parent_screen = parent_screen
 
     def play(self):
         """
@@ -104,9 +200,9 @@ class AudioManager(BoxLayout):
             self.ids.bttn.background_color = [1, 1, 1, 1]
             # Set the corresponding text next to the button
             if remaining == 1:
-                self.ids.txt.text = f'You can replay {remaining} more time'
+                self.ids.txt.text = f'You can replay this sample\n {remaining} more time'
             else:
-                self.ids.txt.text = f'You can replay {remaining} more times'
+                self.ids.txt.text = f'You can replay this sample\n {remaining} more times'
         # Otherwise reflect running out of replays in the button and text
         else:
             self.ids.bttn_image.source = 'GUI/assets/done.png'
@@ -115,8 +211,15 @@ class AudioManager(BoxLayout):
 
         # Unlock the rest of the screen when the audio has been played once
         if self.count == 1:
-            self.parent.parent.question_manager.unlock()
-            self.parent.parent.unlock_check(audio_state=True, )
+            self.parent_screen.unlock_check()
+
+
+class AudioManagerRight(AudioManager):
+    pass
+
+
+class AudioManagerLeft(AudioManager):
+    pass
 
 
 class QuestionManager(BoxLayout):
@@ -230,79 +333,4 @@ class QuestionManager(BoxLayout):
         self.answered[question_id] = answered
         # Have the AudioQuestionScreen check the state
         self.parent.parent.unlock_check(question_state=self.get_state() and not self.disabled)
-
-
-class AudioQuestionScreen(PalilaScreen):
-    """
-    Class that defines the overall audio question screens. Subclass of .screens.PalilaScreen.
-
-    Parameters
-    ----------
-    config_dict : dict
-        Dictionary that defines the audio and related questions.
-    **kwargs
-        Keyword arguments. These are passed on to the .screens.PalilaScreen constructor.
-
-    Attributes
-    ----------
-    config_dict : dict
-        Dictionary that defines the audio and related questions.
-    audio_manager : AudioManager
-        The instance of AudioManager linked to this specific screen.
-    question_manager : QuestionManager
-        The instance of QuestionManager linked to this specific screen.
-    """
-
-    def __init__(self, config_dict: dict, **kwargs) -> None:
-        super().__init__(config_dict['previous'], config_dict['next'], lock=True, **kwargs)
-        self.config_dict = config_dict
-
-        # Get better references to the audio and question managers
-        self.audio_manager: AudioManager = self.ids.audio_manager
-        self.question_manager: QuestionManager = self.ids.question_manager
-
-        # Initialise the audio manager with the audio defined in the input file
-        self.audio_manager.initialise_audio(self.config_dict['filepath'], int(self.config_dict['max replays']))
-
-        # Add the questions from the input file to the question manager
-        for question in self.config_dict['questions']:
-            self.question_manager.add_question(self.config_dict[question])
-        # Readjust the question manager after adding all questions
-        self.question_manager.readjust(self.config_dict['filler'])
-
-    def on_pre_leave(self, *_) -> None:
-        """
-        Store the answers when leaving the screen.
-        """
-        for qid, question in self.ids.question_manager.question_dict.items():
-            # Store the answers, question by question
-            if question.answer is not None:
-                self.manager.store_answer(qid, question.answer.text)
-            else:
-                self.manager.store_answer(qid, 'No Answer')
-
-    def unlock_check(self, audio_state: bool = None, question_state: bool = None):
-        """
-        Check whether the continue button can be unlocked.
-
-        Parameters
-        ----------
-        audio_state : bool, optional
-            The state of the AudioManager. Defaults to a check if the AudioManager count is more than 0.
-        question_state : bool, optional
-            The state of the QuestionManager. Defaults to a check of the QuestionManager state
-        """
-        if audio_state is None:
-            audio_state = self.audio_manager.count >= 1
-
-        if question_state is None:
-            question_state = self.question_manager.get_state()
-
-        # If all questions are answered and the audio is listened to: unlock the continue button
-        if audio_state and question_state:
-            self.reset_continue_label()
-            self.ids.continue_bttn.unlock()
-        # Make sure the continue button is locked if not
-        else:
-            self.ids.continue_bttn.lock()
 
