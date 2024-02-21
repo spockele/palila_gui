@@ -1,12 +1,13 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
+from kivy.config import Config
 from kivy.clock import Clock
 
 from .threaded_tools import ProgressBarThread
 
 
-__all__ = ['PalilaScreen', 'WelcomeScreen', 'TimedTextScreen', 'Filler', 'BackButton']
+__all__ = ['PalilaScreen', 'WelcomeScreen', 'EndScreen', 'FinalScreen', 'TimedTextScreen', 'Filler', 'BackButton']
 
 
 class Filler(Widget):
@@ -20,7 +21,14 @@ class BackButton(Button):
     """
     Button subclass with special functionality to go back
     """
-    pass
+
+    def set_arrow(self):
+        """
+
+        """
+        self.text = ''
+        self.ids.back_bttn_image.source = 'GUI/assets/arrow.png'
+        self.ids.back_bttn_image.opacity = 1.
 
 
 class ContinueButton(Button):
@@ -96,6 +104,17 @@ class PalilaScreen(Screen):
         """
         self.ids.continue_lbl.text = ''
 
+    def set_next_screen(self, next_screen: str):
+        """
+        Set a new next screen for this screen.
+
+        Parameters
+        ----------
+        next_screen: str
+            The name of the new next screen
+        """
+        self.next_screen = next_screen
+
 
 class WelcomeScreen(PalilaScreen):
     """
@@ -141,6 +160,47 @@ class WelcomeScreen(PalilaScreen):
         else:
             # Lock the button in case there is no text in the box
             self.ids.continue_bttn.lock()
+
+
+class EndScreen(PalilaScreen):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # First readjust the continue button
+        self.ids.continue_bttn.font_size = 32
+        self.ids.continue_bttn.text = 'Finish\nExperiment'
+        self.ids.continue_bttn.size_hint_x = .145
+        self.ids.continue_bttn.pos_hint = {'x': .505, 'y': .015}
+        # Create the back button and pass all information to it
+        self.back_button = BackButton()
+        self.back_button.pos_hint = {'right': .495, 'y': .015}
+        self.back_button.size_hint = (.145, .1)
+        self.back_button.font_size = 32
+        self.back_button.text = 'Back to\nQuestionnaire'
+        # Add the button to the screen
+        self.add_widget(self.back_button)
+
+    def back_function(self, *_):
+        going_to: PalilaScreen = self.manager.get_screen(self.previous_screen)
+        going_to.set_next_screen(self.name)
+
+        self.manager.navigate_previous()
+
+    def on_parent(self, *_):
+        self.back_button.on_release = self.back_function
+
+
+class FinalScreen(PalilaScreen):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ids.continue_bttn.text = ''
+        self.ids.continue_bttn.disabled = True
+
+    def on_enter(self, *args):
+        if self.manager.experiment.name != 'gui_dev':
+            self.manager.answers.stop_timer()
+            self.manager.answers.save_to_file()
+
+        Config.set('kivy', 'exit_on_escape', '1')
 
 
 class TimedTextScreen(PalilaScreen):

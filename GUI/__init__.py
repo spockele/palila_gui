@@ -4,8 +4,9 @@ Main module of the GUI package.
 Pulls in all functions from the modules in the package. It also defines the custom ScreenManager and App classes, which
 form the core of this package. Loads all the relevant kivy files for this package.
 """
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
+from kivy.config import Config
 from kivy.lang import Builder
 from kivy.app import App
 
@@ -85,7 +86,8 @@ class PalilaScreenManager(ScreenManager):
                 self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
                                                     manager=self, name=f'{part}-questionnaire'))
 
-        self.add_widget(PalilaScreen('', '', name='end'))
+        self.add_widget(EndScreen('main-questionnaire', 'final', name='end'))
+        self.add_widget(FinalScreen('end', '', name='final'))
 
     def navigate_next(self) -> None:
         """
@@ -98,7 +100,7 @@ class PalilaScreenManager(ScreenManager):
         # Start the timer when leaving the main questionnaire
         if 'main-questionnaire' in self.current_screen.previous_screen and 'main-questionnaire' not in self.current:
             self.answers.start_timer()
-        elif self.current == 'end':
+        elif self.current == 'final':
             self.answers.stop_timer()
 
     def navigate_previous(self) -> None:
@@ -170,14 +172,7 @@ class PalilaApp(App):
 
         # Create the ScreenManager and pass the experiment along
         manager = PalilaScreenManager(self.experiment, self.answers)
+        Config.set('kivy', 'exit_on_escape', '0')
 
         # Required return of the ScreenManager
         return manager
-
-    def on_stop(self) -> None:
-        """
-        Actions to be taken when the app is stopped.
-        """
-        if self.experiment.name != 'gui_dev':
-            self.answers.stop_timer()
-            self.answers.save_to_file()

@@ -223,6 +223,7 @@ class QuestionnaireScreen(PalilaScreen):
             back_button.pos_hint = {'x': .35, 'y': .015}
             back_button.size_hint = (.0625, .1)
             back_button.on_release = manager.navigate_previous
+            back_button.set_arrow()
             # Add the button to the screen
             self.add_widget(back_button)
             # Up the screen count
@@ -350,3 +351,17 @@ class QuestionnaireScreen(PalilaScreen):
         """
         self.unlock_check()
         super().on_pre_enter(*_)
+
+    def set_next_screen(self, next_screen: str):
+        """
+        Set a new next screen for this screen.
+
+        Parameters
+        ----------
+        next_screen: str
+            The name of the new next screen
+        """
+        if self.all_screens is None:
+            self.next_screen = next_screen
+        else:
+            self.all_screens[-1].next_screen = next_screen

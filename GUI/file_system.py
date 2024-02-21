@@ -58,9 +58,12 @@ class PalilaExperiment(ConfigObj):
             for audio in self[part]['audios']:
                 self[part][audio]['questions'] = [question for question in self[part][audio].sections]
 
+        print(f'Successfully loaded "{self.name}.palila".\nVerifying experiment setup...')
         # Verify and prepare for the GUI
         self._verify_experiment()
+        print(f'Successfully verified experiment setup.\nPreparing experiment setup for GUI...')
         self._prepare_experiment()
+        print(f'Successfully prepared experiment.\nStarting GUI...')
 
     def _verify_part(self, part: str) -> None:
         """
@@ -527,14 +530,19 @@ class PalilaAnswers:
         Save the answers to the pre-determined file.
         """
         self.out.to_csv(self.out_path)
+        print(f'Answers successfully save to: {self.out_path}')
 
     def start_timer(self) -> None:
         """
         Set the start time of the experiment to later determine the completion time.
         """
-        print(f'Timer started at {datetime.datetime.now().strftime("%A %d %B %Y - %H:%M")}')
-        self.out.loc['response', 'timer'] = str(time.time())
-        self.timing = True
+        if not self.timing:
+            print(f'Timer started at {datetime.datetime.now().strftime("%A %d %B %Y - %H:%M")}')
+            self.out.loc['response', 'timer'] = str(time.time())
+            self.timing = True
+
+        else:
+            print(f'Timer already started. Ignoring trigger.')
 
     def stop_timer(self) -> None:
         """

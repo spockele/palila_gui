@@ -26,6 +26,11 @@
 
 
 <ContinueButton>
+	text: ''
+	text_size: self.size
+	valign: 'center'
+	halign: 'center'
+
 	Image:
 		id: continue_bttn_image
 		source: ''
@@ -46,9 +51,14 @@
 
 <BackButton>
 	text: ''
+	text_size: self.size
+	valign: 'center'
+	halign: 'center'
 
 	Image:
-		source: 'GUI/assets/arrow.png'
+		id: back_bttn_image
+		source: ''
+		opacity: 0
 		size: self.parent.size
 		pos: self.parent.pos
 
@@ -117,6 +127,25 @@
 
 			on_text:
 				self.parent.parent.check_lock(self.text)
+
+
+<EndScreen>
+	Label:
+		id: goodbye
+		text: ''
+		size_hint: .7, .5
+		pos_hint: {'center_x': .5, 'center_y': .6}
+
+		text_size: self.size
+		halign: 'left'
+		valign: 'bottom'
+
+		canvas:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+				pos: self.pos
+				size: self.size
 
 
 <TimedTextScreen>
