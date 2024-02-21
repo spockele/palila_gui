@@ -71,27 +71,12 @@ randomise = no
 
 			choices = 'Yes', 'No', 'Not Sure'
 
-	[[audio 2]]
-		filename = 'tone500Hz.wav'
+		[[[question sp]]]
+			text = '''This here is a spinner question.
+				Do you like it?'''
+			type = Spinner
 
-		[[[question ns]]]
-			text = '''This here is a numerical scale question.
-				On a scale from 1 to 5, how nice is it?'''
-			type = IntegerScale
-
-			min = 1
-			max = 5
-
-		[[[question nsn]]]
-			text = '''This here is a numerical scale question. With side notes this time.
-				On a scale from 1 to 5, how nice is it?'''
-			type = IntegerScale
-
-			min = 1
-			max = 5
-
-			left note = 'Not so'
-			right note = 'Very'
+			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worst', 'Prefer not to Answer'
 
 	[[audio 3]]
 		filename = 'tone500Hz.wav'
