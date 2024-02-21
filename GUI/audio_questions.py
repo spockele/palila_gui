@@ -104,7 +104,7 @@ class AudioQuestion(BoxLayout):
             self.parent.question_answered(self.qid, True)
 
 
-class TextQuestion(AudioQuestion):
+class TextAQuestion(AudioQuestion):
     """
     Question type which only displays text. Subclass of GUI.AudioQuestion.
 
@@ -126,7 +126,7 @@ class TextQuestion(AudioQuestion):
         self.parent.question_answered(self.qid, True)
 
 
-class MultipleChoiceQuestion(AudioQuestion):
+class MultipleChoiceAQuestion(AudioQuestion):
     """
     Question type for multiple choice. Subclass of GUI.AudioQuestion.
 
@@ -147,7 +147,7 @@ class MultipleChoiceQuestion(AudioQuestion):
             self.ids.answer_options.add_widget(button)
 
 
-class IntegerScaleQuestion(AudioQuestion):
+class IntegerScaleAQuestion(AudioQuestion):
     """
     Numerical scale question type. Subclass of GUI.AudioQuestion.
 
@@ -187,32 +187,6 @@ class IntegerScaleQuestion(AudioQuestion):
             button.pos_hint = {'center_x': (.175 + button_width / 2) + (bi * button_width), 'center_y': .5}
 
 
-class PointCompassQuestion(AudioQuestion):
-    """
-    The compass question type. Subclass of GUI.AudioQuestion.
-
-    Parameters
-    ----------
-    question_dict: dict
-        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
-    **kwargs : dict
-        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
-    """
-    def __init__(self, question_dict: dict, **kwargs) -> None:
-        super().__init__(question_dict, **kwargs)
-        self.ids.question_text.size_hint_y = .2
-
-    def on_parent(self, *_) -> None:
-        """
-        When the widget gets a parent QuestionManager, the manager is limited to only one question.
-        """
-        # When triggered, set the question manager to only accept one question
-        if self.parent.n_question > 1:
-            raise OverflowError('PointCompass question takes 2 question slots.')
-
-        self.parent.n_max = 1
-
-
 class AnswerHolder:
     """
 
@@ -226,7 +200,7 @@ class AnswerHolder:
         self.text: str = ''
 
 
-class SliderQuestion(AudioQuestion):
+class SliderAQuestion(AudioQuestion):
     """
 
     Parameters
@@ -291,3 +265,29 @@ class SliderQuestion(AudioQuestion):
             self.slider_color = [.9 * .5, .9 * 1., .9 * .5, .9 * 1.]
             self.ids.slider.background_horizontal = 'GUI/assets/Slider_cursor_answered.png'
             self.ids.slider.cursor_image = 'GUI/assets/Slider_cursor_answered.png'
+
+
+class PointCompassAQuestion(AudioQuestion):
+    """
+    The compass question type. Subclass of GUI.AudioQuestion.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
+    """
+    def __init__(self, question_dict: dict, **kwargs) -> None:
+        super().__init__(question_dict, **kwargs)
+        self.ids.question_text.size_hint_y = .2
+
+    def on_parent(self, *_) -> None:
+        """
+        When the widget gets a parent QuestionManager, the manager is limited to only one question.
+        """
+        # When triggered, set the question manager to only accept one question
+        if self.parent.n_question > 1:
+            raise OverflowError('PointCompass question takes 2 question slots.')
+
+        self.parent.n_max = 1

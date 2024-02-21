@@ -50,7 +50,7 @@ class FreeNumberTextInput(TextInput):
         super().on_touch_down(touch)
 
 
-class FreeNumberQuestion(QuestionnaireQuestion):
+class FreeNumberQQuestion(QuestionnaireQuestion):
     """
 
     """
@@ -101,7 +101,7 @@ class FreeNumberQuestion(QuestionnaireQuestion):
             self.numpad.coupled_widget = None
 
 
-class SpinnerQuestion(QuestionnaireQuestion):
+class SpinnerQQuestion(QuestionnaireQuestion):
     """
 
     """
@@ -156,7 +156,7 @@ class QuestionnaireChoiceButton(Button):
         self.parent.parent.select_choice(self)
 
 
-class MultipleChoiceQuestion(QuestionnaireQuestion):
+class MultipleChoiceQQuestion(QuestionnaireQuestion):
     """
 
     """
@@ -260,7 +260,7 @@ class QuestionnaireScreen(PalilaScreen):
                 self.ids.questions.add_widget(Filler())
             else:
                 question = to_add[qi]
-                question_type = globals()[f'{self.questionnaire_dict[question]["type"]}Question']
+                question_type = globals()[f'{self.questionnaire_dict[question]["type"]}QQuestion']
                 question_instance: QuestionnaireQuestion = question_type(self.questionnaire_dict[question])
 
                 self.ids.questions.add_widget(question_instance)
@@ -279,7 +279,7 @@ class QuestionnaireScreen(PalilaScreen):
 
             else:
                 question = self.questionnaire_dict['questions'][extra_screen_start:][qi]
-                question_type = globals()[f'{self.questionnaire_dict[question]["type"]}Question']
+                question_type = globals()[f'{self.questionnaire_dict[question]["type"]}QQuestion']
                 question_instance: QuestionnaireQuestion = question_type(self.questionnaire_dict[question])
 
                 self.ids.questions.add_widget(question_instance)

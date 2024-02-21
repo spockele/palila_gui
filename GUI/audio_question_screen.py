@@ -275,7 +275,7 @@ class QuestionManager(BoxLayout):
         # Check if the space is full
         if self.n_question < self.n_max:
             # Add the question according to the input file
-            question_type = getattr(audio_questions, f'{question_dict["type"]}Question')
+            question_type = getattr(audio_questions, f'{question_dict["type"]}AQuestion')
             question = question_type(question_dict)
 
             self.question_dict[question_dict['id']] = question

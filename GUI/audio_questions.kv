@@ -16,7 +16,7 @@
         halign: 'left'
         valign: 'bottom'
 
-<MultipleChoiceQuestion>
+<MultipleChoiceAQuestion>
     BoxLayout:
     	pos_hint: {'center_x': .5}
     	size_hint_x: .95
@@ -27,7 +27,7 @@
         spacing: 20
 
 
-<IntegerScaleQuestion>
+<IntegerScaleAQuestion>
     FloatLayout:
         size_hint_y: .6
         id: answer_options
@@ -69,7 +69,7 @@
                     radius: [self.size[1] / 2.5]
 
 
-<SliderQuestion>
+<SliderAQuestion>
 	BoxLayout:
         size_hint_y: .55
         id: answer_options
@@ -194,8 +194,9 @@
     	size_hint_y: .05
 
 
-<PointCompassQuestion>
+<PointCompassAQuestion>
     FloatLayout:
+    	id: answer_options
         size_hint_y: .8
 
         Image:
