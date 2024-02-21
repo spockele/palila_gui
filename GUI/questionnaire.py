@@ -117,8 +117,10 @@ class SpinnerQuestion(QuestionnaireQuestion):
         """
         if self.ids.question_input.text:
             self.answer = self.ids.question_input.text
+            self.ids.question_input.background_color = [.5, 1., .5, 1.]
         else:
             self.answer = None
+            self.ids.question_input.background_color = [1., 1., 1., 1.]
 
         super().check_input()
 
