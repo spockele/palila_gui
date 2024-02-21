@@ -40,6 +40,7 @@ The experiment configuration consists of two items:
 
 pid mode = <string>                 # -> Mode to set the Participant ID (auto, input).
 welcome = <string> (optional)       # -> Optional welcome message for the first screen.
+goodbye = <string> (optional)       # -> Optional goodbye message for the final screen.
 randomise = <boolean> (optional)    # -> Switch to randomise the order of the experiment parts.
 
 # ======================================================================================================================
@@ -120,12 +121,12 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 
 ### The audio question types:
 - ```Text```: Just text, no question.
-  - Requires no additional input.
+  - Requires no additional inputs.
 - ```AudioMC```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
 - ```NumScale```: Rating question with an integer numerical scale.
-  - Requires:\
+  - Requires the following arguments:\
     ```min = <integer>``` -> Defines the minimum value of the scale.\
     ```max = <integer>``` -> Defines the minimum value of the scale.
   - Recommended range: ```4 <= (max - min) <= 10```
@@ -133,7 +134,7 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
 - ```Slider```: Rating question with a slider input.
-  - Requires:\
+  - Requires the following arguments:\
     ```min = <float>``` -> Defines the minimum value of the scale.\
     ```max = <float>``` -> Defines the minimum value of the scale.\
     ```step = <float>``` -> Defines the steps of the slider scale.
@@ -141,6 +142,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
   - Optional:\
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
+- ```PointCompass```: A question with an 8-point direction compass to test directionality.
+  - Requires no additional input arguments.
 
 ### Standardised question IDs
 - In the main questionnaire: ```main-questionnaire-{question name}```.

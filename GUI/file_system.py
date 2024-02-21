@@ -440,7 +440,7 @@ class PalilaExperiment(ConfigObj):
         Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
         """
         # ==============================================================================================================
-        # PREPARATION OF THE WELCOME MESSAGE
+        # PREPARATION OF THE WELCOME AND GOODBYE MESSAGES
         # ==============================================================================================================
 
         if 'welcome' not in self.keys():
@@ -448,6 +448,11 @@ class PalilaExperiment(ConfigObj):
         else:
             # Fix the welcome message.
             self['welcome'] = self['welcome'].replace('\t', '')
+
+        if 'goodbye' not in self.keys():
+            self['goodbye'] = 'Thank you for your participation in this experiment!'
+        else:
+            self['goodbye'] = self['goodbye'].replace('\t', '')
 
         # Prepare the main questionnaire
         self._prepare_main_questionnaire()
@@ -559,8 +564,8 @@ class PalilaAnswers:
             self.timing = False
             self.out.loc['response', 'timer'] = str(time.time() - float(self.out.loc['response', 'timer']))
             print(f'Timer stopped at {datetime.datetime.now().strftime("%A %d %B %Y - %H:%M")}.\n'
-                  f'Elapsed time was {round(float(self.out.loc["response", "timer"]) / 60)}:'
-                  f'{round(float(self.out.loc["response", "timer"]) % 60)} minutes.')
+                  f'Elapsed time was {str(round(float(self.out.loc["response", "timer"]) / 60)).zfill(2)}:'
+                  f'{str(round(float(self.out.loc["response", "timer"]) % 60)).zfill(2)} minutes.')
 
         else:
             raise RuntimeError('Timer has already stopped.')

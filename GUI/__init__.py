@@ -87,7 +87,7 @@ class PalilaScreenManager(ScreenManager):
                                                     manager=self, name=f'{part}-questionnaire'))
 
         self.add_widget(EndScreen('main-questionnaire', 'final', name='end'))
-        self.add_widget(FinalScreen('end', '', name='final'))
+        self.add_widget(FinalScreen('end', '', goodbye=self.experiment['goodbye'], name='final'))
 
     def navigate_next(self) -> None:
         """

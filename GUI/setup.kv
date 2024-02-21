@@ -131,21 +131,25 @@
 
 <EndScreen>
 	Label:
-		id: goodbye
-		text: ''
-		size_hint: .7, .5
+		text: 'You have reached the end of the experiment questions.\nYou can return to the first questionnaire to check your answers.\nOr you can finish the experiment.'
+		size_hint: .7, .2
 		pos_hint: {'center_x': .5, 'center_y': .6}
 
 		text_size: self.size
-		halign: 'left'
-		valign: 'bottom'
+		halign: 'center'
+		valign: 'center'
 
-		canvas:
-			Color:
-				rgba: 1,1,1,1
-			Rectangle:
-				pos: self.pos
-				size: self.size
+
+<FinalScreen>
+	Label:
+		id: goodbye
+		text: ''
+		size_hint: .7, .2
+		pos_hint: {'center_x': .5, 'center_y': .6}
+
+		text_size: self.size
+		halign: 'center'
+		valign: 'center'
 
 
 <TimedTextScreen>

@@ -175,7 +175,7 @@ class EndScreen(PalilaScreen):
         self.back_button.pos_hint = {'right': .495, 'y': .015}
         self.back_button.size_hint = (.145, .1)
         self.back_button.font_size = 32
-        self.back_button.text = 'Back to\nQuestionnaire'
+        self.back_button.text = 'Back to first\nQuestionnaire'
         # Add the button to the screen
         self.add_widget(self.back_button)
 
@@ -190,10 +190,11 @@ class EndScreen(PalilaScreen):
 
 
 class FinalScreen(PalilaScreen):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, goodbye: str, **kwargs):
         super().__init__(*args, **kwargs)
         self.ids.continue_bttn.text = ''
         self.ids.continue_bttn.disabled = True
+        self.ids.goodbye.text = goodbye
 
     def on_enter(self, *args):
         if self.manager.experiment.name != 'gui_dev':

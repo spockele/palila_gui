@@ -116,3 +116,10 @@ randomise = no
 
 			left note = 'Not so'
 			right note = 'Very'
+
+	[[audio 4]]
+		filename = 'tone500Hz.wav'
+
+		[[[question dir]]]
+			text = 'This is a compass questions, where participants can enter a direction in 8 points.'
+			type = PointCompass
