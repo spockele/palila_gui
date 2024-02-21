@@ -125,6 +125,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 - ```MultipleChoice```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
+- ```Spinner```: Multiple choice question with a dropdown menu.
+  - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
 - ```IntegerScale```: Rating question with an integer numerical scale.
   - Requires the following arguments:\
     ```min = <integer>``` -> Defines the minimum value of the scale.\
