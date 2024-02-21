@@ -6,11 +6,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
 
-__all__ = ['AudioChoiceButton', 'AudioQuestion', 'TextQuestion', 'MultipleChoiceQuestion',
-           'IntegerScaleQuestion', 'PointCompassQuestion'
-           ]
-
-
 class AudioChoiceButton(Button):
     """
     Button with ability to store a state and interact with AudioQuestion. Subclass of kivy.uix.button.Button.

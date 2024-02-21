@@ -222,11 +222,11 @@ class AudioManager(BoxLayout):
             self.parent_screen.unlock_check()
 
 
-class AudioManagerRight(AudioManager):
+class AudioManagerLeft(AudioManager):
     pass
 
 
-class AudioManagerLeft(AudioManager):
+class AudioManagerRight(AudioManager):
     pass
 
 
