@@ -113,20 +113,30 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 ### The questionnaire question types:
 - ```FreeNumber```: Question asking for a freely entered numerical value.
   - Requires no additional input.
+
+
 - ```MultipleChoice```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
+
+
 - ```Spinner```: Multiple choice question with a dropdown menu.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
 
 ### The audio question types:
 - ```Text```: Just text, no question.
   - Requires no additional inputs.
+
+
 - ```MultipleChoice```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
+
+
 - ```Spinner```: Multiple choice question with a dropdown menu.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
+
+
 - ```IntegerScale```: Rating question with an integer numerical scale.
   - Requires the following arguments:\
     ```min = <integer>``` -> Defines the minimum value of the scale.\
@@ -135,6 +145,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
   - Optional:\
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
+
+
 - ```Slider```: Rating question with a slider input.
   - Requires the following arguments:\
     ```min = <float>``` -> Defines the minimum value of the scale.\
@@ -144,6 +156,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
   - Optional:\
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
+
+
 - ```PointCompass```: A question with an 8-point direction compass to test directionality.
   - Requires no additional input arguments.
 
