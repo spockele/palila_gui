@@ -27,6 +27,38 @@
         spacing: 20
 
 
+<SpinnerAQuestion>
+	Spinner:
+		id: answer_options
+
+		size_hint: .55, .45
+		pos_hint: {'center_x': .5}
+		text_size: .96 * self.size[0], self.size[1]
+		halign: 'left'
+		valign: 'center'
+
+		on_text: root.set_value(self.text)
+
+		Image:
+			source: 'GUI/assets/arrow.png'
+			size: .1 * self.parent.size[0], .7 * self.parent.size[1]
+			pos: self.parent.pos[0] + .85 * self.parent.size[0], self.parent.pos[1] + .15 * self.parent.size[1]
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -90
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+	Widget:
+		size_hint_y: .14
+
+
+
 <IntegerScaleAQuestion>
     FloatLayout:
         size_hint_y: .6

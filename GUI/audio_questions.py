@@ -47,6 +47,19 @@ class AudioChoiceButton(Button):
         self.parent.parent.select_choice(self)
 
 
+class AnswerHolder:
+    """
+
+
+    Attributes
+    ----------
+    text : str
+        Holds the answer text
+    """
+    def __init__(self):
+        self.text: str = ''
+
+
 class AudioQuestion(BoxLayout):
     """
     Class to manage the general functions of a question. Subclass of kivy.uix.boxlayout.BoxLayout.
@@ -147,6 +160,37 @@ class MultipleChoiceAQuestion(AudioQuestion):
             self.ids.answer_options.add_widget(button)
 
 
+class SpinnerAQuestion(AudioQuestion):
+    """
+
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question.
+        Should include the following keys: 'id', 'text', 'choices'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, question_dict: dict, **kwargs) -> None:
+        super().__init__(question_dict, **kwargs)
+        self.ids.answer_options.values = question_dict['choices']
+
+        self.answer = AnswerHolder()
+
+    def set_value(self, value: str):
+        if self.answer is not None:
+            if not self.answer.text:
+                self.parent.question_answered(self.qid, True)
+                self.ids.answer_options.background_color = (.5, 1., .5, 1)
+
+            self.answer.text = value
+
+
 class IntegerScaleAQuestion(AudioQuestion):
     """
     Numerical scale question type. Subclass of GUI.AudioQuestion.
@@ -187,19 +231,6 @@ class IntegerScaleAQuestion(AudioQuestion):
             button.pos_hint = {'center_x': (.175 + button_width / 2) + (bi * button_width), 'center_y': .5}
 
 
-class AnswerHolder:
-    """
-
-
-    Attributes
-    ----------
-    text : str
-        Holds the answer text
-    """
-    def __init__(self):
-        self.text: str = ''
-
-
 class SliderAQuestion(AudioQuestion):
     """
 
@@ -208,6 +239,8 @@ class SliderAQuestion(AudioQuestion):
     question_dict: dict
         Dictionary with all the information to construct the question.
         Should include the following keys: 'id', 'text', 'min', 'max'. 'step'. Optional keys: 'left note', 'right note'.
+    **kwargs : dict
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
 
     Attributes
     ----------
