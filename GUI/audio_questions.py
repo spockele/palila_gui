@@ -6,8 +6,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
 
-__all__ = ['AudioChoiceButton', 'AudioQuestion', 'TextQuestion', 'AudioMCQuestion',
-           'NumScaleQuestion', 'PointCompassQuestion'
+__all__ = ['AudioChoiceButton', 'AudioQuestion', 'TextQuestion', 'MultipleChoiceQuestion',
+           'IntegerScaleQuestion', 'PointCompassQuestion'
            ]
 
 
@@ -126,7 +126,7 @@ class TextQuestion(AudioQuestion):
         self.parent.question_answered(self.qid, True)
 
 
-class AudioMCQuestion(AudioQuestion):
+class MultipleChoiceQuestion(AudioQuestion):
     """
     Question type for multiple choice. Subclass of GUI.AudioQuestion.
 
@@ -147,7 +147,7 @@ class AudioMCQuestion(AudioQuestion):
             self.ids.answer_options.add_widget(button)
 
 
-class NumScaleQuestion(AudioQuestion):
+class IntegerScaleQuestion(AudioQuestion):
     """
     Numerical scale question type. Subclass of GUI.AudioQuestion.
 

@@ -111,9 +111,9 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 
 
 ### The questionnaire question types:
-- ```FreeNum```: Question asking for a freely entered numerical value.
+- ```FreeNumber```: Question asking for a freely entered numerical value.
   - Requires no additional input.
-- ```QuestionnaireMC```: Multiple choice question with buttons.
+- ```MultipleChoice```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
 - ```Spinner```: Multiple choice question with a dropdown menu.
@@ -122,10 +122,10 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 ### The audio question types:
 - ```Text```: Just text, no question.
   - Requires no additional inputs.
-- ```AudioMC```: Multiple choice question with buttons.
+- ```MultipleChoice```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
-- ```NumScale```: Rating question with an integer numerical scale.
+- ```IntegerScale```: Rating question with an integer numerical scale.
   - Requires the following arguments:\
     ```min = <integer>``` -> Defines the minimum value of the scale.\
     ```max = <integer>``` -> Defines the minimum value of the scale.

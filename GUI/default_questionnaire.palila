@@ -3,13 +3,13 @@ manual split = yes
 
 [question age]
 	id = 'age'
-	type = FreeNum
+	type = FreeNumber
 	text = 'Age: '
 	manual screen = 1
 
 [question gender]
 	id = 'gender'
-	type = QuestionnaireMC
+	type = MultipleChoice
 	text = 'Gender identity:'
 	choices = 'Man', 'Woman', 'Other', 'Prefer not to say'
 	manual screen = 1
@@ -30,7 +30,7 @@ manual split = yes
 
 [question ear_disease]
 	id = 'ear_disease'
-	type = QuestionnaireMC
+	type = MultipleChoice
 	text = '''Are you currently suffering
 		from any ear disease?'''
 	choices = 'Yes', 'No'
@@ -38,7 +38,7 @@ manual split = yes
 
 [question accident]
 	id = 'accident'
-	type = QuestionnaireMC
+	type = MultipleChoice
 	text = '''Have you had an accident that
 		affected your hearing?'''
 	choices = 'Yes', 'No'
@@ -46,7 +46,7 @@ manual split = yes
 
 [question hearing_aid]
 	id = 'hearing_aid'
-	type = QuestionnaireMC
+	type = MultipleChoice
 	text = 'Do you use a hearing aid?'
 	choices = 'Yes', 'No'
 	manual screen = 2

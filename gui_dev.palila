@@ -16,7 +16,7 @@ randomise = no
 	[[questions]]
 		[[[question 1]]]
 			id = 'NumScale'
-			type = NumScale
+			type = IntegerScale
 			text = 'How good is this question. Please indicate on this scale from 1 to 9.'
 
 			min = 1
@@ -67,7 +67,7 @@ randomise = no
 		[[[question mc]]]
 			text = '''This here is a multiple choice question.
 				Do you like it?'''
-			type = AudioMC
+			type = MultipleChoice
 
 			choices = 'Yes', 'No', 'Not Sure'
 
@@ -77,7 +77,7 @@ randomise = no
 		[[[question ns]]]
 			text = '''This here is a numerical scale question.
 				On a scale from 1 to 5, how nice is it?'''
-			type = NumScale
+			type = IntegerScale
 
 			min = 1
 			max = 5
@@ -85,7 +85,7 @@ randomise = no
 		[[[question nsn]]]
 			text = '''This here is a numerical scale question. With side notes this time.
 				On a scale from 1 to 5, how nice is it?'''
-			type = NumScale
+			type = IntegerScale
 
 			min = 1
 			max = 5

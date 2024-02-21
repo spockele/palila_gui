@@ -33,7 +33,7 @@ class QuestionnaireQuestion(FloatLayout):
         self.parent.parent.unlock_check()
 
 
-class FreeNumTextInput(TextInput):
+class FreeNumberTextInput(TextInput):
     """
 
     """
@@ -50,7 +50,7 @@ class FreeNumTextInput(TextInput):
         super().on_touch_down(touch)
 
 
-class FreeNumQuestion(QuestionnaireQuestion):
+class FreeNumberQuestion(QuestionnaireQuestion):
     """
 
     """
@@ -153,7 +153,7 @@ class QuestionnaireChoiceButton(Button):
         self.parent.parent.select_choice(self)
 
 
-class QuestionnaireMCQuestion(QuestionnaireQuestion):
+class MultipleChoiceQuestion(QuestionnaireQuestion):
     """
 
     """
