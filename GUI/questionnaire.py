@@ -71,6 +71,7 @@ class FreeNumberQuestion(QuestionnaireQuestion):
                 self.ids.question_input_overlay.text = ''
                 self.ids.question_input.background_color = (1., 1., 1., 1.)
                 self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
+                self.ids.question_input.background_color = (.5, 1., .5, 1.)
 
             else:
                 if self.answer is not None:
