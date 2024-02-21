@@ -1,5 +1,3 @@
-#: import Factory kivy.factory.Factory
-
 <QuestionnaireQuestion>
 	Label:
 		id: question_text
@@ -25,7 +23,7 @@
 		multiline: False
 
 		on_text:
-			self.parent.check_input()
+			root.check_input()
 
 	Label:
 		id: question_input_overlay
@@ -52,8 +50,6 @@
 <SpinnerQQuestion>
 	Spinner:
 		id: question_input
-		text: ''
-		values: []
 
 		size_hint: .55, 1.
 		pos_hint: {'right': 1, 'y': 0.}
@@ -62,22 +58,22 @@
 		valign: 'center'
 
 		on_text:
-			self.parent.check_input()
+			root.check_input()
 
-	Image:
-		source: 'GUI/assets/arrow.png'
-		size_hint: None, .5
-		pos_hint: {'right': 1., 'y': .25}
+		Image:
+			source: 'GUI/assets/arrow.png'
+			size: .1 * self.parent.size[0], .7 * self.parent.size[1]
+			pos: self.parent.pos[0] + .9 * self.parent.size[0], self.parent.pos[1] + .15 * self.parent.size[1]
 
-		canvas.before:
-			PushMatrix
-			Rotate:
-				axis: 0, 0, 1
-				angle: -90
-				origin: self.center
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -90
+					origin: self.center
 
-		canvas.after:
-			PopMatrix
+			canvas.after:
+				PopMatrix
 
 
 <MultipleChoiceQQuestion>:
