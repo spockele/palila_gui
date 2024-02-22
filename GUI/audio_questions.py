@@ -72,8 +72,8 @@ class AudioQuestion(BoxLayout):
         Dictionary with all the information to construct the question.
     qid : str
         Question ID for communication with the file system.
-    answer : AudioChoiceButton = None
-        Button of the currently selected answer. None in case no answer is selected.
+    answer
+        AudioChoiceButton or AnswerHolder with the currently selected answer. None in case no answer is selected.
     """
 
     value = NumericProperty(0.)

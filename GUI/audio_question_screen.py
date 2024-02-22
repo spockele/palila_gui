@@ -9,7 +9,7 @@ from .screens import PalilaScreen, Filler
 from . import audio_questions
 
 
-__all__ = ['AudioQuestionScreen']
+__all__ = ['AudioQuestionScreen', ]
 
 
 class AudioQuestionScreen(PalilaScreen):

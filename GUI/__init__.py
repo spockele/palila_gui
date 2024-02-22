@@ -4,7 +4,7 @@ Main module of the GUI package.
 Pulls in all functions from the modules in the package. It also defines the custom ScreenManager and App classes, which
 form the core of this package. Loads all the relevant kivy files for this package.
 """
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager
 from kivy.core.window import Window
 from kivy.config import Config
 from kivy.lang import Builder
