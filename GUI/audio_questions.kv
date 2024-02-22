@@ -37,7 +37,9 @@
 		halign: 'left'
 		valign: 'center'
 
-		on_text: root.set_value(self.text)
+		text: root.text
+
+		on_text: root.set_text()
 
 		Image:
 			source: 'GUI/assets/arrow.png'
@@ -178,11 +180,11 @@
 				step: root.step
 				value: root.value
 
-				on_value: root.set_value(self.value, self.value_normalized)
+				on_value: root.set_value()
 
         	Label:
-        		text: str(root.value)
-        		pos_hint: {'center_x': root.value_normalized, 'y': .82}
+        		text: str(slider.value)
+        		pos_hint: {'center_x': slider.value_normalized, 'y': .82}
         		size_hint: .06, .33
         		text_size: self.size
         		halign: 'center'

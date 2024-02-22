@@ -1,7 +1,7 @@
 """
 Module with all the code for the modular questions.
 """
-from kivy.properties import NumericProperty, ListProperty
+from kivy.properties import NumericProperty, ListProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
@@ -44,7 +44,7 @@ class AudioChoiceButton(Button):
 
 class AnswerHolder:
     """
-
+    Placeholder for the ChoiceButton for those question types that do not use buttons to answer.
 
     Attributes
     ----------
@@ -75,6 +75,10 @@ class AudioQuestion(BoxLayout):
     answer : AudioChoiceButton = None
         Button of the currently selected answer. None in case no answer is selected.
     """
+
+    value = NumericProperty(0.)
+    text = StringProperty('')
+
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(**kwargs)
         # Store the input information
@@ -88,12 +92,12 @@ class AudioQuestion(BoxLayout):
 
     def select_choice(self, choice: AudioChoiceButton) -> None:
         """
-        Sets the current answer in this manager, based on the selected choice.
+        Sets the current answer in this manager, based on the selected ChoiceButton.
 
         Parameters
         ----------
         choice : AudioChoiceButton
-            The AudioChoiceButton instance which has triggered the answer selection
+            The AudioChoiceButton instance which has triggered the answer selection.
         """
         # Deselect the current answer if there is one
         if self.answer is not None:
@@ -110,6 +114,32 @@ class AudioQuestion(BoxLayout):
             self.answer.select()
             # Communicate to the question manager that the question is answered.
             self.parent.question_answered(self.qid, True)
+
+    def set_value(self):
+        """
+        Sets the current answer in this manager, based on the selected numerical value.
+        """
+        # Set the string equivalent of the numerical value
+        self.text = str(self.value)
+        self.set_text()
+
+    def set_text(self):
+        """
+        Sets the current answer in this manager, based on the selected text.
+        """
+        # Create an AnswerHolder if there is None
+        if self.answer is None:
+            self.answer = AnswerHolder()
+
+        # In case this is the first answer
+        if not self.answer.text:
+            # Indicate to the parent that this question is answered
+            self.parent.question_answered(self.qid, True)
+            # Change the background color of the answer option
+            self.ids.answer_options.background_color = (.5, 1., .5, 1)
+
+        # Set the text in the answer instance
+        self.answer.text = self.text
 
 
 class TextAQuestion(AudioQuestion):
@@ -157,7 +187,7 @@ class MultipleChoiceAQuestion(AudioQuestion):
 
 class SpinnerAQuestion(AudioQuestion):
     """
-
+    Multiple choice type question with a dropdown instead of buttons.
 
     Parameters
     ----------
@@ -166,24 +196,11 @@ class SpinnerAQuestion(AudioQuestion):
         Should include the following keys: 'id', 'text', 'choices'.
     **kwargs : dict
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
-
-    Attributes
-    ----------
-
     """
+
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
         self.ids.answer_options.values = question_dict['choices']
-
-        self.answer = AnswerHolder()
-
-    def set_value(self, value: str):
-        if self.answer is not None:
-            if not self.answer.text:
-                self.parent.question_answered(self.qid, True)
-                self.ids.answer_options.background_color = (.5, 1., .5, 1)
-
-            self.answer.text = value
 
 
 class IntegerScaleAQuestion(AudioQuestion):
@@ -228,6 +245,7 @@ class IntegerScaleAQuestion(AudioQuestion):
 
 class SliderAQuestion(AudioQuestion):
     """
+    Numerical scale type question with a slider instead of buttons for a more granular answer.
 
     Parameters
     ----------
@@ -239,11 +257,15 @@ class SliderAQuestion(AudioQuestion):
 
     Attributes
     ----------
-
+    min : NumericProperty
+        Minimum value of the slider.
+    max : NumericProperty
+        Maximum value of the slider.
+    step : NumericProperty
+        Step size of the slider.
+    slider_color : ListProperty
+        Color of the slider to indicate its answer state.
     """
-
-    value = NumericProperty(0.)
-    value_normalized = NumericProperty(0.)
 
     min = NumericProperty(0.)
     max = NumericProperty(0.)
@@ -266,29 +288,13 @@ class SliderAQuestion(AudioQuestion):
         self.step = float(question_dict['step'])
 
         self.value = (self.max + self.min) / 2.
-        self.value_normalized = self.ids.slider.value_normalized
 
-        self.answer = AnswerHolder()
-
-    def set_value(self, value: float, value_normalized: float) -> None:
+    def set_value(self) -> None:
         """
-
-        Parameters
-        ----------
-        value : float
-            The value passed from the slider
-        value_normalized : float
-
+        Overwrite of the set_value method to set the slider look and block when the parent is not assigned yet.
         """
-        if self.answer is not None:
-            if not self.answer.text:
-                self.parent.question_answered(self.qid, True)
-                self.ids.slider.background_color = (.5, 1., .5, 1)
-
-            value = round(value, 9)
-            self.answer.text = str(value)
-            self.value = value
-            self.value_normalized = value_normalized
+        if self.parent is not None:
+            super().set_value()
 
             self.slider_color = [.9 * .5, .9 * 1., .9 * .5, .9 * 1.]
             self.ids.slider.background_horizontal = 'GUI/assets/Slider_cursor_answered.png'
