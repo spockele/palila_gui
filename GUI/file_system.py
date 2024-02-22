@@ -354,7 +354,6 @@ class PalilaExperiment(ConfigObj):
         # ==========================================================================================================
 
         if 'breaks' in self[part].sections:
-            self[part]['breaks']['after_indices'] = []
             break_interval = int(self[part]['breaks']['interval'])
             break_time = int(self[part]['breaks']['time'])
             if 'text' in self[part]['breaks']:
@@ -363,7 +362,7 @@ class PalilaExperiment(ConfigObj):
                 break_text = f'This is a {break_time} s break.'
             break_count = 1
         else:
-            self[part]['breaks'] = {'after_indices': [-1, ]}
+            self[part]['breaks'] = {}
             break_interval = 0
             break_time = 0
             break_text = ''
@@ -410,15 +409,13 @@ class PalilaExperiment(ConfigObj):
                 # Set the previous audio's 'next' to this break
                 self[part][previous_audio]['next'] = current_name
                 # Set up the current break dict
-                self[part][audio] = {'text': break_text, 'time': break_time,
-                                     'previous': previous_name}
-                # Add the last audio index to the list of indices
-                self[part]['breaks']['after_indices'].append(ia)
+                self[part][current_name] = {'text': break_text, 'time': break_time,
+                                            'previous': previous_name}
                 # Up the break counter
                 break_count += 1
                 # Keep track of the last screen name and associated audio name
                 previous_name = current_name
-                previous_audio = audio
+                previous_audio = current_name
 
         # ==========================================================================================================
         # PREPARATION OF THE PART QUESTIONNAIRE

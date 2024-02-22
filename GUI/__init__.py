@@ -51,10 +51,6 @@ class PalilaScreenManager(ScreenManager):
         self.experiment = experiment
         self.answers = answers
 
-        self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
-                                      '', 'main-questionnaire', name='welcome'))
-        self.current = 'welcome'
-
         # Go about initialising the Screens based on the input file
         self._initialise_screens()
 
@@ -62,24 +58,28 @@ class PalilaScreenManager(ScreenManager):
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
-        # Add the initial questionnaire
+        # Add the welcome screen and set it as the current screen.
+        self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
+                                      '', 'main-questionnaire', name='welcome'))
+        self.current = 'welcome'
+        # Add the first questionnaire
         self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self, name='main-questionnaire'))
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
+            # Add the introductions
             self.add_widget(TimedTextScreen(self.experiment[part]['intro'], name=f'{part}-intro'))
-            break_count = 1
             # Within each part, loop over the audios
             for ia, audio in enumerate(self.experiment[part]['audios']):
-                # Gather the corresponding configuration dictionary and add the general audio path of the experiment
-                audio_config_dict = self.experiment[part][audio]
-                # Create the screen
-                self.add_widget(AudioQuestionScreen(audio_config_dict, name=f'{part}-{audio}'))
+                # Create the AudioQuestionScreen and add it to the manager
+                self.add_widget(AudioQuestionScreen(self.experiment[part][audio], name=f'{part}-{audio}'))
 
-                if ia in self.experiment[part]['breaks']['after_indices']:
-                    break_name = f'break {break_count}'
-                    self.add_widget(TimedTextScreen(self.experiment[part][break_name], name=f'{part}-{break_name}'))
-                    break_count += 1
+                # Check if a break should be added.
+                if 'break' in self.experiment[part][audio]['next']:
+                    break_name = self.experiment[part][audio]["next"]
+                    # Create the screen name for the break
+                    self.add_widget(TimedTextScreen(self.experiment[part][break_name],
+                                                    name=break_name))
 
             # Add the final questionnaire if it is present
             if 'questionnaire' in self.experiment[part].sections:
@@ -93,7 +93,6 @@ class PalilaScreenManager(ScreenManager):
         """
         Navigate to the next screen, based on the string defined in the current screen.
         """
-
         # Set the transition direction and the new current screen
         self.transition.direction = 'left'
         self.current = self.current_screen.next_screen
