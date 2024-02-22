@@ -16,7 +16,7 @@ class AudioChoiceButton(Button):
         Text to be displayed on the button.
     font_size : int, optional
         Optional font size of the text. Defaults to 72.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.button.Button constructor.
     """
     def __init__(self, text: str = '', font_size: int = 72, **kwargs) -> None:
@@ -63,7 +63,7 @@ class AudioQuestion(BoxLayout):
     ----------
     question_dict: dict
         Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
 
     Attributes
@@ -150,7 +150,7 @@ class TextAQuestion(AudioQuestion):
     ----------
     question_dict: dict
         Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
     def __init__(self, question_dict: dict, **kwargs):
@@ -173,7 +173,7 @@ class MultipleChoiceAQuestion(AudioQuestion):
     question_dict: dict
         Dictionary with all the information to construct the question.
         Should include the following keys: 'id', 'text', 'choices'.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
@@ -194,7 +194,7 @@ class SpinnerAQuestion(AudioQuestion):
     question_dict: dict
         Dictionary with all the information to construct the question.
         Should include the following keys: 'id', 'text', 'choices'.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
 
@@ -212,7 +212,7 @@ class IntegerScaleAQuestion(AudioQuestion):
     question_dict: dict
         Dictionary with all the information to construct the question.
         Should include the following keys: 'id', 'text', 'min', 'max'. Optional keys: 'left note', 'right note'.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
@@ -252,7 +252,7 @@ class SliderAQuestion(AudioQuestion):
     question_dict: dict
         Dictionary with all the information to construct the question.
         Should include the following keys: 'id', 'text', 'min', 'max'. 'step'. Optional keys: 'left note', 'right note'.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
 
     Attributes
@@ -309,7 +309,7 @@ class PointCompassAQuestion(AudioQuestion):
     ----------
     question_dict: dict
         Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
-    **kwargs : dict
+    **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
