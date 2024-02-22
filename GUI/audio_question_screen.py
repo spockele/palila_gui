@@ -223,10 +223,16 @@ class AudioManager(BoxLayout):
 
 
 class AudioManagerLeft(AudioManager):
+    """
+    Subclass of GUI.AudioManager for the default one on the left side of the AudioQuestionScreen.
+    """
     pass
 
 
 class AudioManagerRight(AudioManager):
+    """
+    Subclass of GUI.AudioManager for the optional second one on the right side of the AudioQuestionScreen.
+    """
     pass
 
 

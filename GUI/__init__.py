@@ -86,6 +86,7 @@ class PalilaScreenManager(ScreenManager):
                 self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
                                                     manager=self, name=f'{part}-questionnaire'))
 
+        # Add the Final two screens
         self.add_widget(EndScreen('main-questionnaire', 'final', name='end'))
         self.add_widget(FinalScreen('end', '', goodbye=self.experiment['goodbye'], name='final'))
 
@@ -106,6 +107,7 @@ class PalilaScreenManager(ScreenManager):
         """
         Navigate to the previous screen, based on the string defined in the current screen.
         """
+        # Set the transition direction and the new current screen
         self.transition.direction = 'right'
         self.current = self.current_screen.previous_screen
 
@@ -155,7 +157,6 @@ class PalilaApp(App):
 
     def __init__(self, experiment_name: str, **kwargs) -> None:
         super().__init__(**kwargs)
-
         # Load the experiment from the file
         self.experiment = PalilaExperiment(experiment_name)
         self.answers = PalilaAnswers(self.experiment)
