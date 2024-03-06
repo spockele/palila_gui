@@ -53,7 +53,38 @@ class PalilaExperiment(ConfigObj):
 
         # Create a list of audios in each part dict
         for part in self['parts']:
-            self[part]['audios'] = [audio for audio in self[part] if 'audio' in audio]
+            self[part]['audios'] = []
+            # Go over all the sections to find audios
+            for audio in self[part]:
+                if 'audio ' in audio:
+                    # In case a repeat is requested, add the required number of repeating audios
+                    if 'repeat' in self[part][audio].keys():
+                        # Get the number of repeats.
+                        repeat = int(self[part][audio]['repeat'])
+                        # For each repeat
+                        for ri in range(repeat):
+                            # Create a new name and add to the list of audios
+                            new_name = audio + '_' + str(ri).zfill(2)
+                            self[part]['audios'].append(new_name)
+                            # Copy this audio as a repeat
+                            self[part][new_name] = {}
+                            for key, value in self[part][audio].items():
+                                if 'question ' in key:
+                                    print(key)
+                                    self[part][new_name][key] = {}
+                                    for subkey, subvalue in value.items():
+                                        print(subkey, subvalue)
+                                        self[part][new_name][key][subkey] = copy.deepcopy(subvalue)
+                                else:
+                                    print(key, value)
+                                    self[part][new_name][key] = copy.deepcopy(value)
+
+                        # Remove the original audio from the dict to save space.
+                        del self[part][audio]
+                    # Otherwise, just add the audio name to the list of audios
+                    else:
+                        self[part]['audios'].append(audio)
+
             # Create a list of questions in each audio dict
             for audio in self[part]['audios']:
                 self[part][audio]['questions'] = [question for question in self[part][audio].sections]
@@ -249,26 +280,16 @@ class PalilaExperiment(ConfigObj):
         for question in self[part][audio]['questions']:
             # Remove tabs from the input file in the question text
             self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
+            # Generate a standardised question id
+            # Extract the part, audio and question names
+            part_id = part.replace('part ', '')
+            audio_id = audio.replace('audio ', '')
+            question_id = question.replace('question ', '')
 
-            # Extract the id to the overall question id list
-            if 'id' in self[part][audio][question] and not question_overwrite:
-                self.question_id_list.append(self[part][audio][question]['id'])
-            # Generate a standardised id when it's not defined explicitly
-            else:
-                # Extract the user input part, audio and question names from the brackets
-                part_id = part.replace('part ', '')
-                audio_id = audio.replace('audio ', '')
-                # In case of questions overwrite, define the ID with a semi-standardised version
-                if question_overwrite:
-                    question_id = self[part][audio][question]['id']
-                # Otherwise, make it ugly as all hell
-                else:
-                    question_id = question.replace('question ', '')
-
-                # Put everything together and add to the list
-                qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
-                self.question_id_list.append(qid)
-                self[part][audio][question]['id'] = qid
+            # Put everything together and add to the list
+            qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
+            self.question_id_list.append(qid)
+            self[part][audio][question]['id'] = qid
 
     def _prepare_part_questionnaire(self, part):
         """
@@ -472,6 +493,8 @@ class PalilaExperiment(ConfigObj):
 
         # Add the end screen as the 'next' of the last screen
         self[previous_part][previous_audio]['next'] = 'end'
+
+        print(self.question_id_list)
 
 
 class PalilaAnswers:
