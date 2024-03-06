@@ -217,19 +217,29 @@ class IntegerScaleAQuestion(AudioQuestion):
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
+        no_notes = True
         # Add the left side note if there is one
         if 'left note' in question_dict.keys():
             self.ids.left_note.text = question_dict['left note']
+            no_notes = False
         # Add the right side note if there is one
         if 'right note' in question_dict.keys():
             self.ids.right_note.text = question_dict['right note']
+            no_notes = False
+
+        scale_width = .64
+        scale_start = .18
+        if no_notes:
+            scale_width = .95
+            scale_start = .025
+            self.ids.scale_bar.size_hint = (.96, .2)
 
         # Make the min and max values into integers
         self.min = int(question_dict['min'])
         self.max = int(question_dict['max'])
         # Determine the number of buttons and their width
         n_button = self.max - self.min + 1
-        button_width = .65 / n_button
+        button_width = scale_width / n_button
 
         # Add buttons at integer intervals
         for bi, bv in enumerate(range(self.min, self.max + 1)):
@@ -237,10 +247,10 @@ class IntegerScaleAQuestion(AudioQuestion):
             button = AudioChoiceButton(str(bv))
             self.ids.answer_options.add_widget(button)
             # Set the x and y size of the buttons (specific to 16:10 aspect ratio)
-            button.size_hint_x = .65 * (button_width ** .95)
-            button.size_hint_y = .65 * (button_width ** .95) * 9
+            button.size_hint_x = .75 * (button_width ** .95)
+            button.size_hint_y = .75 * (button_width ** .95) * 9
             # Determine their positions
-            button.pos_hint = {'center_x': (.175 + button_width / 2) + (bi * button_width), 'center_y': .5}
+            button.pos_hint = {'center_x': (scale_start + button_width / 2) + (bi * button_width), 'center_y': .5}
 
 
 class SliderAQuestion(AudioQuestion):
@@ -275,12 +285,20 @@ class SliderAQuestion(AudioQuestion):
 
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
+        no_notes = True
         # Add the left side note if there is one
         if 'left note' in question_dict.keys():
             self.ids.left_note.text = question_dict['left note']
+            no_notes = False
         # Add the right side note if there is one
         if 'right note' in question_dict.keys():
             self.ids.right_note.text = question_dict['right note']
+            no_notes = False
+
+        if no_notes:
+            self.ids.slider_holder.size_hint_x = .95
+            self.ids.left_note.size_hint_x = 0.05
+            self.ids.right_note.size_hint_x = 0.05
 
         # Make the min and max values into integers
         self.min = float(question_dict['min'])
@@ -294,6 +312,8 @@ class SliderAQuestion(AudioQuestion):
         Overwrite of the set_value method to set the slider look and block when the parent is not assigned yet.
         """
         if self.parent is not None:
+            self.ids.slider.value = round(self.ids.slider.value, 9)
+            self.value = self.ids.slider.value
             super().set_value()
 
             self.slider_color = [.9 * .5, .9 * 1., .9 * .5, .9 * 1.]

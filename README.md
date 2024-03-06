@@ -88,6 +88,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
                                             #   button to the AudioQuestionScreen.
         max replays = <integer> (optional)  # -> Defines the maximum number of times a sample can be replayed.
                                             #   Defaults to 1.
+        repeat = <integer> (optional)       # -> Defines the number of times this audio is repeated in the part.
+                                            #   Defaults to 1.
                                             
         [[[question <string>]]]             # -> SubSubSection defining a single question for the audio sample.
             type = <string>                     # -> Defines the type of question. 
@@ -141,7 +143,7 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
   - Requires the following arguments:\
     ```min = <integer>``` -> Defines the minimum value of the scale.\
     ```max = <integer>``` -> Defines the minimum value of the scale.
-  - Recommended range: ```4 <= (max - min) <= 10```
+  - Recommended range: ```4 <= (max - min) <= 8 with left and right note, else 6 <= (max - min) <= 10```
   - Optional:\
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
