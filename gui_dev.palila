@@ -15,25 +15,32 @@ randomise = no
 
 	[[questions]]
 		[[[question 1]]]
-			id = 'NumScale'
 			type = IntegerScale
-			text = 'How good is this question. Please indicate on this scale from 1 to 9.'
+			text = 'How good is this question. Please indicate on this scale from 0 to 7.'
 
-			min = 1
-			max = 9
+			min = 0
+			max = 7
 
 			left note = 'Very Bad'
 			right note = 'Very Good'
 
+		[[[question 2]]]
+			type = IntegerScale
+			text = 'How good is this question. Please indicate on this scale from 0 to 10.'
+
+			min = 0
+			max = 10
+
 	[[audio 0]]
-		filename = 'tone500Hz.wav'
+		filename = 'prototyping_placeholder.wav'
+		repeat = 2
 
 	[[audio 1]]
-		filename = 'tone500Hz.wav'
-		filename_2 = 'tone500Hz.wav'
+		filename = 'prototyping_placeholder.wav'
+		filename_2 = 'prototyping_placeholder.wav'
 
 	[[audio 2]]
-		filename = 'tone500Hz.wav'
+		filename = 'prototyping_placeholder.wav'
 		max replays = 5
 
 
@@ -52,17 +59,17 @@ randomise = no
 		time = 1
 
 	[[audio 0]]
-		filename = 'tone500Hz.wav'
+		filename = 'prototyping_placeholder.wav'
+		repeat = 2
 
 		[[[question 0]]]
-			id = 'Custom question ID'
 			type = Text
 			text = '''This is just text, no question asked.
 				If only a text is present, the continue button unlocks after playing audio. Use it wisely.
 				The next screens will showcase all question types.'''
 
 	[[audio 1]]
-		filename = 'tone500Hz.wav'
+		filename = 'prototyping_placeholder.wav'
 
 		[[[question mc]]]
 			text = '''This here is a multiple choice question.
@@ -79,7 +86,7 @@ randomise = no
 			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worst', 'Prefer not to Answer'
 
 	[[audio 3]]
-		filename = 'tone500Hz.wav'
+		filename = 'prototyping_placeholder.wav'
 
 		[[[question sl]]]
 			text = '''This here is a slider question.
@@ -103,7 +110,7 @@ randomise = no
 			right note = 'Very'
 
 	[[audio 4]]
-		filename = 'tone500Hz.wav'
+		filename = 'prototyping_placeholder.wav'
 
 		[[[question dir]]]
 			text = 'This is a compass questions, where participants can enter a direction in 8 points.'
