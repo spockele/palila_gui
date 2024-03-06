@@ -220,10 +220,14 @@ class IntegerScaleAQuestion(AudioQuestion):
         no_notes = True
         # Add the left side note if there is one
         if 'left note' in question_dict.keys():
+            if '\n' in question_dict['left note']:
+                question_dict['left note'] = question_dict['left note'].replace('\t', '')
             self.ids.left_note.text = question_dict['left note']
             no_notes = False
         # Add the right side note if there is one
         if 'right note' in question_dict.keys():
+            if '\n' in question_dict['right note']:
+                question_dict['right note'] = question_dict['right note'].replace('\t', '')
             self.ids.right_note.text = question_dict['right note']
             no_notes = False
 
@@ -288,10 +292,14 @@ class SliderAQuestion(AudioQuestion):
         no_notes = True
         # Add the left side note if there is one
         if 'left note' in question_dict.keys():
+            if '\n' in question_dict['left note']:
+                question_dict['left note'] = question_dict['left note'].replace('\t', '')
             self.ids.left_note.text = question_dict['left note']
             no_notes = False
         # Add the right side note if there is one
         if 'right note' in question_dict.keys():
+            if '\n' in question_dict['right note']:
+                question_dict['right note'] = question_dict['right note'].replace('\t', '')
             self.ids.right_note.text = question_dict['right note']
             no_notes = False
 
