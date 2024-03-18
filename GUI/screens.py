@@ -267,8 +267,7 @@ class FinalScreen(PalilaScreen):
         """
         Stop the timer and save results when entering this screen.
         """
-        if self.manager.experiment.name != 'gui_dev':
-            self.manager.answers.save_to_file()
+        self.manager.answers.save_to_file()
         # Don't forget to unlock the escape button
         Config.set('kivy', 'exit_on_escape', '1')
 
