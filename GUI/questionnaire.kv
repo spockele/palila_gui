@@ -12,6 +12,17 @@
 		halign: 'right'
 		valign: 'center'
 
+	Widget:
+		size: root.size
+		pos: root.pos
+
+		canvas:
+			Color:
+				rgba: root.bordercolor
+			Line:
+				points: self.x, self.y + 1.1 * self.height, self.x + self.width, self.y + 1.1 * self.height
+				width: 1.5
+
 
 <FreeNumberQQuestion>
 	FreeNumberTextInput:

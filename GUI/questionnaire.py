@@ -2,6 +2,7 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.properties import ColorProperty
 
 from .screens import PalilaScreen, Filler, BackButton
 from .numpad_bubble import NumPadBubble
@@ -65,6 +66,7 @@ class QuestionnaireQuestion(FloatLayout):
     answer
         Currently selected answer. None in case no answer is selected.
     """
+    bordercolor = ColorProperty([0., 0., 0., 0.])
 
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(**kwargs)
@@ -78,6 +80,12 @@ class QuestionnaireQuestion(FloatLayout):
         Have the QuestionnaireScreen check the unlock condition.
         """
         self.parent.parent.unlock_check()
+
+    def border(self):
+        """
+        Add the top borderline to the question.
+        """
+        self.bordercolor = [.8, .8, .8, 1.]
 
 
 class FreeNumberTextInput(TextInput):
@@ -351,6 +359,9 @@ class QuestionnaireScreen(PalilaScreen):
                 # Add the instance to the screen and the list
                 self.ids.questions.add_widget(question_instance)
                 self.questions.append(question_instance)
+
+                if qi:
+                    question_instance.border()
 
         # If there are any questions remaining, add an extra screen
         if remaining:
