@@ -42,7 +42,6 @@ class QuestionnaireChoiceButton(Button):
         """
         Select this button on release and communicate this to the QuestionnaireQuestion.
         """
-        self.select()
         self.parent.parent.select_choice(self)
 
 
@@ -75,10 +74,28 @@ class QuestionnaireQuestion(FloatLayout):
         self.qid = question_dict['id']
         self.answer = None
 
+        self.dependant = None
+        self.dependant_answer_temp = None
+
+    def set_dependant(self, *_):
+        if 'dependant' in self.question_dict:
+            if 'dependant_condition' not in self.question_dict:
+                raise SyntaxError(f'{self.qid} does not have a "dependant_condition" to unlock its dependant question.')
+            else:
+                self.dependant: QuestionnaireQuestion = self.parent.parent.all_questions[self.question_dict['dependant']]
+                self.dependant.dependant_lock()
+
     def check_input(self):
         """
         Have the QuestionnaireScreen check the unlock condition.
         """
+        if self.dependant is not None and self.answer == self.question_dict['dependant_condition']:
+            self.dependant.dependant_unlock(self.dependant_answer_temp)
+
+        elif self.dependant is not None:
+            self.dependant_answer_temp = self.dependant.answer
+            self.dependant.dependant_lock()
+
         self.parent.parent.unlock_check()
 
     def border(self):
@@ -86,6 +103,14 @@ class QuestionnaireQuestion(FloatLayout):
         Add the top borderline to the question.
         """
         self.bordercolor = [.8, .8, .8, 1.]
+
+    def dependant_lock(self):
+        self.answer = 'n/a'
+        self.disabled = True
+
+    def dependant_unlock(self, previous_answer):
+        self.answer = previous_answer
+        self.disabled = False
 
 
 class FreeNumberTextInput(TextInput):
@@ -134,21 +159,21 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
             if self.ids.question_input.text.isnumeric():
                 self.answer = self.ids.question_input.text
                 self.ids.question_input_overlay.text = ''
-                self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
-                self.ids.question_input.background_color = (.5, 1., .5, 1.)
+                self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
+                self.ids.question_input.background_color = [.5, 1., .5, 1.]
 
             else:
                 if self.answer is not None:
                     self.ids.question_input.text = self.answer
                 else:
                     self.ids.question_input.text = ''
-                    self.ids.question_input_overlay.color = (1., .2, .2, 1.)
-                    self.ids.question_input.background_color = (1., .7, .7, 1.)
+                    self.ids.question_input_overlay.color = [1., .2, .2, 1.]
+                    self.ids.question_input.background_color = [1., .7, .7, 1.]
 
         else:
             self.answer = None
-            self.ids.question_input.background_color = (1., 1., 1., 1.)
-            self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
+            self.ids.question_input.background_color = [1., 1., 1., 1.]
+            self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
             self.ids.question_input_overlay.text = 'Enter a number here.'
 
         super().check_input()
@@ -163,6 +188,16 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
         else:
             self.parent.parent.remove_widget(self.numpad)
             self.numpad.coupled_widget = None
+
+    def dependant_lock(self):
+        super().dependant_lock()
+        self.ids.question_input_overlay.text = ''
+        self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
+        self.ids.question_input.background_color = [.5, 1., .5, 1.]
+
+    def dependant_unlock(self, previous_answer):
+        super().dependant_unlock(previous_answer)
+        self.check_input()
 
 
 class FreeTextQQuestion(QuestionnaireQuestion):
@@ -190,16 +225,26 @@ class FreeTextQQuestion(QuestionnaireQuestion):
 
             self.answer = self.ids.question_input.text
             self.ids.question_input_overlay.text = ''
-            self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
-            self.ids.question_input.background_color = (.5, 1., .5, 1.)
+            self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
+            self.ids.question_input.background_color = [.5, 1., .5, 1.]
 
         else:
             self.answer = None
-            self.ids.question_input.background_color = (1., 1., 1., 1.)
-            self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
+            self.ids.question_input.background_color = [1., 1., 1., 1.]
+            self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
             self.ids.question_input_overlay.text = 'Enter your answer here.'
 
         super().check_input()
+
+    def dependant_lock(self):
+        super().dependant_lock()
+        self.ids.question_input_overlay.text = ''
+        self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
+        self.ids.question_input.background_color = [.5, 1., .5, 1.]
+
+    def dependant_unlock(self, previous_answer):
+        super().dependant_unlock(previous_answer)
+        self.check_input()
 
 
 class SpinnerQQuestion(QuestionnaireQuestion):
@@ -234,6 +279,14 @@ class SpinnerQQuestion(QuestionnaireQuestion):
 
         super().check_input()
 
+    def dependant_lock(self):
+        super().dependant_lock()
+        self.ids.question_input.background_color = [.5, 1., .5, 1.]
+
+    def dependant_unlock(self, previous_answer):
+        super().dependant_unlock(previous_answer)
+        self.check_input()
+
 
 class MultipleChoiceQQuestion(QuestionnaireQuestion):
     """
@@ -254,19 +307,20 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
         self.choice = None
+        self.choice_temp = None
 
         # Add every choice as a button and track their word lengths
-        choices = []
+        self.choices = []
         lengths = []
         for choice in question_dict['choices']:
             choice_button = QuestionnaireChoiceButton(choice)
-            choices.append(choice_button)
+            self.choices.append(choice_button)
             self.ids.question_input.add_widget(choice_button)
             lengths.append(len(choice))
         # Resize proportional to the root of the word lengths
         total = sum(lengths)
         for ii, length in enumerate(lengths):
-            choices[ii].size_hint_x = length ** .5 / total
+            self.choices[ii].size_hint_x = length ** .5 / total
 
     def select_choice(self, choice: QuestionnaireChoiceButton):
         """
@@ -283,9 +337,25 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
         else:
             # Set the current answer to the entered button otherwise
             self.choice = choice
+            self.choice.select()
             self.answer = choice.text
 
         super().check_input()
+
+
+    def dependant_lock(self):
+        super().dependant_lock()
+        self.choice_temp = self.choice
+        self.choice = None
+        for choice in self.choices:
+            choice.select()
+
+    def dependant_unlock(self, previous_answer):
+        super().dependant_unlock(previous_answer)
+        for choice in self.choices:
+            choice.deselect()
+
+        self.select_choice(self.choice_temp)
 
 
 class QuestionnaireScreen(PalilaScreen):
@@ -354,8 +424,11 @@ class QuestionnaireScreen(PalilaScreen):
         else:
             self._automatic_splitting(manager, extra_screen_start)
 
-        print(self.all_questions)
         self.unlock_check()
+        if not extra_screen_start:
+            for qid, question in self.all_questions.items():
+                question: QuestionnaireQuestion
+                question.set_dependant()
 
     def _manual_splitting(self, manager: ScreenManager, extra_screen_start: int):
         """
