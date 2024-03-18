@@ -81,13 +81,26 @@ manual split = yes
 	choices = 'Yes', 'No'
 	manual screen = 2
 
+[question which_protection]
+	id = 'which_protection'
+	type = FreeText
+	text = '''What noise do/did have to protect yourself from?
+		(Only if the previous answer was yes)'''
+	manual screen = 2
+
 
 [question ear_disease]
 	id = 'ear_disease'
 	type = MultipleChoice
-	text = '''Have your suffered or are you currently
+	text = '''Have your suffered, or are you currently
 		suffering from any ear disease?'''
 	choices = 'Yes', 'No'
+	manual screen = 3
+
+[question which_disease]
+	id = 'which_disease'
+	type = FreeText
+	text = 'If yes, which disease?'
 	manual screen = 3
 
 [question tinnitus]
@@ -102,6 +115,14 @@ manual split = yes
 	type = MultipleChoice
 	text = 'Do you currently have a cold?'
 	choices = 'Yes', 'No'
+	manual screen = 3
+
+[question cold_magnitude]
+	id = 'cold_magnitude'
+	type = MultipleChoice
+	text = '''How bad is your cold?
+		From 1 (very weak) to 5 (very strong)'''
+	choices = '1', '2', '3', '4', '5'
 	manual screen = 3
 
 [question feeling]
