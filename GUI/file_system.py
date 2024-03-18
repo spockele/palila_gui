@@ -70,13 +70,10 @@ class PalilaExperiment(ConfigObj):
                             self[part][new_name] = {}
                             for key, value in self[part][audio].items():
                                 if 'question ' in key:
-                                    print(key)
                                     self[part][new_name][key] = {}
                                     for subkey, subvalue in value.items():
-                                        print(subkey, subvalue)
                                         self[part][new_name][key][subkey] = copy.deepcopy(subvalue)
                                 else:
-                                    print(key, value)
                                     self[part][new_name][key] = copy.deepcopy(value)
 
                         # Remove the original audio from the dict to save space.
@@ -493,8 +490,6 @@ class PalilaExperiment(ConfigObj):
 
         # Add the end screen as the 'next' of the last screen
         self[previous_part][previous_audio]['next'] = 'end'
-
-        print(self.question_id_list)
 
 
 class PalilaAnswers:
