@@ -54,7 +54,7 @@ manual split = yes
 [question hearing_aid]
 	id = 'hearing_aid'
 	type = MultipleChoice
-	text = 'Do you use a hearing aid?'
+	text = 'Do you normally use a hearing aid?'
 	choices = 'Yes', 'No'
 	manual screen = 2
 
@@ -62,7 +62,7 @@ manual split = yes
 	id = 'wearing_aid'
 	type = MultipleChoice
 	text = 'Are you currently wearing a hearing aid?'
-	choices = 'Yes', 'No', 'N/A'
+	choices = 'Yes', 'No'
 	manual screen = 2
 
 [question blast_trauma]
@@ -93,17 +93,15 @@ manual split = yes
 [question tinnitus]
 	id = 'tinnitus'
 	type = MultipleChoice
-	text = '''Do you suffer from ringing in the ears?
-		(tinnitus)'''
+	text = 'Do you suffer from ringing in the ears (tinnitus)?'
 	choices = 'Yes', 'No'
 	manual screen = 3
 
 [question cold]
 	id = 'cold'
 	type = MultipleChoice
-	text = '''Do you currently have a cold?
-		If so, how bad from 1 (very weak) to 5 (very strong)'''
-	choices = 'No', '1', '2', '3', '4', '5'
+	text = 'Do you currently have a cold?'
+	choices = 'Yes', 'No'
 	manual screen = 3
 
 [question feeling]
