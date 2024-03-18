@@ -81,6 +81,9 @@ manual split = yes
 	choices = 'Yes', 'No'
 	manual screen = 2
 
+	dependant = 'which_protection'
+	dependant_condition = 'Yes'
+
 [question which_protection]
 	id = 'which_protection'
 	type = FreeText
@@ -97,10 +100,13 @@ manual split = yes
 	choices = 'Yes', 'No'
 	manual screen = 3
 
+	dependant = 'which_disease'
+	dependant_condition = 'Yes'
+
 [question which_disease]
 	id = 'which_disease'
 	type = FreeText
-	text = 'If yes, which disease?'
+	text = 'If yes, what kind of ear disease?'
 	manual screen = 3
 
 [question tinnitus]
@@ -117,9 +123,12 @@ manual split = yes
 	choices = 'Yes', 'No'
 	manual screen = 3
 
+	dependant = 'cold_magnitude'
+	dependant_condition = 'Yes'
+
 [question cold_magnitude]
 	id = 'cold_magnitude'
-	type = MultipleChoice
+	type = Spinner
 	text = '''How bad is your cold?
 		From 1 (very weak) to 5 (very strong)'''
 	choices = '1', '2', '3', '4', '5'
