@@ -32,7 +32,7 @@ manual split = yes
 	id = 'how_found'
 	type = Spinner
 	text = 'How did you find out about this experiment?'
-	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Other'
+	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Email', 'Other'
 	manual screen = 1
 
 
