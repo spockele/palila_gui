@@ -134,7 +134,6 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
             if self.ids.question_input.text.isnumeric():
                 self.answer = self.ids.question_input.text
                 self.ids.question_input_overlay.text = ''
-                self.ids.question_input.background_color = (1., 1., 1., 1.)
                 self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
                 self.ids.question_input.background_color = (.5, 1., .5, 1.)
 
@@ -188,7 +187,6 @@ class FreeTextQQuestion(QuestionnaireQuestion):
         if self.ids.question_input.text:
             self.answer = self.ids.question_input.text
             self.ids.question_input_overlay.text = ''
-            self.ids.question_input.background_color = (1., 1., 1., 1.)
             self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
             self.ids.question_input.background_color = (.5, 1., .5, 1.)
 
