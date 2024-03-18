@@ -166,6 +166,41 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
             self.numpad.coupled_widget = None
 
 
+class FreeTextQQuestion(QuestionnaireQuestion):
+    """
+    Question type that allows for text to be entered by the participant.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
+    **kwargs
+        Keyword arguments. These are passed on to the kivy.uix.floatlayout.FloatLayout constructor.
+    """
+
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(question_dict, **kwargs)
+
+    def check_input(self):
+        """
+        Check the full input of the TextInput before triggering the unlock check.
+        """
+        if self.ids.question_input.text:
+            self.answer = self.ids.question_input.text
+            self.ids.question_input_overlay.text = ''
+            self.ids.question_input.background_color = (1., 1., 1., 1.)
+            self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
+            self.ids.question_input.background_color = (.5, 1., .5, 1.)
+
+        else:
+            self.answer = None
+            self.ids.question_input.background_color = (1., 1., 1., 1.)
+            self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
+            self.ids.question_input_overlay.text = 'Enter your answer here.'
+
+        super().check_input()
+
+
 class SpinnerQQuestion(QuestionnaireQuestion):
     """
     Multiple choice type question with a dropdown instead of buttons.

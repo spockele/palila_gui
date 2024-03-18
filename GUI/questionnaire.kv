@@ -48,6 +48,30 @@
 		halign: 'left'
 		valign: 'center'
 
+
+<FreeTextQQuestion>
+	TextInput:
+		id: question_input
+		text: ''
+
+		size_hint: .55, 1.
+		pos_hint: {'right': 1, 'y': 0.}
+
+		on_text:
+			root.check_input()
+
+	Label:
+		id: question_input_overlay
+		text: 'Enter your answer here'
+		color: (.7, .7, .7, 1.)
+
+		size_hint: .55, 1.
+		pos_hint: {'right': 1, 'y': 0.}
+		text_size: .96 * self.size[0], self.size[1]
+		halign: 'left'
+		valign: 'center'
+
+
 <Dropdown>
 	auto_width: False
 	width: '900dp'
