@@ -185,6 +185,9 @@ class FreeTextQQuestion(QuestionnaireQuestion):
         Check the full input of the TextInput before triggering the unlock check.
         """
         if self.ids.question_input.text:
+            if len(self.ids.question_input.text.split('\n')) > 2:
+                self.ids.question_input.text = self.answer
+
             self.answer = self.ids.question_input.text
             self.ids.question_input_overlay.text = ''
             self.ids.question_input_overlay.color = (.7, .7, .7, 1.)
