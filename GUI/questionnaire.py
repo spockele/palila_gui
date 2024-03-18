@@ -316,13 +316,15 @@ class QuestionnaireScreen(PalilaScreen):
     questions : list
         List of all the questions in this singular screen.
     """
-    def __init__(self, questionnaire_dict: dict, manager: ScreenManager,
+    def __init__(self, questionnaire_dict: dict, manager: ScreenManager, all_questions: dict = None,
                  extra_screen_start: int = 0, all_screens: list = None, **kwargs):
         super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], lock=True, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
         self.state_override = False
         self.all_screens = all_screens
+        # Set up the dict with all questionnaire questions, in order to handle conditional questions
+        self.all_questions = {} if all_questions is None else all_questions
 
         # Keep a count of the number of screens in this questionnaire
         if 'screen_count' not in self.questionnaire_dict.keys():
@@ -352,6 +354,7 @@ class QuestionnaireScreen(PalilaScreen):
         else:
             self._automatic_splitting(manager, extra_screen_start)
 
+        print(self.all_questions)
         self.unlock_check()
 
     def _manual_splitting(self, manager: ScreenManager, extra_screen_start: int):
@@ -395,6 +398,7 @@ class QuestionnaireScreen(PalilaScreen):
                 # Add the instance to the screen and the list
                 self.ids.questions.add_widget(question_instance)
                 self.questions.append(question_instance)
+                self.all_questions[self.questionnaire_dict[question]['id']] = question_instance
 
                 if qi:
                     question_instance.border()
@@ -444,16 +448,11 @@ class QuestionnaireScreen(PalilaScreen):
         extra_screen_start : int, optional
             Place to start a new screen in the questions list.
         """
-        # Set up the list of all screens if it does not exist yet
-        if self.all_screens is None:
-            self.all_screens = [self, ]
-
         # Create the extra screen and let it do its thing
-        extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager,
+        extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager, all_questions=self.all_questions,
                                            extra_screen_start=extra_screen_start + 7, all_screens=self.all_screens,
                                            name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
-        # Add it to the all screens list
-        self.all_screens.append(extra_screen)
+
         # Add it to the ScreenManager
         manager.add_widget(extra_screen)
 
@@ -473,20 +472,12 @@ class QuestionnaireScreen(PalilaScreen):
         """
         # Start a variable to store the total state
         total_state = True
-        # Gather all the screens of the questionnaire
-        if self.all_screens is None:
-            all_screens = [self, ]
-        else:
-            all_screens = self.all_screens
 
-        # Loop over the screens
-        for screen in all_screens:
-            screen: QuestionnaireScreen
-            # Loop over the questions
-            for question_instance in screen.questions:
-                state = question_instance.answer is not None
-                # Update the total state via the boolean "and" operator
-                total_state = total_state and state
+        # Loop over all questions
+        for question_instance in self.all_questions.values():
+            state = question_instance.answer is not None
+            # Update the total state via the boolean "and" operator
+            total_state = total_state and state
 
         # Return the final state or the override
         return total_state or self.state_override
