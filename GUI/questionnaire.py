@@ -70,8 +70,6 @@ class QuestionnaireQuestion(FloatLayout):
         super().__init__(**kwargs)
         self.question_dict = question_dict
         self.ids.question_text.text = question_dict['text']
-        if '\n' in question_dict['text']:
-            self.ids.question_text.font_size = 32
         self.qid = question_dict['id']
         self.answer = None
 
