@@ -4,6 +4,21 @@ randomise = no
 [questionnaire]
 	default = yes
 
+#	[[question testing]]
+#		id = 'testing'
+#		text = 'Just Testing'
+#		type = MultipleChoice
+#		choices = 'Ok', 'Understood'
+#
+#		dependant = 'testing_dep'
+#		dependant condition = 'Ok'
+#
+#	[[question 2]]
+#		id = 'testing_dep'
+#		text = 'This question is dependant on the previous one'
+#		type = MultipleChoice
+#		choices = 'Ok', 'Understood'
+
 
 [part 1]
 	randomise = no
@@ -34,6 +49,23 @@ randomise = no
 	[[audio 0]]
 		filename = 'prototyping_placeholder.wav'
 		repeat = 2
+
+	[[questionnaire]]
+		[[[question 1]]]
+			id = 'showcase'
+			text = '''This is an optional questionnaire
+				at the end of a part: '''
+			type = MultipleChoice
+			choices = 'Ok', 'Understood'
+
+			dependant = 'showcase_dep'
+			dependant condition = 'Ok'
+
+		[[[question 2]]]
+			id = 'showcase_dep'
+			text = 'This question is dependant on the previous one: '
+			type = MultipleChoice
+			choices = 'Ok', 'Understood'
 
 	[[audio 1]]
 		filename = 'prototyping_placeholder.wav'

@@ -79,8 +79,8 @@ class QuestionnaireQuestion(FloatLayout):
 
     def set_dependant(self, *_):
         if 'dependant' in self.question_dict:
-            if 'dependant_condition' not in self.question_dict:
-                raise SyntaxError(f'{self.qid} does not have a "dependant_condition" to unlock its dependant question.')
+            if 'dependant condition' not in self.question_dict:
+                raise SyntaxError(f'{self.qid} does not have a "dependant condition" to unlock its dependant question.')
             else:
                 self.dependant: QuestionnaireQuestion = self.parent.parent.all_questions[self.question_dict['dependant']]
                 self.dependant.dependant_lock()
@@ -89,7 +89,7 @@ class QuestionnaireQuestion(FloatLayout):
         """
         Have the QuestionnaireScreen check the unlock condition.
         """
-        if self.dependant is not None and self.answer == self.question_dict['dependant_condition']:
+        if self.dependant is not None and self.answer == self.question_dict['dependant condition']:
             self.dependant.dependant_unlock(self.dependant_answer_temp)
 
         elif self.dependant is not None:
@@ -193,7 +193,7 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
         super().dependant_lock()
         self.ids.question_input_overlay.text = ''
         self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-        self.ids.question_input.background_color = [.5, 1., .5, 1.]
+        self.ids.question_input.background_color = [.7, 1., .7, 1.]
 
     def dependant_unlock(self, previous_answer):
         super().dependant_unlock(previous_answer)
@@ -240,7 +240,7 @@ class FreeTextQQuestion(QuestionnaireQuestion):
         super().dependant_lock()
         self.ids.question_input_overlay.text = ''
         self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-        self.ids.question_input.background_color = [.5, 1., .5, 1.]
+        self.ids.question_input.background_color = [.7, 1., .7, 1.]
 
     def dependant_unlock(self, previous_answer):
         super().dependant_unlock(previous_answer)
@@ -281,7 +281,7 @@ class SpinnerQQuestion(QuestionnaireQuestion):
 
     def dependant_lock(self):
         super().dependant_lock()
-        self.ids.question_input.background_color = [.5, 1., .5, 1.]
+        self.ids.question_input.background_color = [.7, 1., .7, 1.]
 
     def dependant_unlock(self, previous_answer):
         super().dependant_unlock(previous_answer)
@@ -348,7 +348,7 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
         self.choice_temp = self.choice
         self.choice = None
         for choice in self.choices:
-            choice.select()
+            choice.background_color = [.7, 1, .7, 1.]
 
     def dependant_unlock(self, previous_answer):
         super().dependant_unlock(previous_answer)
