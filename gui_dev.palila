@@ -115,7 +115,7 @@ randomise = no
 				Do you like it?'''
 			type = Spinner
 
-			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worst', 'Prefer not to Answer'
+			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worse', 'Prefer not to Answer'
 
 	[[audio 3]]
 		filename = 'prototyping_placeholder.wav'

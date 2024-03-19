@@ -173,7 +173,8 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
   - Requires no additional input arguments.
 ---
 ## Output file format
-Results from an experiment will be output as individual ```.csv``` files in the directory ```.\<experiment name>\responses\```.\
+Results from an experiment will be output as individual ```.csv``` files in the directory 
+```.\<experiment name>\responses\```.\
 The ```.csv``` files contain a table which is formated as follows:
 
 |          | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
