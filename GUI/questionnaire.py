@@ -424,6 +424,8 @@ class QuestionnaireScreen(PalilaScreen):
         else:
             self._automatic_splitting(manager, extra_screen_start)
 
+        [question.border() for question in self.questions[:-1]]
+
         self.unlock_check()
         if not extra_screen_start:
             for qid, question in self.all_questions.items():
@@ -473,9 +475,6 @@ class QuestionnaireScreen(PalilaScreen):
                 self.questions.append(question_instance)
                 self.all_questions[self.questionnaire_dict[question]['id']] = question_instance
 
-                if qi:
-                    question_instance.border()
-
         # If there are any questions remaining, add an extra screen
         if remaining:
             self._add_extra_screen(manager, extra_screen_start)
@@ -505,6 +504,7 @@ class QuestionnaireScreen(PalilaScreen):
                 # Add the instance to the screen and the list
                 self.ids.questions.add_widget(question_instance)
                 self.questions.append(question_instance)
+                self.all_questions[self.questionnaire_dict[question]['id']] = question_instance
 
         # If there are any questions remaining, add an extra screen
         if len(self.questionnaire_dict['questions'][extra_screen_start:]) > 7:
