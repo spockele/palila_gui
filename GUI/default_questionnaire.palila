@@ -25,7 +25,7 @@ manual split = yes
 	id = 'employment'
 	type = Spinner
 	text = 'Current employment status: '
-	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work or unable to work'
+	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work', 'Unable to work'
 	manual screen = 1
 
 [question how_found]
@@ -33,6 +33,13 @@ manual split = yes
 	type = Spinner
 	text = 'How did you find out about this experiment?'
 	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Email', 'Other'
+	manual screen = 1
+
+[question affiliation]
+	id = 'affiliation'
+	type = Spinner
+	text = 'What is your current, most direct affiliation with TU Delft?'
+	choices = 'Prefer not to say', 'None', 'Student / employee', 'Work / study at a partner university', 'Work at a partner company'
 	manual screen = 1
 
 
@@ -95,7 +102,7 @@ manual split = yes
 [question ear_disease]
 	id = 'ear_disease'
 	type = MultipleChoice
-	text = '''Have your suffered, or are you currently
+	text = '''Have you suffered, or are you currently
 		suffering from any ear disease?'''
 	choices = 'Yes', 'No'
 	manual screen = 3
