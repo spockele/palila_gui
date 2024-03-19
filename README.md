@@ -15,7 +15,7 @@ Graphical user interface for listening experiments in the
 - [Python](https://www.python.org/) version 3.11 or newer. 
   - Enable <b><u>'Add Python to PATH'</u></b> while installing.
 - A touchscreen device with a resolution of 1920 x 1200.
-  - Other ratios may result in visual artefacts.
+  - Other resolutions will result in visual defects.
 
 ### Installation
 1. Download this software to the desired location, either:
@@ -61,6 +61,11 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
         text = <string>                     # -> Defines the question text.
         manual screen = <integer>           # -> In case of manual split = yes, this defines the screen to 
                                             #   put the question. Has no effect if manual split = no.
+                                            #
+        dependant = <string>  (optional)              # -> Question ID of another questionnaire question, which is 
+                                                      #   locked until the condition in this question is met.
+        dependant condition = <string>  (optional)    # -> The value the answer of this question has to take to unlock 
+                                                      #   the dependant question.
 
 # ======================================================================================================================
         
@@ -106,7 +111,7 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 ### Some definitions of the data types:
 |   Value type    |                      Explanation                      |
 |:---------------:|:-----------------------------------------------------:|
-| ```<string>```  |           Any sequence of letters / numbers           |
+| ```<string>```  |              Any sequence of characters               |
 | ```<boolean>``` | Binary operator (yes, true, on, 1; no, false, off, 0) |
 | ```<integer>``` |           Any number without decimal point            |
 |  ```<float>```  |             Any number with decimal point             |
@@ -114,6 +119,10 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 
 ### The questionnaire question types:
 - ```FreeNumber```: Question asking for a freely entered numerical value.
+  - Requires no additional input.
+
+
+- ```FreeText```: Question asking for a freely entered answer (can be anything, maximum 2 lines).
   - Requires no additional input.
 
 
@@ -162,13 +171,6 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
 
 - ```PointCompass```: A question with an 8-point direction compass to test directionality.
   - Requires no additional input arguments.
-
-### Standardised question IDs
-- In the main questionnaire: ```main-questionnaire-{question name}```.
-- In ```[audio]``` sections: ```{part name}-{audio name}-{question name}```.
-- In part questionnaires: ```{part name}-questionnaire-{question name}```.
-- All question, audio and part names will be adjusted to at least 2 characters with ```str().zfill(2)```.
-
 ---
 ## Output file format
 Results from an experiment will be output as individual ```.csv``` files in the directory ```.\<experiment name>\responses\```.\
@@ -185,6 +187,18 @@ A script will be included to merge these individual tables into one ```.csv``` f
 | ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
 | ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
 |          ...           |         ...         |         ...         | ... |             ...             |
+
+### Standardised question IDs
+For all audio questions, and the questionnaire questions where no ID is defined, a standardised format ID will 
+be generated. The format is defined:
+- In the main questionnaire: ```main-questionnaire-{question name}```.
+- In ```[audio]``` sections: ```{part name}-{audio name}-{question name}```.
+- In part questionnaires: ```{part name}-questionnaire-{question name}```.
+- All question, audio and part names will be adjusted to at least 2 characters with ```str().zfill(2)```.
+
+The names (part, audio and question) are the ```<string>``` values defined in the brackets of the input file.\
+<b>NOTE</b>: When ```repeat``` is set in an ```[audio]``` section, a two digit (01, 02, ...) repetition index is added 
+as follows: ```{part name}-{audio name}_{repetition index}-{question name}``` to all repetitions of the same question.
 
 [//]: # (---)
 
