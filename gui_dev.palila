@@ -50,6 +50,14 @@ randomise = no
 		filename = 'prototyping_placeholder.wav'
 		repeat = 2
 
+	[[audio 1]]
+		filename = 'prototyping_placeholder.wav'
+		filename_2 = 'prototyping_placeholder.wav'
+
+	[[audio 2]]
+		filename = 'prototyping_placeholder.wav'
+		max replays = 5
+
 	[[questionnaire]]
 		[[[question 1]]]
 			id = 'showcase'
@@ -66,14 +74,6 @@ randomise = no
 			text = 'This question is dependant on the previous one: '
 			type = MultipleChoice
 			choices = 'Ok', 'Understood'
-
-	[[audio 1]]
-		filename = 'prototyping_placeholder.wav'
-		filename_2 = 'prototyping_placeholder.wav'
-
-	[[audio 2]]
-		filename = 'prototyping_placeholder.wav'
-		max replays = 5
 
 
 [part 2]
