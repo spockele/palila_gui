@@ -94,14 +94,15 @@ class PalilaScreenManager(ScreenManager):
         """
         Navigate to the next screen, based on the string defined in the current screen.
         """
+        # Start the timer when leaving the main questionnaire
+        if 'main-questionnaire' not in self.current_screen.next_screen and 'main-questionnaire' in self.current:
+            self.answers.start_timer()
+        elif self.current_screen.next_screen == 'final':
+            self.answers.stop_timer()
+
         # Set the transition direction and the new current screen
         self.transition.direction = 'left'
         self.current = self.current_screen.next_screen
-        # Start the timer when leaving the main questionnaire
-        if 'main-questionnaire' in self.current_screen.previous_screen and 'main-questionnaire' not in self.current:
-            self.answers.start_timer()
-        elif self.current == 'final':
-            self.answers.stop_timer()
 
     def navigate_previous(self) -> None:
         """
