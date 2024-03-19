@@ -39,7 +39,7 @@ manual split = yes
 	id = 'affiliation'
 	type = Spinner
 	text = 'What is your current, most direct affiliation with TU Delft?'
-	choices = 'Prefer not to say', 'None', 'Student / employee', 'Work / study at a partner university', 'Work at a partner company'
+	choices = 'Prefer not to say', 'None', 'Student / employee at TU Delft', 'Student / employee at a partner university', 'Employee at a partner company'
 	manual screen = 1
 
 
