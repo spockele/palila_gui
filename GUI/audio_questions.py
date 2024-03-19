@@ -313,7 +313,19 @@ class SliderAQuestion(AudioQuestion):
         self.max = float(question_dict['max'])
         self.step = float(question_dict['step'])
 
-        self.value = (self.max + self.min) / 2.
+        if 'initial' in question_dict:
+            initial = float(question_dict['initial'])
+            if self.min > initial or self.max < initial:
+                raise SyntaxError(f'Initial Slider value of {question_dict["id"]} '
+                                  f'outside the range [{self.min}, {self.max}].')
+            elif initial % self.step:
+                raise SyntaxError(f'Initial Slider value of {question_dict["id"]} '
+                                  f'not compatible with step size {self.step}.')
+
+            else:
+                self.value = initial
+        else:
+            self.value = (self.max + self.min) / 2.
 
     def set_value(self) -> None:
         """
