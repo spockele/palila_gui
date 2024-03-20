@@ -392,6 +392,8 @@ class QuestionnaireScreen(PalilaScreen):
         self.questionnaire_dict = questionnaire_dict
         self.state_override = state_override
         self.all_screens = all_screens
+        if all_screens is not None:
+            self.all_screens.append(self)
         # Set up the dict with all questionnaire questions, in order to handle conditional questions
         self.all_questions = {} if all_questions is None else all_questions
 
@@ -520,6 +522,8 @@ class QuestionnaireScreen(PalilaScreen):
         extra_screen_start : int, optional
             Place to start a new screen in the questions list.
         """
+        if self.all_screens is None:
+            self.all_screens = [self, ]
         # Create the extra screen and let it do its thing
         extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager, all_questions=self.all_questions,
                                            extra_screen_start=extra_screen_start + 7, all_screens=self.all_screens,
@@ -591,6 +595,7 @@ class QuestionnaireScreen(PalilaScreen):
         next_screen: str
             The name of the new next screen
         """
+        print(self.all_screens)
         if self.all_screens is None:
             self.next_screen = next_screen
         else:
