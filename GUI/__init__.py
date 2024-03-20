@@ -59,9 +59,11 @@ class PalilaScreenManager(ScreenManager):
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
         # Add the welcome screen and set it as the current screen.
+        if self.experiment.as_bool('demo'):
+            self.add_widget(AudioQuestionScreen({}, demo=True, name='demo'))
         self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
                                       '', 'main-questionnaire', name='welcome'))
-        self.current = 'welcome'
+        self.current = 'demo' if self.experiment.as_bool('demo') else 'welcome'
         # Add the first questionnaire
         self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self, name='main-questionnaire'))
 

@@ -3,6 +3,7 @@ Module containing the overall classes for the Audio Question screens.
 """
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.audio import SoundLoader
+import os
 
 from .threaded_tools import ProgressBarThread
 from .screens import PalilaScreen, Filler
@@ -20,6 +21,8 @@ class AudioQuestionScreen(PalilaScreen):
     ----------
     config_dict : dict
         Dictionary that defines the audio and related questions.
+    demo : bool, optional
+        Set this screen up as the demonstration to show participants. Defaults to False.
     **kwargs
         Keyword arguments. These are passed on to the .screens.PalilaScreen constructor.
 
@@ -37,9 +40,20 @@ class AudioQuestionScreen(PalilaScreen):
         Switch indicating that audio replay should be blocked.
     """
 
-    def __init__(self, config_dict: dict, **kwargs) -> None:
-        super().__init__(config_dict['previous'], config_dict['next'], lock=True, **kwargs)
-        self.config_dict = config_dict
+    demo_dict = {'questions': ['question 1', 'question 2'], 'previous': '', 'next': 'welcome',
+                 'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'), 'max replays': '2', 'filler': True,
+                 'question 1': {'type': 'IntegerScale',
+                                'text': 'How good is this question. Please indicate on this scale from 0 to 7.',
+                                'min': '0', 'max': '7',
+                                'left note': 'Very Bad', 'right note': 'Very Good', 'id': 'demo-01'},
+                 'question 2': {'type': 'Slider',
+                                'text': 'How good is this question. Please indicate on this slider from 0 to 10.',
+                                'min': '0', 'max': '10', 'step': '.50', 'id': 'demo-02'}
+                 }
+
+    def __init__(self, config_dict: dict, demo: bool = False, **kwargs) -> None:
+        self.config_dict = config_dict if not demo else self.demo_dict
+        super().__init__(self.config_dict['previous'], self.config_dict['next'], lock=True, **kwargs)
 
         # Get better references to the audio and question managers
         self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left

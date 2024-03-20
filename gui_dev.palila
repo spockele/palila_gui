@@ -1,5 +1,6 @@
 pid mode = auto
 randomise = no
+demo = yes
 
 [questionnaire]
 	default = yes

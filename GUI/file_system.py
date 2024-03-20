@@ -382,7 +382,6 @@ class PalilaExperiment(ConfigObj):
             else f'This is a {break_time} second break.'
         break_count = 0 if not breaks else 1
 
-
         # ==========================================================================================================
         # PREPARATION OF THE PART AUDIOS
         # ==========================================================================================================
@@ -470,6 +469,9 @@ class PalilaExperiment(ConfigObj):
             self['goodbye'] = 'Thank you for your participation in this experiment!'
         else:
             self['goodbye'] = self['goodbye'].replace('\t', '')
+
+        if 'demo' not in self.keys():
+            self['demo'] = 'no'
 
         # Prepare the main questionnaire
         self._prepare_main_questionnaire()
