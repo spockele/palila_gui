@@ -414,12 +414,10 @@ class PalilaExperiment(ConfigObj):
             # ======================================================================================================
             # PREPARATION OF THE PART BREAKS (BLOCK 2)
             # ======================================================================================================
-            add_break = (ia + 1 == len(self[part]['audios']) and break_interval >= 0) or (
-                    break_interval != 0 and (ia + 1) % break_interval == 0)
+            add_break = break_interval != 0 and (ia + 1) % break_interval == 0
 
             # If a break should be included
             if breaks and add_break:
-                print(break_count)
                 # Set the current audio and name accordingly
                 audio = f'break {break_count}'
                 current_name = f'{part}-{audio}'
@@ -434,8 +432,6 @@ class PalilaExperiment(ConfigObj):
                 previous_name = current_name
                 previous_audio = audio
 
-                print(self[part].keys())
-
         # ==========================================================================================================
         # PREPARATION OF THE PART QUESTIONNAIRE
         # ==========================================================================================================
@@ -448,6 +444,21 @@ class PalilaExperiment(ConfigObj):
             self[part][audio]['previous'] = previous_name
 
             self._prepare_part_questionnaire(part)
+
+            previous_name = current_name
+            previous_audio = audio
+
+        if breaks and break_interval >= 0:
+            # Set the current audio and name accordingly
+            audio = f'break {break_count}'
+            current_name = f'{part}-{audio}'
+            # Set the previous audio's 'next' to this break
+            self[part][previous_audio]['next'] = audio
+            # Set up the current break dict
+            self[part][audio] = {'text': break_text, 'time': break_time,
+                                 'previous': previous_name}
+            # Up the break counter
+            break_count += 1
 
         return audio, current_name
 
