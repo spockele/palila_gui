@@ -422,10 +422,10 @@ class PalilaExperiment(ConfigObj):
                 audio = f'break {break_count}'
                 current_name = f'{part}-{audio}'
                 # Set the previous audio's 'next' to this break
-                self[part][previous_audio]['next'] = audio
+                self[part][previous_audio]['next'] = current_name
                 # Set up the current break dict
-                self[part][audio] = {'text': break_text, 'time': break_time,
-                                     'previous': previous_name}
+                self[part][current_name] = {'text': break_text, 'time': break_time,
+                                            'previous': previous_name}
                 # Up the break counter
                 break_count += 1
                 # Keep track of the last screen name and associated audio name
@@ -453,14 +453,17 @@ class PalilaExperiment(ConfigObj):
             audio = f'break {break_count}'
             current_name = f'{part}-{audio}'
             # Set the previous audio's 'next' to this break
-            self[part][previous_audio]['next'] = audio
+            self[part][previous_audio]['next'] = current_name
             # Set up the current break dict
-            self[part][audio] = {'text': break_text, 'time': break_time,
-                                 'previous': previous_name}
+            self[part][current_name] = {'text': break_text, 'time': break_time,
+                                        'previous': previous_name}
             # Up the break counter
             break_count += 1
 
-        return audio, current_name
+            previous_name = current_name
+            previous_audio = current_name
+
+        return previous_audio, previous_name
 
     def _prepare_experiment(self) -> None:
         """
