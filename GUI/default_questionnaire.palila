@@ -95,8 +95,8 @@ manual split = yes
 [question which_protection]
 	id = 'which_protection'
 	type = FreeText
-	text = '''What noise do/did have to protect yourself from?
-		(Only if the previous answer was yes)'''
+	text = '''What noise do/did you have to protect
+		yourself from?'''
 	manual screen = 2
 
 
