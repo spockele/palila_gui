@@ -65,7 +65,9 @@ class PalilaScreenManager(ScreenManager):
                                       '', 'main-questionnaire', name='welcome'))
         self.current = 'demo' if self.experiment.as_bool('demo') else 'welcome'
         # Add the first questionnaire
-        self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self, name='main-questionnaire'))
+        override = self.experiment.name == 'gui_dev'
+        self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self,
+                                            state_override=override, name='main-questionnaire'))
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
