@@ -23,6 +23,11 @@ randomise = no
 [part 1]
 	randomise = no
 
+	[[breaks]]
+		text = 'Breaks can be put at the end of each part.'
+		interval = 0
+		time = 1
+
 	[[intro]]
 		text = '''This is the first part of the PALILA GUI demo. This part showcases audio's with common questions. It also shows multi-audio screens and the replay ability.
 		Press continue, once available, to resume the experiment...'''
@@ -86,7 +91,7 @@ randomise = no
 		time = 1
 
 	[[breaks]]
-		text = 'Breaks can be put at an interval.'
+		text = 'Breaks can also be put at an interval.'
 		interval = 2
 		time = 1
 

@@ -126,7 +126,11 @@ class PalilaExperiment(ConfigObj):
         if 'breaks' in self[part].sections:
             if 'interval' not in self[part]['breaks']:
                 raise SyntaxError(f'Experiment {part} breaks does not contain "interval" variable.')
-            elif not self[part]['breaks']['interval'].isnumeric():
+            elif (not self[part]['breaks']['interval'].startswith('-') and
+                  not self[part]['breaks']['interval'].isnumeric()):
+                raise SyntaxError(f'Experiment {part} breaks "interval" is not a number.')
+            elif (self[part]['breaks']['interval'].startswith('-') and
+                  not self[part]['breaks']['interval'][1:].isnumeric()):
                 raise SyntaxError(f'Experiment {part} breaks "interval" is not a number.')
 
             if 'time' not in self[part]['breaks']:
@@ -370,21 +374,14 @@ class PalilaExperiment(ConfigObj):
         # ==========================================================================================================
         # PREPARATION OF THE PART BREAKS (BLOCK 1)
         # ==========================================================================================================
+        breaks = 'breaks' in self[part].sections
 
-        if 'breaks' in self[part].sections:
-            break_interval = int(self[part]['breaks']['interval'])
-            break_time = int(self[part]['breaks']['time'])
-            if 'text' in self[part]['breaks']:
-                break_text = self[part]['breaks']['text']
-            else:
-                break_text = f'This is a {break_time} s break.'
-            break_count = 1
-        else:
-            self[part]['breaks'] = {}
-            break_interval = 0
-            break_time = 0
-            break_text = ''
-            break_count = 0
+        break_interval = 0 if not breaks else int(self[part]['breaks']['interval'])
+        break_time = 0 if not breaks else int(self[part]['breaks']['time'])
+        break_text = self[part]['breaks']['text'] if breaks and 'text' in self[part]['breaks']\
+            else f'This is a {break_time} second break.'
+        break_count = 0 if not breaks else 1
+
 
         # ==========================================================================================================
         # PREPARATION OF THE PART AUDIOS
@@ -418,22 +415,27 @@ class PalilaExperiment(ConfigObj):
             # ======================================================================================================
             # PREPARATION OF THE PART BREAKS (BLOCK 2)
             # ======================================================================================================
+            add_break = (ia + 1 == len(self[part]['audios']) and break_interval >= 0) or (
+                    break_interval != 0 and (ia + 1) % break_interval == 0)
 
             # If a break should be included
-            if (break_interval and not (ia + 1) % break_interval) and ia + 1 < len(self[part]['audios']):
+            if breaks and add_break:
+                print(break_count)
                 # Set the current audio and name accordingly
                 audio = f'break {break_count}'
                 current_name = f'{part}-{audio}'
                 # Set the previous audio's 'next' to this break
-                self[part][previous_audio]['next'] = current_name
+                self[part][previous_audio]['next'] = audio
                 # Set up the current break dict
-                self[part][current_name] = {'text': break_text, 'time': break_time,
-                                            'previous': previous_name}
+                self[part][audio] = {'text': break_text, 'time': break_time,
+                                     'previous': previous_name}
                 # Up the break counter
                 break_count += 1
                 # Keep track of the last screen name and associated audio name
                 previous_name = current_name
-                previous_audio = current_name
+                previous_audio = audio
+
+                print(self[part].keys())
 
         # ==========================================================================================================
         # PREPARATION OF THE PART QUESTIONNAIRE

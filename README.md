@@ -76,6 +76,9 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
     [[breaks]] (optional)               # -> Optional breaks to allow for resting in the experiment part.
         text = <string> (optional)          # -> Optional custom message for during the breaks.
         interval = <integer>                # -> Number of audios between breaks.
+                                            #   [0]: Adds a break only at the end of the part.
+                                            #   [1, ...]: Adds a break every n audios and at the end of the part.
+                                            #   [-1, ...]: Same, but a break at the end of the part is omitted.
         time = <integer>                    # -> Duration of the breaks in seconds.
     
     [[intro]] (optional)                # -> Optional introduction message to the experiment part.
