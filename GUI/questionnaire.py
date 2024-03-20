@@ -342,7 +342,6 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
 
         super().check_input()
 
-
     def dependant_lock(self):
         super().dependant_lock()
         self.choice_temp = self.choice
@@ -387,11 +386,11 @@ class QuestionnaireScreen(PalilaScreen):
         List of all the questions in this singular screen.
     """
     def __init__(self, questionnaire_dict: dict, manager: ScreenManager, all_questions: dict = None,
-                 extra_screen_start: int = 0, all_screens: list = None, **kwargs):
+                 extra_screen_start: int = 0, all_screens: list = None, state_override: bool = False, **kwargs):
         super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], lock=True, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
-        self.state_override = False
+        self.state_override = state_override
         self.all_screens = all_screens
         # Set up the dict with all questionnaire questions, in order to handle conditional questions
         self.all_questions = {} if all_questions is None else all_questions
@@ -524,6 +523,7 @@ class QuestionnaireScreen(PalilaScreen):
         # Create the extra screen and let it do its thing
         extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager, all_questions=self.all_questions,
                                            extra_screen_start=extra_screen_start + 7, all_screens=self.all_screens,
+                                           state_override=self.state_override,
                                            name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
 
         # Add it to the ScreenManager
