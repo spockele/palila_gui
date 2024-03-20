@@ -379,7 +379,7 @@ class PalilaExperiment(ConfigObj):
         break_interval = 0 if not breaks else int(self[part]['breaks']['interval'])
         break_time = 0 if not breaks else int(self[part]['breaks']['time'])
         break_text = self[part]['breaks']['text'] if breaks and 'text' in self[part]['breaks']\
-            else f'This is a {break_time} second break.'
+            else f'Please take some time to refocus during this {break_time} second break.'
         break_count = 0 if not breaks else 1
 
         # ==========================================================================================================
