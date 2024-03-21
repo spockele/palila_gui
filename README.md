@@ -99,6 +99,11 @@ randomise = <boolean> (optional)    # -> Switch to randomise the order of the ex
         repeat = <integer> (optional)       # -> Defines the number of times this audio is repeated in the part.
                                             #   Defaults to 1.
                                             
+        dependant = <string>  (optional)              # -> Question name of another audio question, which is 
+                                                      #   locked until the condition in this question is met.
+        dependant condition = <string>  (optional)    # -> The value the answer of this question has to take to unlock 
+                                                      #   the dependant question.
+                                            
         [[[question <string>]]]             # -> SubSubSection defining a single question for the audio sample.
             type = <string>                     # -> Defines the type of question. 
                                                 #   See below for specifics of each types.
