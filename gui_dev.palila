@@ -130,7 +130,7 @@ demo = yes
 			type = MultipleChoice
 			choices = 'Yes', 'No', 'Not Sure'
 
-			dependant = 'sp'
+			dependant = 'mcc'
 			dependant condition = 'Yes'
 
 		[[[question mcc]]]
