@@ -90,7 +90,11 @@ class AudioQuestion(BoxLayout):
         # Initialise variable to store current answer
         self.answer = None
 
-    def select_choice(self, choice: AudioChoiceButton) -> None:
+        self.dependant = None
+        self.dependant_id = None
+        self.dependant_answer_temp = None
+
+    def select_choice(self, choice: AudioChoiceButton, dependant_unlock: bool = False) -> None:
         """
         Sets the current answer in this manager, based on the selected ChoiceButton.
 
@@ -98,13 +102,15 @@ class AudioQuestion(BoxLayout):
         ----------
         choice : AudioChoiceButton
             The AudioChoiceButton instance which has triggered the answer selection.
+        dependant_unlock : bool, optional
+
         """
         # Deselect the current answer if there is one
         if self.answer is not None:
             self.answer.deselect()
 
         # Remove the current answer if the current answer is pressed again
-        if self.answer == choice:
+        if self.answer == choice and not dependant_unlock:
             self.answer = None
             # Communicate to the question manager that the question is unanswered.
             self.parent.question_answered(self.qid, False)
@@ -114,6 +120,9 @@ class AudioQuestion(BoxLayout):
             self.answer.select()
             # Communicate to the question manager that the question is answered.
             self.parent.question_answered(self.qid, True)
+
+        if self.dependant is not None:
+            self.check_dependant()
 
     def set_value(self):
         """
@@ -140,6 +149,44 @@ class AudioQuestion(BoxLayout):
 
         # Set the text in the answer instance
         self.answer.text = self.text
+
+        if self.dependant is not None:
+            self.check_dependant()
+
+    def check_dependant(self):
+        if self.answer is not None:
+            if self.answer.text == self.question_dict['dependant condition']:
+                self.dependant.dependant_unlock(self.dependant_answer_temp)
+        else:
+            self.dependant_answer_temp = self.dependant.answer
+            self.dependant.dependant_lock()
+
+    def set_dependant(self):
+        if 'dependant' in self.question_dict:
+            self.dependant_id = self.question_dict['part-audio'] + self.question_dict['dependant'].zfill(2)
+            if 'dependant condition' not in self.question_dict:
+                raise SyntaxError(f'{self.qid} does not have a "dependant condition" to unlock its dependant question.')
+            else:
+                self.dependant: AudioQuestion = self.parent.question_dict[self.dependant_id]
+                self.dependant.dependant_lock()
+
+    def dependant_lock(self):
+        print('locked')
+        self.answer = AnswerHolder()
+        self.answer.text = 'n/a'
+        self.parent.question_answered(self.qid, True)
+        self.disabled = True
+
+    def dependant_unlock(self, previous_answer):
+        print('unlocked')
+        self.answer = None
+        self.parent.question_answered(self.qid, False)
+        self.disabled = False
+
+        if isinstance(previous_answer, AnswerHolder):
+            self.set_text()
+        elif previous_answer is not None:
+            self.select_choice(previous_answer, dependant_unlock=True)
 
 
 class TextAQuestion(AudioQuestion):

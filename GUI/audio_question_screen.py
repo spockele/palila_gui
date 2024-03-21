@@ -296,7 +296,7 @@ class QuestionManager(BoxLayout):
         if self.n_question < self.n_max:
             # Add the question according to the input file
             question_type = getattr(audio_questions, f'{question_dict["type"]}AQuestion')
-            question = question_type(question_dict)
+            question: audio_questions.AudioQuestion = question_type(question_dict)
 
             self.question_dict[question_dict['id']] = question
             self.answered[question_dict['id']] = False
@@ -322,6 +322,9 @@ class QuestionManager(BoxLayout):
             # Add filler widgets in the leftover space
             for ii in range(self.n_max - self.n_question):
                 self.add_widget(Filler())
+
+        for question in self.question_dict.values():
+            question.set_dependant()
 
     def unlock(self) -> None:
         """

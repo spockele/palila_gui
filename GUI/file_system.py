@@ -287,6 +287,8 @@ class PalilaExperiment(ConfigObj):
             audio_id = audio.replace('audio ', '')
             question_id = question.replace('question ', '')
 
+            self[part][audio][question]['part-audio'] = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-'
+
             # Put everything together and add to the list
             qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
             self.question_id_list.append(qid)
@@ -430,7 +432,7 @@ class PalilaExperiment(ConfigObj):
                 break_count += 1
                 # Keep track of the last screen name and associated audio name
                 previous_name = current_name
-                previous_audio = audio
+                previous_audio = current_name
 
         # ==========================================================================================================
         # PREPARATION OF THE PART QUESTIONNAIRE
