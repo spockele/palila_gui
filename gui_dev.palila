@@ -113,15 +113,31 @@ demo = yes
 			text = '''This here is a multiple choice question.
 				Do you like it?'''
 			type = MultipleChoice
-
 			choices = 'Yes', 'No', 'Not Sure'
 
 		[[[question sp]]]
 			text = '''This here is a spinner question.
 				Do you like it?'''
 			type = Spinner
-
 			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worse', 'Prefer not to Answer'
+
+	[[audio 2]]
+		filename = 'prototyping_placeholder.wav'
+
+		[[[question mc]]]
+			text = '''This here is a multiple choice question.
+				Do you like it?'''
+			type = MultipleChoice
+			choices = 'Yes', 'No', 'Not Sure'
+
+			dependant = 'sp'
+			dependant condition = 'Yes'
+
+		[[[question sp]]]
+			text = '''This here is a question, dependant on the answer of the above.
+				Do you like it?'''
+			type = MultipleChoice
+			choices = 'Yes', 'No', 'Not Sure'
 
 	[[audio 3]]
 		filename = 'prototyping_placeholder.wav'
