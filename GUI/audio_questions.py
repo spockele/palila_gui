@@ -22,6 +22,7 @@ class AudioChoiceButton(Button):
     def __init__(self, text: str = '', font_size: int = 72, **kwargs) -> None:
         super().__init__(text=text, **kwargs)
         self.font_size = font_size
+        self.dependant_lock = False
 
     def select(self) -> None:
         """
@@ -51,8 +52,9 @@ class AnswerHolder:
     text : str
         Holds the answer text
     """
-    def __init__(self):
-        self.text: str = ''
+    def __init__(self, dependant_lock: bool = False):
+        self.text: str = 'n/a' if dependant_lock else ''
+        self.dependant_lock = dependant_lock
 
 
 class AudioQuestion(BoxLayout):
@@ -154,11 +156,11 @@ class AudioQuestion(BoxLayout):
             self.check_dependant()
 
     def check_dependant(self):
-        if self.answer is not None:
-            if self.answer.text == self.question_dict['dependant condition']:
-                self.dependant.dependant_unlock(self.dependant_answer_temp)
+        if self.answer is not None and self.answer.text == self.question_dict['dependant condition']:
+            self.dependant.dependant_unlock(self.dependant_answer_temp)
         else:
-            self.dependant_answer_temp = self.dependant.answer
+            if self.dependant.answer is not None and not self.dependant.answer.dependant_lock:
+                self.dependant_answer_temp = self.dependant.answer
             self.dependant.dependant_lock()
 
     def set_dependant(self):
@@ -172,8 +174,7 @@ class AudioQuestion(BoxLayout):
 
     def dependant_lock(self):
         print('locked')
-        self.answer = AnswerHolder()
-        self.answer.text = 'n/a'
+        self.answer = AnswerHolder(dependant_lock=True)
         self.parent.question_answered(self.qid, True)
         self.disabled = True
 
