@@ -173,13 +173,11 @@ class AudioQuestion(BoxLayout):
                 self.dependant.dependant_lock()
 
     def dependant_lock(self):
-        print('locked')
         self.answer = AnswerHolder(dependant_lock=True)
         self.parent.question_answered(self.qid, True)
         self.disabled = True
 
     def dependant_unlock(self, previous_answer):
-        print('unlocked')
         self.answer = None
         self.parent.question_answered(self.qid, False)
         self.disabled = False
@@ -226,11 +224,23 @@ class MultipleChoiceAQuestion(AudioQuestion):
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
+        self.buttons = []
         # Add the choices from the input file
         for choice in self.question_dict['choices']:
             button = AudioChoiceButton(choice, font_size=48)
+            self.buttons.append(button)
             # self.options.append(button)
             self.ids.answer_options.add_widget(button)
+
+    def dependant_lock(self):
+        for button in self.buttons:
+            button.background_color = [.7, 1., .7, 1.]
+        super().dependant_lock()
+
+    def dependant_unlock(self, previous_answer):
+        for button in self.buttons:
+            button.background_color = [1, 1, 1, 1]
+        super().dependant_unlock(previous_answer)
 
 
 class SpinnerAQuestion(AudioQuestion):
