@@ -90,6 +90,13 @@ class PalilaScreenManager(ScreenManager):
                 self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
                                                     manager=self, name=f'{part}-questionnaire'))
 
+                # Check if a break should be added.
+                if 'break' in self.experiment[part]['questionnaire']['next']:
+                    break_name = self.experiment[part]['questionnaire']["next"]
+                    # Create the screen name for the break
+                    self.add_widget(TimedTextScreen(self.experiment[part][break_name],
+                                                    name=break_name))
+
         # Add the Final two screens
         self.add_widget(EndScreen('main-questionnaire', 'final', name='end'))
         self.add_widget(FinalScreen('end', '', goodbye=self.experiment['goodbye'], name='final'))
