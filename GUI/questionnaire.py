@@ -77,7 +77,7 @@ class QuestionnaireQuestion(FloatLayout):
         self.dependant = None
         self.dependant_answer_temp = None
 
-    def set_dependant(self, *_):
+    def set_dependant(self):
         if 'dependant' in self.question_dict:
             if 'dependant condition' not in self.question_dict:
                 raise SyntaxError(f'{self.qid} does not have a "dependant condition" to unlock its dependant question.')
