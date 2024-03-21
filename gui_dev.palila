@@ -133,7 +133,7 @@ demo = yes
 			dependant = 'sp'
 			dependant condition = 'Yes'
 
-		[[[question sp]]]
+		[[[question mcc]]]
 			text = '''This here is a question, dependant on the answer of the above.
 				Do you like it?'''
 			type = MultipleChoice
