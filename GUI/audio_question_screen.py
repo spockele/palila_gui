@@ -40,8 +40,12 @@ class AudioQuestionScreen(PalilaScreen):
         Switch indicating that audio replay should be blocked.
     """
 
-    demo_dict = {'questions': ['question 1', 'question 2'], 'previous': '', 'next': 'welcome',
-                 'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'), 'max replays': '2', 'filler': True,
+    demo_dict = {'previous': '',
+                 'next': 'welcome',
+                 'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'),
+                 'max replays': '2',
+                 'filler': True,
+                 'questions': ['question 1', 'question 2'],
                  'question 1': {'type': 'IntegerScale',
                                 'text': 'How good is this question. Please indicate on this scale from 0 to 7.',
                                 'min': '0', 'max': '7',
@@ -222,9 +226,9 @@ class AudioManager(BoxLayout):
             self.ids.bttn.background_color = [1, 1, 1, 1]
             # Set the corresponding text next to the button
             if remaining == 1:
-                self.ids.txt.text = f'You can replay this sample\n {remaining} more time'
+                self.ids.txt.text = f'You can replay this sample {remaining} time'
             else:
-                self.ids.txt.text = f'You can replay this sample\n {remaining} more times'
+                self.ids.txt.text = f'You can replay this sample {remaining} times'
         # Otherwise reflect running out of replays in the button and text
         else:
             self.ids.bttn_image.source = 'GUI/assets/done.png'
