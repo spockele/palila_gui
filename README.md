@@ -42,6 +42,7 @@ pid mode = <string>                 # -> Mode to set the Participant ID (auto, i
 welcome = <string> (optional)       # -> Optional welcome message for the first screen.
 goodbye = <string> (optional)       # -> Optional goodbye message for the final screen.
 randomise = <boolean> (optional)    # -> Switch to randomise the order of the experiment parts.
+demo = <boolean> (optional)         # -> Show a demonstration for participants before the welcome screen.
 
 # ======================================================================================================================
 
