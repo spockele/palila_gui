@@ -416,7 +416,7 @@ class PalilaExperiment(ConfigObj):
             # ======================================================================================================
             # PREPARATION OF THE PART BREAKS (BLOCK 2)
             # ======================================================================================================
-            add_break = break_interval != 0 and (ia + 1) % break_interval == 0
+            add_break = break_interval != 0 and (ia + 1) % break_interval == 0 and (ia + 1) < len(self[part]['audios'])
 
             # If a break should be included
             if breaks and add_break:
