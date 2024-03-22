@@ -93,12 +93,11 @@ demo = yes
 
 	[[breaks]]
 		text = 'Breaks can also be put at an interval.'
-		interval = 2
+		interval = -2
 		time = 1
 
 	[[audio 0]]
 		filename = 'prototyping_placeholder.wav'
-		repeat = 2
 
 		[[[question 0]]]
 			type = Text
