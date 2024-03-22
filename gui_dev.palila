@@ -1,6 +1,6 @@
 pid mode = auto
 randomise = no
-demo = yes
+demo = no
 
 [questionnaire]
 	default = yes
@@ -30,39 +30,32 @@ demo = yes
 		time = 1
 
 	[[intro]]
-		text = '''This is the first part of the PALILA GUI demo. This part showcases audio's with common questions. It also shows multi-audio screens and the replay ability.
-		Press continue, once available, to resume the experiment...'''
+		text = '''This is the first part of the PALILA GUI demo. This part showcases audio's with common questions. It also shows multi-audio screens and the replay ability.'''
 		time = 1
-
-	[[questions]]
-		[[[question 1]]]
-			type = IntegerScale
-			text = 'How good is this question. Please indicate on this scale from 0 to 7.'
-
-			min = 0
-			max = 7
-
-			left note = 'Very Bad'
-			right note = 'Very Good'
-
-		[[[question 2]]]
-			type = IntegerScale
-			text = 'How good is this question. Please indicate on this scale from 0 to 10.'
-
-			min = 0
-			max = 10
 
 	[[audio 0]]
 		filename = 'prototyping_placeholder.wav'
 		repeat = 2
 
+		[[[question q1]]]
+			text = 'This exact question-sample combination is repeated twice.'
+			type = Text
+
 	[[audio 1]]
 		filename = 'prototyping_placeholder.wav'
 		filename_2 = 'prototyping_placeholder.wav'
 
+		[[[question q1]]]
+			text = 'This is an example of two sample files with (a) common question(s).'
+			type = Text
+
 	[[audio 2]]
 		filename = 'prototyping_placeholder.wav'
 		max replays = 5
+
+		[[[question q1]]]
+			text = 'This is an example of a sound sample that can be repeated.'
+			type = Text
 
 	[[questionnaire]]
 		[[[question 1]]]
@@ -72,28 +65,18 @@ demo = yes
 			type = MultipleChoice
 			choices = 'Ok', 'Understood'
 
-			dependant = 'showcase_dep'
-			dependant condition = 'Ok'
-
-		[[[question 2]]]
-			id = 'showcase_dep'
-			text = 'This question is dependant on the previous one: '
-			type = MultipleChoice
-			choices = 'Ok', 'Understood'
-
 
 [part 2]
 	randomise = no
 
 	[[intro]]
 		text = '''This is the second part of the PALILA GUI demo.
-			This part showcases most options in questions.
-			Press continue, once available, to resume the experiment...'''
+			This part showcases most options for questions.'''
 		time = 1
 
 	[[breaks]]
 		text = 'Breaks can also be put at an interval.'
-		interval = -2
+		interval = 2
 		time = 1
 
 	[[audio 0]]
@@ -102,20 +85,19 @@ demo = yes
 		[[[question 0]]]
 			type = Text
 			text = '''This is just text, no question asked.
-				If only a text is present, the continue button unlocks after playing audio. Use it wisely.
-				The next screens will showcase all question types.'''
+				If only a text is present, the continue button unlocks after playing audio.'''
 
 	[[audio 1]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question mc]]]
-			text = '''This here is a multiple choice question.
+			text = '''This is a multiple choice question.
 				Do you like it?'''
 			type = MultipleChoice
 			choices = 'Yes', 'No', 'Not Sure'
 
 		[[[question sp]]]
-			text = '''This here is a spinner question.
+			text = '''This is a spinner (multiple choice) question.
 				Do you like it?'''
 			type = Spinner
 			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worse', 'Prefer not to Answer'
@@ -124,7 +106,7 @@ demo = yes
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question mc]]]
-			text = '''This here is a multiple choice question.
+			text = '''This is a multiple choice question.
 				Do you like it?'''
 			type = MultipleChoice
 			choices = 'Yes', 'No', 'Not Sure'
@@ -133,16 +115,37 @@ demo = yes
 			dependant condition = 'Yes'
 
 		[[[question mcc]]]
-			text = '''This here is a question, dependant on the answer of the above.
-				Do you like it?'''
+			text = '''This is another question, dependant on the answer of the above.'''
 			type = MultipleChoice
-			choices = 'Yes', 'No', 'Not Sure'
+			choices = 'Ok', 'Understood'
 
 	[[audio 3]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question sl]]]
-			text = '''This here is a slider question.
+			text = '''This is an integer scale question.
+				On a scale from 0 to 10, how nice is it?'''
+			type = IntegerScale
+
+			min = 0
+			max = 10
+
+		[[[question sln]]]
+			text = '''This is another integer scale question. With side notes this time.
+				On a scale from 0 to 10, how nice is it?'''
+			type = IntegerScale
+
+			min = 0
+			max = 7
+
+			left note = 'Not nice'
+			right note = 'Very nice'
+
+	[[audio 4]]
+		filename = 'prototyping_placeholder.wav'
+
+		[[[question sl]]]
+			text = '''This is a slider question.
 				On a scale from 0 to 10, how nice is it?'''
 			type = Slider
 
@@ -151,7 +154,7 @@ demo = yes
 			step = .5
 
 		[[[question sln]]]
-			text = '''This here is a slider question. With side notes this time.
+			text = '''This is another slider question. With side notes this time.
 				On a scale from 0 to 10, how nice is it?'''
 			type = Slider
 
@@ -159,10 +162,10 @@ demo = yes
 			max = 10
 			step = .5
 
-			left note = 'Not so'
-			right note = 'Very'
+			left note = 'Not nice'
+			right note = 'Very nice'
 
-	[[audio 4]]
+	[[audio 5]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question dir]]]
