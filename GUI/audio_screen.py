@@ -88,12 +88,9 @@ class AudioQuestionScreen(PalilaScreen):
         """
         Store the answers when leaving the screen.
         """
-        for qid, question in self.ids.question_manager.question_dict.items():
+        for qid, answer in self.ids.question_manager.answers.items():
             # Store the answers, question by question
-            if question.answer is not None:
-                self.manager.store_answer(qid, question.answer.text)
-            else:
-                self.manager.store_answer(qid, 'n/a')
+            self.manager.store_answer(qid, answer)
 
     def unlock_check(self, question_state: bool = None):
         """
@@ -279,8 +276,8 @@ class AQuestionManager(BoxLayout):
         super().__init__(**kwargs)
         self.n_question = 0
         self.question_dict = {}
-        self.answered = {}
         self.disabled = True
+        self.answers = {}
 
     def add_question(self, question_dict: dict) -> None:
         """
@@ -303,7 +300,7 @@ class AQuestionManager(BoxLayout):
             question: audio_questions.AudioQuestion = question_type(question_dict)
 
             self.question_dict[question_dict['id']] = question
-            self.answered[question_dict['id']] = False
+            self.answers[question_dict['id']] = 'n/a' if question_dict["type"] == 'Text' else ''
             # Add the question to the widgets
             self.add_widget(question)
             # Update the counter
@@ -347,25 +344,13 @@ class AQuestionManager(BoxLayout):
         """
         # Start a variable to store the total state
         total_state = True
-        for state in self.answered.values():
+        for qid, answer in self.answers.items():
             # Update the total state via the boolean "and" operator
-            total_state = total_state and state
+            total_state = total_state and bool(answer)
 
         return total_state
 
-    def question_answered(self, question_id: str, answered: bool) -> None:
-        """
-        Function to set and check the state of the questions.
-
-        Parameters
-        ----------
-        question_id : str
-            Question ID of the question to set the state of.
-        answered : bool
-            Indication if the question linked to the ID has been answered.
-        """
-        # Firstly set the state of the question
-        self.answered[question_id] = answered
+    def change_answer(self, question_id: str, answer: str) -> None:
+        self.answers[question_id] = answer
         # Have the AudioQuestionScreen check the state
         self.parent.parent.unlock_check(question_state=self.get_state() and not self.disabled)
-

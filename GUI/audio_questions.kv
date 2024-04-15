@@ -29,7 +29,7 @@
 
 <SpinnerAQuestion>
 	Spinner:
-		id: answer_options
+		id: spinner
 
 		size_hint: .55, .45
 		pos_hint: {'center_x': .5}
@@ -39,7 +39,7 @@
 
 		text: root.text
 
-		on_text: root.set_text()
+		on_text: root.spinner_input()
 
 		Image:
 			source: 'GUI/assets/arrow.png'
@@ -182,7 +182,7 @@
 				step: root.step
 				value: root.value
 
-				on_value: root.set_value()
+				on_value: root.slider_input()
 
         	Label:
         		text: str(slider.value)

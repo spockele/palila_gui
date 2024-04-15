@@ -43,19 +43,6 @@ class AudioChoiceButton(Button):
         self.parent.parent.select_choice(self)
 
 
-class AnswerHolder:
-    """
-    Placeholder for the ChoiceButton for those question types that do not use buttons to answer.
-
-    Attributes
-    ----------
-    text : str
-        Holds the answer text
-    """
-    def __init__(self):
-        self.text: str = ''
-
-
 class AudioQuestion(BoxLayout):
     """
     Class to manage the general functions of a question. Subclass of kivy.uix.boxlayout.BoxLayout.
@@ -73,8 +60,6 @@ class AudioQuestion(BoxLayout):
         Dictionary with all the information to construct the question.
     qid : str
         Question ID for communication with the file system.
-    answer
-        AudioChoiceButton or AnswerHolder with the currently selected answer. None in case no answer is selected.
     """
 
     value = NumericProperty(0.)
@@ -89,78 +74,20 @@ class AudioQuestion(BoxLayout):
         if '\n' in question_dict['text']:
             self.ids.question_text.font_size = 38
         # Initialise variable to store current answer
-        self.answer = None
-
         self.dependant = None
         self.dependant_id = None
-        self.dependant_answer_temp = None
 
-    def select_choice(self, choice: AudioChoiceButton, dependant_unlock: bool = False) -> None:
-        """
-        Sets the current answer in this manager, based on the selected ChoiceButton.
+        self.answer_temp = ''
 
-        Parameters
-        ----------
-        choice : AudioChoiceButton
-            The AudioChoiceButton instance which has triggered the answer selection.
-        dependant_unlock : bool, optional
-
-        """
-        # Deselect the current answer if there is one
-        if self.answer is not None:
-            self.answer.deselect()
-
-        # Remove the current answer if the current answer is pressed again
-        if self.answer == choice and not dependant_unlock:
-            self.answer = None
-            # Communicate to the question manager that the question is unanswered.
-            self.parent.question_answered(self.qid, False)
-        # Set the current answer to the selected button otherwise
-        else:
-            self.answer = choice
-            self.answer.select()
-            # Communicate to the question manager that the question is answered.
-            self.parent.question_answered(self.qid, True)
-
+    def change_answer(self, answer: str):
         if self.dependant is not None:
-            self.check_dependant()
+            if answer == self.question_dict['dependant condition']:
+                self.dependant.dependant_unlock()
 
-    def set_value(self):
-        """
-        Sets the current answer in this manager, based on the selected numerical value.
-        """
-        # Set the string equivalent of the numerical value
-        self.text = str(self.value)
-        self.set_text()
+            else:
+                self.dependant.dependant_lock()
 
-    def set_text(self):
-        """
-        Sets the current answer in this manager, based on the selected text.
-        """
-        # Create an AnswerHolder if there is None
-        if self.answer is None:
-            self.answer = AnswerHolder()
-
-        # In case this is the first answer
-        if not self.answer.text:
-            # Indicate to the parent that this question is answered
-            self.parent.question_answered(self.qid, True)
-            # Change the background color of the answer option
-            self.ids.answer_options.background_color = (.5, 1., .5, 1)
-
-        # Set the text in the answer instance
-        self.answer.text = self.text
-
-        if self.dependant is not None:
-            self.check_dependant()
-
-    def check_dependant(self):
-        if self.answer is not None and self.answer.text == self.question_dict['dependant condition']:
-            self.dependant.dependant_unlock(self.dependant_answer_temp)
-        else:
-            if self.dependant.answer is not None and not self.dependant.answer.dependant_lock:
-                self.dependant_answer_temp = self.dependant.answer
-            self.dependant.dependant_lock()
+        self.parent.change_answer(self.qid, answer)
 
     def set_dependant(self):
         if 'dependant' in self.question_dict:
@@ -172,16 +99,13 @@ class AudioQuestion(BoxLayout):
                 self.dependant.dependant_lock()
 
     def dependant_lock(self):
-        self.answer = None
-        self.parent.question_answered(self.qid, True)
+        self.answer_temp = self.parent.answers[self.qid]
+        self.change_answer('n/a')
         self.disabled = True
 
-    def dependant_unlock(self, previous_answer):
-        self.parent.question_answered(self.qid, False)
+    def dependant_unlock(self):
+        self.change_answer(self.answer_temp)
         self.disabled = False
-
-        if previous_answer is not None:
-            self.select_choice(previous_answer, dependant_unlock=True)
 
 
 class TextAQuestion(AudioQuestion):
@@ -199,25 +123,8 @@ class TextAQuestion(AudioQuestion):
         super().__init__(question_dict, **kwargs)
         self.ids.question_text.valign = 'center'
 
-    def on_parent(self, *_):
-        """
-        When the widget gets a parent QuestionManager, this function notifies it that no answer is required here.
-        """
-        self.parent.question_answered(self.qid, True)
 
-
-class MultipleChoiceAQuestion(AudioQuestion):
-    """
-    Question type for multiple choice. Subclass of GUI.AudioQuestion.
-
-    Parameters
-    ----------
-    question_dict: dict
-        Dictionary with all the information to construct the question.
-        Should include the following keys: 'id', 'text', 'choices'.
-    **kwargs
-        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
-    """
+class ButtonAQuestion(AudioQuestion):
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
         self.buttons = []
@@ -225,18 +132,47 @@ class MultipleChoiceAQuestion(AudioQuestion):
         for choice in self.question_dict['choices']:
             button = AudioChoiceButton(choice, font_size=48)
             self.buttons.append(button)
-            # self.options.append(button)
             self.ids.answer_options.add_widget(button)
 
+        self.choice = None
+        self.choice_temp = None
+
+    def select_choice(self, choice: AudioChoiceButton):
+        if self.choice is not None:
+            # Deselect the current answer if there is one
+            self.choice.deselect()
+
+        if self.choice == choice:
+            # Remove the current answer if the same button is pressed
+            self.choice = None
+            self.change_answer('')
+
+        else:
+            # Set the current answer to the entered button otherwise
+            self.choice = choice
+            self.change_answer(choice.text)
+            self.choice.select()
+
     def dependant_lock(self):
+        self.choice_temp = self.choice
+        self.choice = None
         for button in self.buttons:
             button.background_color = [.7, 1., .7, 1.]
         super().dependant_lock()
 
-    def dependant_unlock(self, previous_answer):
+    def dependant_unlock(self):
         for button in self.buttons:
-            button.background_color = [1, 1, 1, 1]
-        super().dependant_unlock(previous_answer)
+            button.deselect()
+
+        self.select_choice(self.choice_temp)
+        super().dependant_unlock()
+
+
+class MultipleChoiceAQuestion(ButtonAQuestion):
+    """
+    Question type for multiple choice. Subclass of GUI.ButtonAQuestion.
+    """
+    pass
 
 
 class SpinnerAQuestion(AudioQuestion):
@@ -254,10 +190,25 @@ class SpinnerAQuestion(AudioQuestion):
 
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
-        self.ids.answer_options.values = question_dict['choices']
+        self.ids.spinner.values = question_dict['choices']
+
+    def spinner_input(self):
+        self.change_answer(self.ids.spinner.text)
+        self.ids.spinner.background_color = [.5, 1., .5, 1.]
+
+    def dependant_lock(self):
+        self.ids.spinner.background_color = [.7, 1., .7, 1.]
+        super().dependant_lock()
+
+    def dependant_unlock(self):
+        if self.ids.spinner.text:
+            self.ids.spinner.background_color = [.5, 1., .5, 1.]
+        else:
+            self.ids.spinner.background_color = [1., 1., 1., 1.]
+        super().dependant_unlock()
 
 
-class IntegerScaleAQuestion(AudioQuestion):
+class IntegerScaleAQuestion(ButtonAQuestion):
     """
     Numerical scale question type. Subclass of GUI.AudioQuestion.
 
@@ -270,7 +221,13 @@ class IntegerScaleAQuestion(AudioQuestion):
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
+        # Make the min and max values into integers
+        self.min = int(question_dict['min'])
+        self.max = int(question_dict['max'])
+
+        question_dict['choices'] = [str(num) for num in range(self.min, self.max + 1)]
         super().__init__(question_dict, **kwargs)
+
         no_notes = True
         # Add the left side note if there is one
         if 'left note' in question_dict.keys():
@@ -292,18 +249,12 @@ class IntegerScaleAQuestion(AudioQuestion):
             scale_start = .025
             self.ids.scale_bar.size_hint = (.96, .2)
 
-        # Make the min and max values into integers
-        self.min = int(question_dict['min'])
-        self.max = int(question_dict['max'])
         # Determine the number of buttons and their width
         n_button = self.max - self.min + 1
         button_width = scale_width / n_button
 
         # Add buttons at integer intervals
-        for bi, bv in enumerate(range(self.min, self.max + 1)):
-            # Create the button and add it to the Layout
-            button = AudioChoiceButton(str(bv))
-            self.ids.answer_options.add_widget(button)
+        for bi, button in enumerate(self.buttons):
             # Set the x and y size of the buttons (specific to 16:10 aspect ratio)
             button.size_hint_x = .75 * (button_width ** .95)
             button.size_hint_y = .75 * (button_width ** .95) * 9
@@ -381,21 +332,19 @@ class SliderAQuestion(AudioQuestion):
         else:
             self.value = (self.max + self.min) / 2.
 
-    def set_value(self) -> None:
-        """
-        Overwrite of the set_value method to set the slider look and block when the parent is not assigned yet.
-        """
-        if self.parent is not None:
-            self.ids.slider.value = round(self.ids.slider.value, 9)
-            self.value = self.ids.slider.value
-            super().set_value()
+    def slider_input(self) -> None:
+        if self.parent is None:
+            return
 
-            self.slider_color = [.9 * .5, .9 * 1., .9 * .5, .9 * 1.]
-            self.ids.slider.background_horizontal = 'GUI/assets/Slider_cursor_answered.png'
-            self.ids.slider.cursor_image = 'GUI/assets/Slider_cursor_answered.png'
+        self.ids.slider.value = round(self.ids.slider.value, 9)
+        self.change_answer(str(self.ids.slider.value))
+
+        self.slider_color = [.9 * .5, .9 * 1., .9 * .5, .9 * 1.]
+        self.ids.slider.background_horizontal = 'GUI/assets/Slider_cursor_answered.png'
+        self.ids.slider.cursor_image = 'GUI/assets/Slider_cursor_answered.png'
 
 
-class PointCompassAQuestion(AudioQuestion):
+class PointCompassAQuestion(ButtonAQuestion):
     """
     The compass question type. Subclass of GUI.AudioQuestion.
 
@@ -407,8 +356,11 @@ class PointCompassAQuestion(AudioQuestion):
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
+        question_dict['choices'] = []
         super().__init__(question_dict, **kwargs)
         self.ids.question_text.size_hint_y = .2
+
+        self.buttons = [self.ids[widget_id] for widget_id in self.ids.keys() if 'choice' in widget_id]
 
     def on_parent(self, *_) -> None:
         """
