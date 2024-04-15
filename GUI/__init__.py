@@ -11,9 +11,8 @@ from kivy.lang import Builder
 from kivy.app import App
 
 from .audio_screen import *
-from .questionnaire_questions import *
 from .file_system import *
-from .questionnaire_screen import QuestionnaireScreen
+from .questionnaire_screen import *
 from .screens import *
 
 

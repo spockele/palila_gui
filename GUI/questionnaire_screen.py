@@ -4,6 +4,9 @@ from .screens import PalilaScreen, BackButton, Filler
 from . import questionnaire_questions
 
 
+__all__ = ['QuestionnaireScreen', ]
+
+
 class QuestionnaireScreen(PalilaScreen):
     """
     Class that defines the overall audio question screens. Subclass of GUI.screens.PalilaScreen.
