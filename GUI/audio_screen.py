@@ -34,7 +34,7 @@ class AudioQuestionScreen(PalilaScreen):
         The primary instance of AudioManager linked to this specific screen.
     audio_manager_right : AudioManagerLeft
         The secondary instance of AudioManager linked to this specific screen.
-    question_manager : QuestionManager
+    question_manager : AQuestionManager
         The instance of QuestionManager linked to this specific screen.
     audio_block : bool
         Switch indicating that audio replay should be blocked.
@@ -62,7 +62,7 @@ class AudioQuestionScreen(PalilaScreen):
         # Get better references to the audio and question managers
         self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left
         self.audio_manager_right: AudioManagerRight = AudioManagerRight()
-        self.question_manager: QuestionManager = self.ids.question_manager
+        self.question_manager: AQuestionManager = self.ids.question_manager
 
         # Initialise the audio managers with the audios defined in the input file
         self.audio_manager_left.initialise_manager(self.config_dict['filepath'],
@@ -254,7 +254,7 @@ class AudioManagerRight(AudioManager):
     pass
 
 
-class QuestionManager(BoxLayout):
+class AQuestionManager(BoxLayout):
     """
     Subclass of kivy.uix.boxlayout.BoxLayout that defines and manages the question part of an AudioQuestionScreen.
 

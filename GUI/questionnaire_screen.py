@@ -1,4 +1,5 @@
 from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.boxlayout import BoxLayout
 
 from .screens import PalilaScreen, BackButton, Filler
 from . import questionnaire_questions
@@ -252,3 +253,8 @@ class QuestionnaireScreen(PalilaScreen):
             self.next_screen = next_screen
         else:
             self.all_screens[-1].next_screen = next_screen
+
+
+class QQuestionManager(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
