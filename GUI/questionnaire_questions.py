@@ -93,7 +93,9 @@ class QuestionnaireQuestion(FloatLayout):
         elif self.dependant is not None:
             self.dependant_answer_temp = self.dependant.answer
             self.dependant.dependant_lock()
+            self.parent.answered[self.dependant.qid] = True
 
+        self.parent.answered[self.qid] = self.answer is not None
         self.parent.parent.unlock_check()
 
     def border(self):
@@ -108,6 +110,7 @@ class QuestionnaireQuestion(FloatLayout):
 
     def dependant_unlock(self, previous_answer):
         self.answer = previous_answer
+        self.check_input()
         self.disabled = False
 
 

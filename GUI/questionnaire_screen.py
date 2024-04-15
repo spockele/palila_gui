@@ -29,8 +29,6 @@ class QuestionnaireScreen(PalilaScreen):
     ----------
     questionnaire_dict : dict
         Dictionary that defines the questionnaire and its questions.
-    state_override : bool
-        Override of the answering state to allow navigation between questionnaire screens.
     all_screens : list
         List with all the questionnaire screens.
     questions : list
@@ -115,18 +113,12 @@ class QuestionnaireScreen(PalilaScreen):
         for qi in range(7):
             # If the end of the to_add list is passed, just fill the space
             if qi >= len(to_add):
-                self.ids.questions.add_widget(Filler())
+                self.ids.question_manager.add_widget(Filler())
             # Otherwise
             else:
                 # Gather the question, type and create the actual instance of the question
                 question = to_add[qi]
-                question_type = getattr(questionnaire_questions,
-                                        f'{self.questionnaire_dict[question]["type"]}QQuestion')
-                question_instance: questionnaire_questions.QuestionnaireQuestion = question_type(self.questionnaire_dict[question])
-                # Add the instance to the screen and the list
-                self.ids.questions.add_widget(question_instance)
-                self.questions.append(question_instance)
-                self.all_questions[self.questionnaire_dict[question]['id']] = question_instance
+                self.ids.question_manager.add_question(self.questionnaire_dict[question])
 
         # If there are any questions remaining, add an extra screen
         if remaining:
@@ -147,18 +139,12 @@ class QuestionnaireScreen(PalilaScreen):
         for qi in range(7):
             # If the end of the questions input list is passed, just fill the space
             if qi >= len(self.questionnaire_dict['questions'][extra_screen_start:]):
-                self.ids.questions.add_widget(Filler())
+                self.ids.question_manager.add_widget(Filler())
             # Otherwise
             else:
                 # Gather the question, type and create the actual instance of the question
                 question = self.questionnaire_dict['questions'][extra_screen_start:][qi]
-                question_type = getattr(questionnaire_questions,
-                                        f'{self.questionnaire_dict[question]["type"]}QQuestion')
-                question_instance: questionnaire_questions.QuestionnaireQuestion = question_type(self.questionnaire_dict[question])
-                # Add the instance to the screen and the list
-                self.ids.questions.add_widget(question_instance)
-                self.questions.append(question_instance)
-                self.all_questions[self.questionnaire_dict[question]['id']] = question_instance
+                self.ids.question_manager.add_question(self.questionnaire_dict[question])
 
         # If there are any questions remaining, add an extra screen
         if len(self.questionnaire_dict['questions'][extra_screen_start:]) > 7:
@@ -193,8 +179,6 @@ class QuestionnaireScreen(PalilaScreen):
         # Set up the continue button for the multiscreen questionnaire
         self.ids.continue_bttn.set_arrow()
         self.ids.continue_bttn.unlock()
-        # Override the state to allow for navigation before this screen is complete.
-        self.state_override = True
 
     def get_state(self):
         """
@@ -204,9 +188,8 @@ class QuestionnaireScreen(PalilaScreen):
         total_state = True
 
         # Loop over all questions
-        for question_instance in self.all_questions.values():
-            state = question_instance.answer is not None
-            # Update the total state via the boolean "and" operator
+        for qid, state in self.ids.question_manager.answered.items():
+            print(qid, state)
             total_state = total_state and state
 
         # Return the final state or the override
@@ -258,3 +241,24 @@ class QuestionnaireScreen(PalilaScreen):
 class QQuestionManager(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.question_dict = {}
+        self.answered = {}
+
+    def add_question(self, question_dict: dict) -> None:
+        """
+        Add a questionnaire question to this question manager.
+        Parameters
+        ----------
+        question_dict : dict
+            Dictionary with all the information to construct the question.
+        """
+        question_type = getattr(questionnaire_questions,
+                                f'{question_dict["type"]}QQuestion')
+        question_instance: questionnaire_questions.QuestionnaireQuestion = question_type(question_dict)
+        # Add the instance to the screen and the list
+        self.add_widget(question_instance)
+        self.parent.questions.append(question_instance)
+        self.parent.all_questions[question_dict['id']] = question_instance
+
+        self.question_dict[question_dict['id']] = question_instance
+        self.answered[question_dict['id']] = False
