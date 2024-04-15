@@ -23,6 +23,7 @@ Builder.load_file('GUI/audio_question_screen.kv')
 Builder.load_file('GUI/audio_questions.kv')
 Builder.load_file('GUI/numpad_bubble.kv')
 Builder.load_file('GUI/questionnaire_questions.kv')
+Builder.load_file('GUI/questionnaire_screen.kv')
 Builder.load_file('GUI/setup.kv')
 
 

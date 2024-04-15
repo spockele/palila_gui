@@ -1,0 +1,26 @@
+<QuestionnaireScreen>
+	Label:
+		id: top_text
+		text: 'Please fill out this questionnaire: '
+
+        pos_hint: {'center_x': .5, 'y': .875}
+        size_hint: 1., .1
+
+        text_size: .95 * self.size[0], self.size[1]
+        font_size: 48
+        valign: 'center'
+
+        canvas.before:
+        	Color:
+        		rgba: (0 / 255, 166 / 255, 214 / 255, .7)
+
+        	Rectangle:
+        		size: self.size
+        		pos: self.pos
+
+	BoxLayout:
+		id: questions
+        pos_hint: {'center_x': .5, 'y': .16}
+        size_hint: .95, .7
+        orientation: 'vertical'
+        spacing: 20
