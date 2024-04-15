@@ -11,8 +11,9 @@ from kivy.lang import Builder
 from kivy.app import App
 
 from .audio_question_screen import *
-from .questionnaire import *
+from .questionnaire_questions import *
 from .file_system import *
+from .questionnaire_screen import QuestionnaireScreen
 from .screens import *
 
 
@@ -21,7 +22,7 @@ __all__ = ['PalilaApp', ]
 Builder.load_file('GUI/audio_question_screen.kv')
 Builder.load_file('GUI/audio_questions.kv')
 Builder.load_file('GUI/numpad_bubble.kv')
-Builder.load_file('GUI/questionnaire.kv')
+Builder.load_file('GUI/questionnaire_questions.kv')
 Builder.load_file('GUI/setup.kv')
 
 
