@@ -20,7 +20,6 @@ class QuestionnaireChoiceButton(Button):
     **kwargs
         Keyword arguments. These are passed on to the kivy.uix.button.Button constructor.
     """
-
     def __init__(self, text: str = '', **kwargs):
         super().__init__(text=text, **kwargs)
 
@@ -70,48 +69,42 @@ class QuestionnaireQuestion(FloatLayout):
         self.question_dict = question_dict
         self.ids.question_text.text = question_dict['text']
         self.qid = question_dict['id']
-        self.answer = None
 
         self.dependant = None
-        self.dependant_answer_temp = None
+        self.answer_temp = ''
+
+    def change_answer(self, answer: str) -> None:
+        if self.dependant is not None:
+            if answer == self.question_dict['dependant condition']:
+                self.dependant.dependant_unlock()
+
+            else:
+                self.dependant.dependant_lock()
+
+        self.parent.change_answer(self.qid, answer)
 
     def set_dependant(self):
         if 'dependant' in self.question_dict:
             if 'dependant condition' not in self.question_dict:
                 raise SyntaxError(f'{self.qid} does not have a "dependant condition" to unlock its dependant question.')
             else:
-                self.dependant: QuestionnaireQuestion = self.parent.parent.all_questions[self.question_dict['dependant']]
+                self.dependant: QuestionnaireQuestion = self.parent.questions[self.question_dict['dependant']]
                 self.dependant.dependant_lock()
 
-    def check_input(self):
-        """
-        Have the QuestionnaireScreen check the unlock condition.
-        """
-        if self.dependant is not None and self.answer == self.question_dict['dependant condition']:
-            self.dependant.dependant_unlock(self.dependant_answer_temp)
+    def dependant_lock(self):
+        self.answer_temp = self.parent.answers[self.qid]
+        self.change_answer('n/a')
+        self.disabled = True
 
-        elif self.dependant is not None:
-            self.dependant_answer_temp = self.dependant.answer
-            self.dependant.dependant_lock()
-            self.parent.answered[self.dependant.qid] = True
-
-        self.parent.answered[self.qid] = self.answer is not None
-        self.parent.parent.unlock_check()
+    def dependant_unlock(self):
+        self.change_answer(self.answer_temp)
+        self.disabled = False
 
     def border(self):
         """
         Add the top borderline to the question.
         """
         self.bordercolor = [.8, .8, .8, 1.]
-
-    def dependant_lock(self):
-        self.answer = 'n/a'
-        self.disabled = True
-
-    def dependant_unlock(self, previous_answer):
-        self.answer = previous_answer
-        self.check_input()
-        self.disabled = False
 
 
 class FreeNumberTextInput(TextInput):
@@ -152,32 +145,24 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
         super().__init__(question_dict, **kwargs)
         self.numpad = NumPadBubble()
 
-    def check_input(self):
+    def number_input(self):
         """
         Check the full input of the TextInput before triggering the unlock check.
         """
-        if self.ids.question_input.text:
-            if self.ids.question_input.text.isnumeric():
-                self.answer = self.ids.question_input.text
-                self.ids.question_input_overlay.text = ''
-                self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-                self.ids.question_input.background_color = [.5, 1., .5, 1.]
+        if self.ids.number_input.text:
+            if self.ids.number_input.text.isnumeric():
+                self.ids.number_overlay.text = ''
+                self.ids.number_input.background_color = [.5, 1., .5, 1.]
 
             else:
-                if self.answer is not None:
-                    self.ids.question_input.text = self.answer
-                else:
-                    self.ids.question_input.text = ''
-                    self.ids.question_input_overlay.color = [1., .2, .2, 1.]
-                    self.ids.question_input.background_color = [1., .7, .7, 1.]
+                self.ids.number_input.text = self.answer_temp
 
         else:
-            self.answer = None
-            self.ids.question_input.background_color = [1., 1., 1., 1.]
-            self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-            self.ids.question_input_overlay.text = 'Enter a number here.'
+            self.ids.number_input.background_color = [1., 1., 1., 1.]
+            self.ids.number_overlay.text = 'Enter a number here.'
 
-        super().check_input()
+        self.change_answer(self.ids.number_input.text)
+        self.answer_temp = self.ids.number_input.text
 
     def trigger_numpad(self, called_with):
         """
@@ -191,14 +176,13 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
             self.numpad.coupled_widget = None
 
     def dependant_lock(self):
+        self.ids.number_overlay.text = ''
+        self.ids.number_input.background_color = [.7, 1., .7, 1.]
         super().dependant_lock()
-        self.ids.question_input_overlay.text = ''
-        self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-        self.ids.question_input.background_color = [.7, 1., .7, 1.]
 
-    def dependant_unlock(self, previous_answer):
-        super().dependant_unlock(previous_answer)
-        self.check_input()
+    def dependant_unlock(self):
+        self.number_input()
+        super().dependant_unlock()
 
 
 class FreeTextQQuestion(QuestionnaireQuestion):
@@ -216,36 +200,29 @@ class FreeTextQQuestion(QuestionnaireQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
 
-    def check_input(self):
-        """
-        Check the full input of the TextInput before triggering the unlock check.
-        """
-        if self.ids.question_input.text:
-            if len(self.ids.question_input.text.split('\n')) > 2:
-                self.ids.question_input.text = self.answer
+    def text_input(self):
+        if self.ids.text_input.text:
+            if len(self.ids.text_input.text.split('\n')) > 2:
+                self.ids.text_input.text = self.answer_temp
 
-            self.answer = self.ids.question_input.text
-            self.ids.question_input_overlay.text = ''
-            self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-            self.ids.question_input.background_color = [.5, 1., .5, 1.]
+            self.ids.text_overlay.text = ''
+            self.ids.text_input.background_color = [.5, 1., .5, 1.]
 
         else:
-            self.answer = None
-            self.ids.question_input.background_color = [1., 1., 1., 1.]
-            self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-            self.ids.question_input_overlay.text = 'Enter your answer here.'
+            self.ids.text_input.background_color = [1., 1., 1., 1.]
+            self.ids.text_overlay.text = 'Enter your answer here.'
 
-        super().check_input()
+        self.change_answer(self.ids.text_input.text)
+        self.answer_temp = self.ids.text_input.text
 
     def dependant_lock(self):
+        self.ids.text_overlay.text = ''
+        self.ids.text_input.background_color = [.7, 1., .7, 1.]
         super().dependant_lock()
-        self.ids.question_input_overlay.text = ''
-        self.ids.question_input_overlay.color = [.7, .7, .7, 1.]
-        self.ids.question_input.background_color = [.7, 1., .7, 1.]
 
-    def dependant_unlock(self, previous_answer):
-        super().dependant_unlock(previous_answer)
-        self.check_input()
+    def dependant_unlock(self):
+        super().dependant_unlock()
+        self.text_input()
 
 
 class SpinnerQQuestion(QuestionnaireQuestion):
@@ -265,28 +242,23 @@ class SpinnerQQuestion(QuestionnaireQuestion):
 
         """
         super().__init__(question_dict, **kwargs)
-        self.ids.question_input.values = question_dict['choices']
+        self.ids.spinner.values = question_dict['choices']
 
-    def check_input(self):
-        """
-
-        """
-        if self.ids.question_input.text:
-            self.answer = self.ids.question_input.text
-            self.ids.question_input.background_color = [.5, 1., .5, 1.]
+    def spinner_input(self):
+        if self.ids.spinner.text:
+            self.ids.spinner.background_color = [.5, 1., .5, 1.]
         else:
-            self.answer = None
-            self.ids.question_input.background_color = [1., 1., 1., 1.]
+            self.ids.spinner.background_color = [1., 1., 1., 1.]
 
-        super().check_input()
+        self.change_answer(self.ids.spinner.text)
 
     def dependant_lock(self):
         super().dependant_lock()
-        self.ids.question_input.background_color = [.7, 1., .7, 1.]
+        self.ids.spinner.background_color = [.7, 1., .7, 1.]
 
-    def dependant_unlock(self, previous_answer):
-        super().dependant_unlock(previous_answer)
-        self.check_input()
+    def dependant_unlock(self):
+        self.spinner_input()
+        super().dependant_unlock()
 
 
 class MultipleChoiceQQuestion(QuestionnaireQuestion):
@@ -334,26 +306,24 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
         if self.choice == choice:
             # Remove the current answer if the same button is pressed
             self.choice = None
-            self.answer = None
+            self.change_answer('')
         else:
             # Set the current answer to the entered button otherwise
             self.choice = choice
             self.choice.select()
-            self.answer = choice.text
-
-        super().check_input()
+            self.change_answer(choice.text)
 
     def dependant_lock(self):
-        super().dependant_lock()
         self.choice_temp = self.choice
         self.choice = None
         for choice in self.choices:
             choice.background_color = [.7, 1, .7, 1.]
+        super().dependant_lock()
 
-    def dependant_unlock(self, previous_answer):
-        super().dependant_unlock(previous_answer)
+    def dependant_unlock(self):
         for choice in self.choices:
             choice.deselect()
 
         self.select_choice(self.choice_temp)
+        super().dependant_unlock()
 

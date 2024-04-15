@@ -20,13 +20,13 @@
 			Color:
 				rgba: root.bordercolor
 			Line:
-				points: self.x, self.y - .1 * self.height, self.x + self.width, self.y - .1 * self.height
+				points: self.x, self.y - .05 * self.height, self.x + self.width, self.y - .05 * self.height
 				width: 1.5
 
 
 <FreeNumberQQuestion>
 	FreeNumberTextInput:
-		id: question_input
+		id: number_input
 		text: ''
 
 		size_hint: .55, 1.
@@ -35,10 +35,10 @@
 		multiline: False
 
 		on_text:
-			root.check_input()
+			root.number_input()
 
 	Label:
-		id: question_input_overlay
+		id: number_overlay
 		text: 'Enter a number here'
 		color: (.7, .7, .7, 1.)
 
@@ -51,17 +51,17 @@
 
 <FreeTextQQuestion>
 	TextInput:
-		id: question_input
+		id: text_input
 		text: ''
 
 		size_hint: .55, 1.
 		pos_hint: {'right': 1, 'y': 0.}
 
 		on_text:
-			root.check_input()
+			root.text_input()
 
 	Label:
-		id: question_input_overlay
+		id: text_overlay
 		text: 'Enter your answer here'
 		color: (.7, .7, .7, 1.)
 
@@ -85,7 +85,7 @@
 
 <SpinnerQQuestion>
 	Spinner:
-		id: question_input
+		id: spinner
 
 		size_hint: .55, 1.
 		pos_hint: {'right': 1, 'y': 0.}
@@ -94,7 +94,7 @@
 		valign: 'center'
 
 		on_text:
-			root.check_input()
+			root.spinner_input()
 
 		Image:
 			source: 'GUI/assets/arrow.png'

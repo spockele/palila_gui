@@ -34,17 +34,13 @@ class QuestionnaireScreen(PalilaScreen):
     questions : list
         List of all the questions in this singular screen.
     """
-    def __init__(self, questionnaire_dict: dict, manager: ScreenManager, all_questions: dict = None,
-                 extra_screen_start: int = 0, all_screens: list = None, state_override: bool = False, **kwargs):
+    def __init__(self, questionnaire_dict: dict, manager: ScreenManager,
+                 extra_screen_start: int = 0, state_override: bool = False, **kwargs):
         super().__init__(questionnaire_dict['previous'], questionnaire_dict['next'], lock=True, **kwargs)
 
         self.questionnaire_dict = questionnaire_dict
         self.state_override = state_override
-        self.all_screens = all_screens
-        if all_screens is not None:
-            self.all_screens.append(self)
-        # Set up the dict with all questionnaire questions, in order to handle conditional questions
-        self.all_questions = {} if all_questions is None else all_questions
+        self.question_manager: QQuestionManager = self.ids.question_manager
 
         # Keep a count of the number of screens in this questionnaire
         if 'screen_count' not in self.questionnaire_dict.keys():
@@ -66,21 +62,15 @@ class QuestionnaireScreen(PalilaScreen):
             # Up the screen count
             self.questionnaire_dict['screen_count'] += 1
 
-        # Start a list to store all questions in this screen
-        self.questions = []
         # Split the questions according to the input file
         if self.questionnaire_dict['manual split']:
             self._manual_splitting(manager, extra_screen_start)
         else:
             self._automatic_splitting(manager, extra_screen_start)
 
-        [question.border() for question in self.questions[:-1]]
-
         self.unlock_check()
-        if not extra_screen_start:
-            for qid, question in self.all_questions.items():
-                question: questionnaire_questions.QuestionnaireQuestion
-                question.set_dependant()
+        [question.border() for question in self.question_manager.questions.values()]
+        [question.set_dependant() for question in self.question_manager.questions.values()]
 
     def _manual_splitting(self, manager: ScreenManager, extra_screen_start: int):
         """
@@ -113,12 +103,12 @@ class QuestionnaireScreen(PalilaScreen):
         for qi in range(7):
             # If the end of the to_add list is passed, just fill the space
             if qi >= len(to_add):
-                self.ids.question_manager.add_widget(Filler())
+                self.question_manager.add_widget(Filler())
             # Otherwise
             else:
                 # Gather the question, type and create the actual instance of the question
                 question = to_add[qi]
-                self.ids.question_manager.add_question(self.questionnaire_dict[question])
+                self.question_manager.add_question(self.questionnaire_dict[question])
 
         # If there are any questions remaining, add an extra screen
         if remaining:
@@ -139,12 +129,12 @@ class QuestionnaireScreen(PalilaScreen):
         for qi in range(7):
             # If the end of the questions input list is passed, just fill the space
             if qi >= len(self.questionnaire_dict['questions'][extra_screen_start:]):
-                self.ids.question_manager.add_widget(Filler())
+                self.question_manager.add_widget(Filler())
             # Otherwise
             else:
                 # Gather the question, type and create the actual instance of the question
                 question = self.questionnaire_dict['questions'][extra_screen_start:][qi]
-                self.ids.question_manager.add_question(self.questionnaire_dict[question])
+                self.question_manager.add_question(self.questionnaire_dict[question])
 
         # If there are any questions remaining, add an extra screen
         if len(self.questionnaire_dict['questions'][extra_screen_start:]) > 7:
@@ -161,11 +151,9 @@ class QuestionnaireScreen(PalilaScreen):
         extra_screen_start : int, optional
             Place to start a new screen in the questions list.
         """
-        if self.all_screens is None:
-            self.all_screens = [self, ]
         # Create the extra screen and let it do its thing
-        extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager, all_questions=self.all_questions,
-                                           extra_screen_start=extra_screen_start + 7, all_screens=self.all_screens,
+        extra_screen = QuestionnaireScreen(self.questionnaire_dict, manager,
+                                           extra_screen_start=extra_screen_start + 7,
                                            state_override=self.state_override,
                                            name=self.name + f'-{self.questionnaire_dict["screen_count"]}')
 
@@ -180,40 +168,27 @@ class QuestionnaireScreen(PalilaScreen):
         self.ids.continue_bttn.set_arrow()
         self.ids.continue_bttn.unlock()
 
-    def get_state(self):
-        """
-        Get the completion state of this questionnaire.
-        """
-        # Start a variable to store the total state
-        total_state = True
-
-        # Loop over all questions
-        for qid, state in self.ids.question_manager.answered.items():
-            print(qid, state)
-            total_state = total_state and state
-
-        # Return the final state or the override
-        return total_state or self.state_override
-
-    def unlock_check(self):
+    def unlock_check(self, question_state: bool = None):
         """
         Check for unlocking the continue button.
         """
-        if self.get_state():
-            # If all questions are answered: unlock the continue button
+        if question_state is None:
+            question_state = self.question_manager.get_state()
+
+        # If all questions are answered and the audio is listened to: unlock the continue button
+        if question_state or self.state_override:
             self.reset_continue_label()
             self.ids.continue_bttn.unlock()
+        # Make sure the continue button is locked if not
         else:
-            # Make sure the continue button is locked if not
             self.ids.continue_bttn.lock()
 
     def on_pre_leave(self, *_):
         """
         Store all answers before leaving the screen.
         """
-        for question_instance in self.questions:
-            if question_instance.answer is not None:
-                self.manager.store_answer(question_instance.qid, question_instance.answer)
+        for qid, answer in self.question_manager.answers.items():
+            self.manager.store_answer(qid, answer)
 
     def on_pre_enter(self, *args):
         """
@@ -231,7 +206,6 @@ class QuestionnaireScreen(PalilaScreen):
         next_screen: str
             The name of the new next screen
         """
-        print(self.all_screens)
         if self.all_screens is None:
             self.next_screen = next_screen
         else:
@@ -241,8 +215,8 @@ class QuestionnaireScreen(PalilaScreen):
 class QQuestionManager(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.question_dict = {}
-        self.answered = {}
+        self.questions = {}
+        self.answers = {}
 
     def add_question(self, question_dict: dict) -> None:
         """
@@ -257,8 +231,24 @@ class QQuestionManager(BoxLayout):
         question_instance: questionnaire_questions.QuestionnaireQuestion = question_type(question_dict)
         # Add the instance to the screen and the list
         self.add_widget(question_instance)
-        self.parent.questions.append(question_instance)
-        self.parent.all_questions[question_dict['id']] = question_instance
 
-        self.question_dict[question_dict['id']] = question_instance
-        self.answered[question_dict['id']] = False
+        self.questions[question_dict['id']] = question_instance
+        self.answers[question_dict['id']] = ''
+
+    def get_state(self):
+        """
+        Get the completion state of this questionnaire.
+        """
+        # Start a variable to store the total state
+        total_state = True
+
+        # Loop over all questions
+        for qid, answer in self.answers.items():
+            total_state = total_state and bool(answer)
+
+        # Return the final state
+        return total_state
+
+    def change_answer(self, question_id: str, answer: str) -> None:
+        self.answers[question_id] = answer
+        self.parent.unlock_check(question_state=self.get_state() and not self.disabled)
