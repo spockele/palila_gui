@@ -2,6 +2,8 @@ pid mode = auto
 randomise = no
 demo = no
 
+override = no
+
 [questionnaire]
 	default = yes
 
