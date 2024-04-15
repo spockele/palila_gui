@@ -52,9 +52,8 @@ class AnswerHolder:
     text : str
         Holds the answer text
     """
-    def __init__(self, dependant_lock: bool = False):
-        self.text: str = 'n/a' if dependant_lock else ''
-        self.dependant_lock = dependant_lock
+    def __init__(self):
+        self.text: str = ''
 
 
 class AudioQuestion(BoxLayout):
@@ -173,18 +172,15 @@ class AudioQuestion(BoxLayout):
                 self.dependant.dependant_lock()
 
     def dependant_lock(self):
-        self.answer = AnswerHolder(dependant_lock=True)
+        self.answer = None
         self.parent.question_answered(self.qid, True)
         self.disabled = True
 
     def dependant_unlock(self, previous_answer):
-        self.answer = None
         self.parent.question_answered(self.qid, False)
         self.disabled = False
 
-        if isinstance(previous_answer, AnswerHolder):
-            self.set_text()
-        elif previous_answer is not None:
+        if previous_answer is not None:
             self.select_choice(previous_answer, dependant_unlock=True)
 
 

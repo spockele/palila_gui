@@ -93,7 +93,7 @@ class AudioQuestionScreen(PalilaScreen):
             if question.answer is not None:
                 self.manager.store_answer(qid, question.answer.text)
             else:
-                self.manager.store_answer(qid, 'No Answer')
+                self.manager.store_answer(qid, 'n/a')
 
     def unlock_check(self, question_state: bool = None):
         """
