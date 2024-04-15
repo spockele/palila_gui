@@ -20,9 +20,7 @@ class AudioChoiceButton(Button):
         Keyword arguments. These are passed on to the kivy.uix.button.Button constructor.
     """
     def __init__(self, text: str = '', font_size: int = 72, **kwargs) -> None:
-        super().__init__(text=text, **kwargs)
-        self.font_size = font_size
-        self.dependant_lock = False
+        super().__init__(text=text, font_size=font_size, **kwargs)
 
     def select(self) -> None:
         """
@@ -79,7 +77,7 @@ class AudioQuestion(BoxLayout):
 
         self.answer_temp = ''
 
-    def change_answer(self, answer: str):
+    def change_answer(self, answer: str) -> None:
         if self.dependant is not None:
             if answer == self.question_dict['dependant condition']:
                 self.dependant.dependant_unlock()
@@ -95,7 +93,7 @@ class AudioQuestion(BoxLayout):
             if 'dependant condition' not in self.question_dict:
                 raise SyntaxError(f'{self.qid} does not have a "dependant condition" to unlock its dependant question.')
             else:
-                self.dependant: AudioQuestion = self.parent.question_dict[self.dependant_id]
+                self.dependant: AudioQuestion = self.parent.questions[self.dependant_id]
                 self.dependant.dependant_lock()
 
     def dependant_lock(self):

@@ -65,8 +65,10 @@ class PalilaScreenManager(ScreenManager):
         self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
                                       '', 'main-questionnaire', name='welcome'))
         self.current = 'demo' if self.experiment.as_bool('demo') else 'welcome'
+
+        # Little shortcut for the purpose of testing stuff
+        override = self.experiment.name == 'gui_dev' and self.experiment.as_bool('override')
         # Add the first questionnaire
-        override = self.experiment.name == 'gui_dev'
         self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self,
                                             state_override=override, name='main-questionnaire'))
 
@@ -77,7 +79,8 @@ class PalilaScreenManager(ScreenManager):
             # Within each part, loop over the audios
             for ia, audio in enumerate(self.experiment[part]['audios']):
                 # Create the AudioQuestionScreen and add it to the manager
-                self.add_widget(AudioQuestionScreen(self.experiment[part][audio], name=f'{part}-{audio}'))
+                self.add_widget(AudioQuestionScreen(self.experiment[part][audio],
+                                                    name=f'{part}-{audio}', state_override=override))
 
                 # Check if a break should be added.
                 if 'break' in self.experiment[part][audio]['next']:

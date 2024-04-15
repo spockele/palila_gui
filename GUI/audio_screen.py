@@ -55,9 +55,11 @@ class AudioQuestionScreen(PalilaScreen):
                                 'min': '0', 'max': '10', 'step': '.50', 'id': 'demo-02'}
                  }
 
-    def __init__(self, config_dict: dict, demo: bool = False, **kwargs) -> None:
+    def __init__(self, config_dict: dict, demo: bool = False, state_override: bool = False, **kwargs) -> None:
         self.config_dict = config_dict if not demo else self.demo_dict
+
         super().__init__(self.config_dict['previous'], self.config_dict['next'], lock=True, **kwargs)
+        self.state_override = state_override
 
         # Get better references to the audio and question managers
         self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left
@@ -83,6 +85,7 @@ class AudioQuestionScreen(PalilaScreen):
         self.question_manager.readjust(self.config_dict['filler'])
 
         self.audio_block = False
+        self.unlock_check()
 
     def on_pre_leave(self, *_) -> None:
         """
@@ -105,7 +108,7 @@ class AudioQuestionScreen(PalilaScreen):
         audio_state_right = self.audio_manager_right.n_max is None or self.audio_manager_right.count >= 1
         audio_state = audio_state_left and audio_state_right
 
-        if audio_state:
+        if audio_state or self.state_override:
             self.question_manager.unlock()
             self.ids.extra_message.text = ''
 
@@ -113,7 +116,7 @@ class AudioQuestionScreen(PalilaScreen):
                 question_state = self.question_manager.get_state()
 
             # If all questions are answered and the audio is listened to: unlock the continue button
-            if question_state:
+            if question_state or self.state_override:
                 self.reset_continue_label()
                 self.ids.continue_bttn.unlock()
             # Make sure the continue button is locked if not
@@ -275,7 +278,7 @@ class AQuestionManager(BoxLayout):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.n_question = 0
-        self.question_dict = {}
+        self.questions = {}
         self.disabled = True
         self.answers = {}
 
@@ -299,7 +302,7 @@ class AQuestionManager(BoxLayout):
             question_type = getattr(audio_questions, f'{question_dict["type"]}AQuestion')
             question: audio_questions.AudioQuestion = question_type(question_dict)
 
-            self.question_dict[question_dict['id']] = question
+            self.questions[question_dict['id']] = question
             self.answers[question_dict['id']] = 'n/a' if question_dict["type"] == 'Text' else ''
             # Add the question to the widgets
             self.add_widget(question)
@@ -324,7 +327,7 @@ class AQuestionManager(BoxLayout):
             for ii in range(self.n_max - self.n_question):
                 self.add_widget(Filler())
 
-        for question in self.question_dict.values():
+        for question in self.questions.values():
             question.set_dependant()
 
     def unlock(self) -> None:
