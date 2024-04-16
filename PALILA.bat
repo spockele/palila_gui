@@ -13,7 +13,6 @@
 :: limitations under the License.
 
 
-
 @echo off
 
 .\venv\Scripts\python.exe -m main
