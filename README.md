@@ -26,7 +26,26 @@ Graphical user interface for listening experiments in the
 Now you can run the GUI with ```PALILA.bat```
 
 ---
+## Copyright notice
 
+Technische Universiteit Delft hereby disclaims all copyright interest in the program “PALILA GUI”, a graphical user interface software for psychoacoustic listening epxeriments, written by the Author(s). 
+Henri Werij, Faculty of Aerospace Engineering, Technische Universiteit Delft. 
+
+Copyright (c) 2024, Josephine Siebert Pockelé
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---
 ## Experiment Configuration
 The experiment configuration consists of two items:
 - An experiment config file (```<experiment_name>.palila```)
