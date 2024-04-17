@@ -51,13 +51,21 @@ Pockelé, J.S. (2024). Psychoacoustic Listening Laboratory Graphical User Interf
 
 ---
 ## Experiment Configuration
-The experiment configuration consists of two items:
+The experiment configuration consists of the following additons/changes to this code, where ```<experiment_name>``` represents the name you use for your experiment:
 - An experiment config file (```<experiment_name>.palila```)
   - Defines the experiment (audios, questions, etc.).
+  - An example can be found in ```gui_dev.palila```.
+  - The structure of this file is described in the [following section](#configfile_structure).
 - An experiment file directory (```.\<experiment_name>```)
   - Contains the audio samples and the responses of the experiment.
+  - See for example the ```.\gui_dev``` directory.
+- Modify line 5 in ```main.py``` file:
+  ```
+  PalilaApp('<experiment_mame>').run()
+  ```
 
 ### Config file structure (```.palila```)
+<a id="configfile_structure"></a>
 ```
 # ======================================================================================================================
 
@@ -207,19 +215,23 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
 ## Output file format
 Results from an experiment will be output as individual ```.csv``` files in the directory 
 ```.\<experiment name>\responses\```.\
-The ```.csv``` files contain a table which is formated as follows:
+The ```.csv``` files contain a table which is structured as follows:
 
 |          | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
 |:--------:|:-------------------:|:-------------------:|-----|:---------------------------:|
 | response |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
 
-A script will be included to merge these individual tables into one ```.csv``` file, with a row per participant ID:
+The individual response files can be merged into a single ```.csv``` file using the ```.\merge_responses.bat``` script. This script requires modifying Line 27 in ```.\merge_responses.py``` to:
+```
+CURRENT_PATH = os.path.abspath('<experiment_name>')
+```
+The resulting ```.\<experiment_name>\responses_table.csv``` file will contain a table structured as follows:
 
 |                        | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
 |:----------------------:|:-------------------:|:-------------------:|-----|:---------------------------:|
-| ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
-| ```<Participant ID>``` |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
-|          ...           |         ...         |         ...         | ... |             ...             |
+|  0  |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
+|  1  |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
+| ... |         ...         |         ...         | ... |             ...             |
 
 ### Standardised question IDs
 For all audio questions, and the questionnaire questions where no ID is defined, a standardised format ID will 
