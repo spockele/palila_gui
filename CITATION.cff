@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+
+authors:
+- family-names: "Pockelé"
+  given-names: "Josephine Siebert"
+  orcid: https://orcid.org/0009-0002-5152-9986
+
+title: "Psychoacoustic Listening Laboratory Graphical User Interface (PALILA GUI)"
+version: v1.0.0
+date-released: 2024-04-16
+
+url: "https://gitlab.tudelft.nl/jpockele/palila_gui"
+identifiers:
+  - type: doi
+    value: 10.4121/eb2d0a57-60ca-4890-951f-9b677fa0a455
