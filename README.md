@@ -4,6 +4,8 @@ Graphical user interface for listening experiments in the
 [<b><u>P</u></b>sycho<b><u>A</u></b>coustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf)
 [[1](#merinomartinez_2023)] at the [Delft University of Technology, Faculty of Aerospace Engineering](https://www.tudelft.nl/lr).
 
+[![DOI](https://zenodo.org/badge/789127892.svg)](https://zenodo.org/doi/10.5281/zenodo.11028965)
+
 ### Developed by:
 - [ir. Josephine Siebert Pockelé](https://orcid.org/0009-0002-5152-9986)
   - PhD Candidate, [TU Delft Aircraft Noise and Climate Effects Section](https://www.tudelft.nl/lr/organisatie/afdelingen/control-and-operations/aircraft-noise-and-climate-effects-ance).
@@ -47,7 +49,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ### Citation
-Pockelé, J.S. (2024). Psychoacoustic Listening Laboratory Graphical User Interface (PALILA GUI) (version v1.0.0). DOI: 10.4121/eb2d0a57-60ca-4890-951f-9b677fa0a455
+If you use this code in scientific research, please cite it as below:
+```
+Pockelé, J.S. (2024). Graphical User Interface for the Psychoacoustic Listening Laboratory (PALILA GUI) (version v1.0.0). Zenodo. DOI: 10.5281/zenodo.11028965.
+```
 
 ---
 ## Experiment Configuration
