@@ -73,18 +73,23 @@ class PalilaScreenManager(ScreenManager):
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
-        # Add the welcome screen and set it as the current screen.
+        # Add the welcome screen
+        self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
+                                      '', 'main-questionnaire-1', name='welcome'))
+        # Add the demo screen if that is required and set the correct screen as current
         if self.experiment.as_bool('demo'):
             self.add_widget(AudioQuestionScreen({}, demo=True, name='demo'))
-        self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
-                                      '', 'main-questionnaire', name='welcome'))
-        self.current = 'demo' if self.experiment.as_bool('demo') else 'welcome'
+            self.current = 'demo'
+        else:
+            self.current = 'welcome'
 
         # Little shortcut for the purpose of testing stuff
         override = self.experiment.name == 'gui_dev' and self.experiment.as_bool('override')
         # Add the first questionnaire
-        self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self,
-                                            state_override=override, name='main-questionnaire'))
+        # self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self,
+        #                                     state_override=override, name='main-questionnaire'))
+
+        questionnaire_setup(self.experiment['questionnaire'], self, override)
 
         # Loop over the experiment parts
         for part in self.experiment['parts']:
@@ -105,8 +110,9 @@ class PalilaScreenManager(ScreenManager):
 
             # Add the final questionnaire if it is present
             if 'questionnaire' in self.experiment[part].sections:
-                self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
-                                                    manager=self, name=f'{part}-questionnaire'))
+                # self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
+                #                                     manager=self, name=f'{part}-questionnaire'))
+                questionnaire_setup(self.experiment[part]['questionnaire'], self, override, part=part)
 
                 # Check if a break should be added.
                 if 'break' in self.experiment[part]['questionnaire']['next']:
@@ -116,7 +122,7 @@ class PalilaScreenManager(ScreenManager):
                                                     name=break_name))
 
         # Add the Final two screens
-        self.add_widget(EndScreen('main-questionnaire', 'final', name='end'))
+        self.add_widget(EndScreen('main-questionnaire-1', 'final', name='end'))
         self.add_widget(FinalScreen('end', '', goodbye=self.experiment['goodbye'], name='final'))
 
     def navigate_next(self) -> None:

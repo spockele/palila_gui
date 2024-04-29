@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased] - tbd
+## [Unreleased]
 
 ### Added
 - Added a QuestionManager class to the questionnaire system to get closer to the system of audio questions.
@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The ```change_answer()``` function is now supplemented by a type-specific trigger function per question type.
   - ChoiceButton classes are now functionally the same.
   - questionnaire.py and questionnaire.kv have been split into questionnaire_questions and questionnaire_screen.
+  - Logic for splitting the questionnaire over multiple sceens is moved to an external function ```questionnaire_setup()```.
 
 ### Deprecated
 
