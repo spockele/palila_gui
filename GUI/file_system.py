@@ -19,7 +19,7 @@ Module containing the classes that manage the interactions with files during the
 
 ------------------------------------------------------------------------------------------------------------------------
 """
-from configobj import ConfigObj
+from configobj import ConfigObj, Section
 import pandas as pd
 import datetime
 import random
@@ -214,7 +214,7 @@ class PalilaExperiment(ConfigObj):
         for part in self['parts']:
             self._verify_part(part)
 
-    def _prepare_questionnaire(self, questionnaire_dict: dict, part: str) -> dict:
+    def _prepare_questionnaire(self, questionnaire_dict: Section, part: str) -> dict:
         """
         Sets up the questionnaire dictionary based on the config file.
 
@@ -228,7 +228,7 @@ class PalilaExperiment(ConfigObj):
         if part == 'main':
             # Check for the default keyword in the main questionnaire
             if 'default' in questionnaire_dict.keys():
-                questionnaire_dict['default'] = bool(questionnaire_dict['default'])
+                questionnaire_dict['default'] = questionnaire_dict.as_bool('default')
             else:
                 questionnaire_dict['default'] = False
 
