@@ -13,7 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+------------------------------------------------------------------------------------------------------------------------
+
 Module containing the classes that manage the interactions with files during the experiment.
+
+------------------------------------------------------------------------------------------------------------------------
 """
 from configobj import ConfigObj
 import pandas as pd
@@ -31,6 +35,8 @@ class PalilaExperiment(ConfigObj):
     """
     Subclass of ConfigObj. Stores the full configuration of the experiment. Responsible for verification and
     pre-processing of the config file information.
+
+    Works similar to a dictionary (see ConfigObj documentation).
 
     Parameters
     ----------
@@ -210,7 +216,14 @@ class PalilaExperiment(ConfigObj):
 
     def _prepare_questionnaire(self, questionnaire_dict: dict, part: str) -> dict:
         """
-        Sets up the main questionnaire dictionary based on the config file.
+        Sets up the questionnaire dictionary based on the config file.
+
+        Parameters
+        ----------
+        questionnaire_dict : dict
+            The specific questionnaire dictionary to be pre-processed.
+        part : str
+            The part of the experiment where this questionnaire is located.
         """
         if part == 'main':
             # Check for the default keyword in the main questionnaire
