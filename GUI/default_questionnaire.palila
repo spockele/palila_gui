@@ -13,7 +13,6 @@
 ## 	limitations under the License.
 
 
-default = yes
 manual split = yes
 
 [question age]
@@ -53,8 +52,7 @@ manual split = yes
 [question affiliation]
 	id = 'affiliation'
 	type = Spinner
-	text = '''What is your current, most direct
-		affiliation with TU Delft?'''
+	text = '''Your current, most direct affiliation with TU Delft:'''
 	choices = 'Prefer not to say', 'Student / employee at TU Delft', 'Student / employee at a partner university', 'Employee at a partner company', 'None of the above'
 	manual screen = 1
 
@@ -110,8 +108,7 @@ manual split = yes
 [question which_protection]
 	id = 'which_protection'
 	type = FreeText
-	text = '''What noise do/did you have to protect
-		yourself from?'''
+	text = '''What noise do/did you have to protect yourself from?'''
 	manual screen = 2
 
 

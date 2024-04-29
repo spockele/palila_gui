@@ -16,7 +16,7 @@ limitations under the License.
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-from kivy.properties import ColorProperty
+from kivy.properties import ColorProperty, NumericProperty
 
 from .numpad_bubble import NumPadBubble
 
@@ -78,6 +78,9 @@ class QuestionnaireQuestion(FloatLayout):
         Currently selected answer. None in case no answer is selected.
     """
     bordercolor = ColorProperty([0., 0., 0., 0.])
+
+    text_width = NumericProperty(.455)
+    answer_width = NumericProperty(.545)
 
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(**kwargs)

@@ -20,7 +20,7 @@
 		text: ''
 		font_size: 32
 
-		size_hint: .44, 1.
+		size_hint: root.text_width, 1.
 		pos_hint: {'x': 0., 'y': 0.}
 		text_size: .95 * self.size[0], self.size[1]
 
@@ -44,7 +44,7 @@
 		id: number_input
 		text: ''
 
-		size_hint: .55, 1.
+		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
 
 		multiline: False
@@ -57,7 +57,7 @@
 		text: 'Enter a number here'
 		color: (.7, .7, .7, 1.)
 
-		size_hint: .55, 1.
+		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
@@ -69,7 +69,7 @@
 		id: text_input
 		text: ''
 
-		size_hint: .55, 1.
+		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
 
 		on_text:
@@ -80,7 +80,7 @@
 		text: 'Enter your answer here'
 		color: (.7, .7, .7, 1.)
 
-		size_hint: .55, 1.
+		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
@@ -102,7 +102,7 @@
 	Spinner:
 		id: spinner
 
-		size_hint: .55, 1.
+		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
@@ -133,5 +133,5 @@
 
 		orientation: 'horizontal'
 		spacing: 10
-		size_hint: .55, 1.
+		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
