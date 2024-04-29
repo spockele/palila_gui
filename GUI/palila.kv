@@ -42,16 +42,19 @@
 
 <ContinueButton>
 	text: ''
+
 	text_size: self.size
 	valign: 'center'
 	halign: 'center'
 
 	Image:
 		id: continue_bttn_image
+
+		pos: self.parent.pos
+		size: self.parent.size
+
 		source: ''
 		opacity: 0
-		size: self.parent.size
-		pos: self.parent.pos
 
 		canvas.before:
 			PushMatrix
@@ -66,16 +69,19 @@
 
 <BackButton>
 	text: ''
+
 	text_size: self.size
 	valign: 'center'
 	halign: 'center'
 
 	Image:
 		id: back_bttn_image
+
+		pos: self.parent.pos
+		size: self.parent.size
+
 		source: ''
 		opacity: 0
-		size: self.parent.size
-		pos: self.parent.pos
 
 		canvas.before:
 			PushMatrix
@@ -90,42 +96,52 @@
 
 <Screen>
     Image:
-        size_hint: .1, .09
         pos_hint: {'x': .05, 'y': .02}
+        size_hint: .1, .09
+
         source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
 
     Image:
-        fit_mode: 'contain'
-        size_hint: .07, .09
         pos_hint: {'x': .88, 'y': .02}
+        size_hint: .07, .09
+
+        fit_mode: 'contain'
         source: 'GUI/assets/PALILA.png'
 
 
 <PalilaScreen>
 	Label:
 		id: continue_lbl
-		text: 'Complete this screen before continuing'
+
 		pos_hint: {'center_x': .5, 'y': .115}
 		size_hint: .3, .05
 
+		text: 'Complete this screen before continuing'
+
     ContinueButton:
     	id: continue_bttn
-        text: 'Continue'
-        font_size: 48
+
         pos_hint: {'center_x': .5, 'y': .015}
         size_hint: .3, .1
+
+        text: 'Continue'
+
+        font_size: 48
 
 
 <WelcomeScreen>
 	BoxLayout:
 		pos_hint: {'center_x': .5, 'center_y': .6}
 		size_hint: .7, .2
+
 		orientation: 'vertical'
 
 		Label:
 			id: welcome
-			text: ''
+
 			size_hint_y: .66
+
+			text: ''
 
 			text_size: self.size
 			halign: 'left'
@@ -133,11 +149,12 @@
 
 		TextInput:
 			id: pid_entry
-			text: ''
+
 			size_hint_y: .33
 
-			multiline: False
+			text: ''
 
+			multiline: False
 			text_size: self.size
 
 			on_text:
@@ -146,9 +163,10 @@
 
 <EndScreen>
 	Label:
-		text: 'You have reached the end of the experiment questions.\nYou can return to the first questionnaire to check your answers.\nOr you can finish the experiment.'
-		size_hint: .7, .2
 		pos_hint: {'center_x': .5, 'center_y': .6}
+		size_hint: .7, .2
+
+		text: 'You have reached the end of the experiment questions.\nYou can return to the first questionnaire to check your answers.\nOr you can finish the experiment.'
 
 		text_size: self.size
 		halign: 'center'
@@ -158,9 +176,11 @@
 <FinalScreen>
 	Label:
 		id: goodbye
-		text: ''
-		size_hint: .7, .2
+
 		pos_hint: {'center_x': .5, 'center_y': .6}
+		size_hint: .7, .2
+
+		text: ''
 
 		text_size: self.size
 		halign: 'center'
@@ -170,14 +190,18 @@
 <TimedTextScreen>
 	ProgressBar:
 		id: timer
+
 		pos_hint: {'center_x': .5, 'y': .115}
 		size_hint: .28, .01
 
 	Label:
 		id: intro_text
+
 		pos_hint: {'center_x': .5, 'center_y': .6}
 		size_hint: .7, .2
+
 		text: ''
+
 		text_size: self.size
 		halign: 'center'
 		valign: 'center'

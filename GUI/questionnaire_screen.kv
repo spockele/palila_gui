@@ -16,10 +16,11 @@
 <QuestionnaireScreen>
 	Label:
 		id: top_text
-		text: 'Please fill out this questionnaire: '
 
         pos_hint: {'center_x': .5, 'y': .875}
         size_hint: 1., .1
+
+		text: 'Please fill out this questionnaire: '
 
         text_size: .95 * self.size[0], self.size[1]
         font_size: 48
@@ -35,7 +36,9 @@
 
 	QQuestionManager:
 		id: question_manager
+
         pos_hint: {'center_x': .5, 'y': .17}
         size_hint: .95, .69
+
         orientation: 'vertical'
         spacing: 10

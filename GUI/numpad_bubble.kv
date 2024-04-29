@@ -14,24 +14,24 @@
 
 
 <NumPadBubble>
-	size_hint: 1 * .3, 1.6 * 4/3 * .3
 	pos_hint: {'center_x': .25, 'center_y': .5}
+	size_hint: 1 * .3, 1.6 * 4/3 * .3
+
 	show_arrow: False
 
 	BubbleContent:
+		orientation: 'vertical'
+		spacing: 10
+
 		background_image: 'gui/assets/Rounded_button_normal.png'
 		border: 30, 30, 30, 30
 		background_color: .95, .988, 1., 1.
-
-		orientation: 'vertical'
-		spacing: 10
 
 		padding: [10, 10, 10, 10, ]
 
 		BoxLayout:
 			orientation: 'horizontal'
 			spacing: 10
-
 			Button:
 				text: '7'
 				font_size: 96
@@ -51,7 +51,6 @@
 		BoxLayout:
 			orientation: 'horizontal'
 			spacing: 10
-
 			Button:
 				text: '4'
 				font_size: 96
@@ -71,7 +70,6 @@
 		BoxLayout:
 			orientation: 'horizontal'
 			spacing: 10
-
 			Button:
 				text: '1'
 				font_size: 96
@@ -91,7 +89,6 @@
 		BoxLayout:
 			orientation: 'horizontal'
 			spacing: 10
-
 			Button:
 				text: '0'
 				font_size: 96
@@ -103,10 +100,13 @@
 				font_size: 96
 				background_color: .975, .994, 1., 1.
 				on_press: root.remove_text()
+
 				Image:
-					source: 'GUI/assets/arrow.png'
-					size: .5 * self.parent.size[0], .5 * self.parent.size[1]
 					pos: self.parent.pos[0] + .25 * self.parent.size[0], self.parent.pos[1] + .25 * self.parent.size[1]
+					size: .5 * self.parent.size[0], .5 * self.parent.size[1]
+
+					source: 'GUI/assets/arrow.png'
+
 					canvas.before:
 						PushMatrix
 						Rotate:

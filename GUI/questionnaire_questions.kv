@@ -17,19 +17,19 @@
 	Label:
 		id: question_text
 
-		text: ''
-		font_size: 32
-
-		size_hint: root.text_width, 1.
 		pos_hint: {'x': 0., 'y': 0.}
-		text_size: .95 * self.size[0], self.size[1]
+		size_hint: root.text_width, 1.
 
+		text: ''
+
+		font_size: 32
+		text_size: .95 * self.size[0], self.size[1]
 		halign: 'right'
 		valign: 'center'
 
 	Widget:
-		size: root.size
 		pos: root.pos
+		size: root.size
 
 		canvas:
 			Color:
@@ -42,10 +42,11 @@
 <FreeNumberQQuestion>
 	FreeNumberTextInput:
 		id: number_input
-		text: ''
 
 		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
+
+		text: ''
 
 		multiline: False
 
@@ -54,11 +55,13 @@
 
 	Label:
 		id: number_overlay
-		text: 'Enter a number here'
-		color: (.7, .7, .7, 1.)
 
-		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
+		size_hint: root.answer_width, 1.
+
+		text: 'Enter a number here'
+
+		color: (.7, .7, .7, 1.)
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
 		valign: 'center'
@@ -67,21 +70,24 @@
 <FreeTextQQuestion>
 	TextInput:
 		id: text_input
-		text: ''
 
-		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
+		size_hint: root.answer_width, 1.
+
+		text: ''
 
 		on_text:
 			root.text_input()
 
 	Label:
 		id: text_overlay
-		text: 'Enter your answer here'
-		color: (.7, .7, .7, 1.)
 
-		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
+		size_hint: root.answer_width, 1.
+
+		text: 'Enter your answer here'
+
+		color: (.7, .7, .7, 1.)
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
 		valign: 'center'
@@ -102,8 +108,9 @@
 	Spinner:
 		id: spinner
 
-		size_hint: root.answer_width, 1.
 		pos_hint: {'right': 1, 'y': 0.}
+		size_hint: root.answer_width, 1.
+
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
 		valign: 'center'
@@ -112,9 +119,10 @@
 			root.spinner_input()
 
 		Image:
-			source: 'GUI/assets/arrow.png'
-			size: .1 * self.parent.size[0], .7 * self.parent.size[1]
 			pos: self.parent.pos[0] + .9 * self.parent.size[0], self.parent.pos[1] + .15 * self.parent.size[1]
+			size: .1 * self.parent.size[0], .7 * self.parent.size[1]
+
+			source: 'GUI/assets/arrow.png'
 
 			canvas.before:
 				PushMatrix
@@ -131,7 +139,8 @@
 	BoxLayout:
 		id: question_input
 
+		pos_hint: {'right': 1, 'y': 0.}
+		size_hint: root.answer_width, 1.
+
 		orientation: 'horizontal'
 		spacing: 10
-		size_hint: root.answer_width, 1.
-		pos_hint: {'right': 1, 'y': 0.}

@@ -22,22 +22,26 @@
     spacing: 20
 
     Label:
-        size_hint_y: .4
         id: question_text
-        text: ''
-        font_size: 48
 
+        size_hint_y: .4
+
+        text: ''
+
+        font_size: 48
         text_size: self.size
         halign: 'left'
         valign: 'bottom'
 
+
 <MultipleChoiceAQuestion>
     BoxLayout:
+        id: answer_options
+
     	pos_hint: {'center_x': .5}
     	size_hint_x: .95
         size_hint_y: .6
 
-        id: answer_options
         orientation: 'horizontal'
         spacing: 20
 
@@ -46,13 +50,14 @@
 	Spinner:
 		id: spinner
 
-		size_hint: .55, .45
 		pos_hint: {'center_x': .5}
+		size_hint: .55, .45
+
+		text: root.text
+
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
 		valign: 'center'
-
-		text: root.text
 
 		on_text: root.spinner_input()
 
@@ -75,17 +80,17 @@
 		size_hint_y: .14
 
 
-
 <IntegerScaleAQuestion>
     FloatLayout:
         size_hint_y: .6
         id: answer_options
 
         Label:
+            id: left_note
+
             pos_hint: {'x': 0, 'center_y': .5, }
             size_hint: .15, 1
 
-            id: left_note
             text: ''
 
             text_size: self.size
@@ -94,10 +99,11 @@
             valign: 'center'
 
         Label:
+            id: right_note
+
             pos_hint: {'right': 1, 'center_y': .5, }
             size_hint: .15, 1
 
-            id: right_note
             text: ''
 
             text_size: self.size
@@ -107,6 +113,7 @@
 
         Widget:
         	id: scale_bar
+
             pos_hint: {'center_x': .5, 'center_y': .5}
             size_hint: .65, .2
 
@@ -121,15 +128,18 @@
 
 <SliderAQuestion>
 	BoxLayout:
-        size_hint_y: .55
         id: answer_options
+
+        size_hint_y: .55
+
         orientation: 'horizontal'
         spacing: 30
 
         Label:
+            id: left_note
+
             size_hint: .15, 1
 
-            id: left_note
             text: ''
 
             text_size: self.size
@@ -139,6 +149,7 @@
 
         FloatLayout:
         	id: slider_holder
+
 			size_hint: .7, 1.
 
         	Widget:
@@ -178,9 +189,10 @@
         				radius: (5., )
 
 			Slider:
+				id: slider
+
 				pos_hint: {'center_x': .5, 'center_y': .5}
 				size_hint: 1., 1.
-				id: slider
 
 				background_disabled_horizontal: 'GUI/assets/Rounded_button_disabled_normal.png'
 				background_horizontal: 'GUI/assets/Rounded_button_normal.png'
@@ -192,6 +204,7 @@
 				cursor_width: 30
 
 				padding: 0
+
 				min: root.min
 				max: root.max
 				step: root.step
@@ -200,9 +213,11 @@
 				on_value: root.slider_input()
 
         	Label:
-        		text: str(slider.value)
         		pos_hint: {'center_x': slider.value_normalized, 'y': .82}
         		size_hint: .06, .33
+
+        		text: str(slider.value)
+
         		text_size: self.size
         		halign: 'center'
         		valign: 'bottom'
@@ -216,24 +231,28 @@
         				radius: (5., )
 
         	Label:
-        		text: str(root.min)
         		pos_hint: {'center_x': 0., 'top': .175}
         		size_hint: .1, .15
 
+        		text: str(root.min)
+
         	Label:
-        		text: str((root.max + root.min) / 2.)
         		pos_hint: {'center_x': .5, 'top': .175}
         		size_hint: .1, .15
 
+        		text: str((root.max + root.min) / 2.)
+
         	Label:
-        		text: str(root.max)
         		pos_hint: {'center_x': 1., 'top': .175}
         		size_hint: .1, .15
 
+        		text: str(root.max)
+
         Label:
+            id: right_note
+
             size_hint: .15, 1
 
-            id: right_note
             text: ''
 
             text_size: self.size
@@ -248,21 +267,25 @@
 <PointCompassAQuestion>
     FloatLayout:
     	id: answer_options
+
         size_hint_y: .8
 
         Image:
-        	source: 'GUI/assets/compass.png'
-        	size_hint_y: .5
         	pos_hint: {'center_x': .5, 'center_y': .5}
+        	size_hint_y: .5
+
+        	source: 'GUI/assets/compass.png'
         	color: 1, 1, 1, .25
 
         AudioChoiceButton:
+			id: choice_f
+
         	pos_hint: {'center_x': .5, 'center_y': .855}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_f
         	text: 'front'
+
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
 
@@ -277,17 +300,20 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
 
 		AudioChoiceButton:
+			id: choice_r
+
         	pos_hint: {'center_x': .6175, 'center_y': .5}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_r
         	text: 'right'
+
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
 
@@ -302,17 +328,20 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
 
 		AudioChoiceButton:
+			id: choice_re
+
         	pos_hint: {'center_x': .5, 'center_y': .145}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_re
         	text: 'rear'
+
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
 
@@ -327,17 +356,20 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
 
 		AudioChoiceButton:
+			id: choice_l
+
         	pos_hint: {'center_x': .3825, 'center_y': .5}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_l
         	text: 'left'
+
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
 
@@ -352,17 +384,19 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
 
         AudioChoiceButton:
+			id: choice_fr
         	pos_hint: {'center_x': .5825, 'center_y': .75}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_fr
         	text: 'front right'
+
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
 
@@ -377,17 +411,20 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
 
 		AudioChoiceButton:
+			id: choice_rr
+
         	pos_hint: {'center_x': .5825, 'center_y': .25}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_rr
         	text: 'rear right'
+
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
 
@@ -402,16 +439,18 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
 
 		AudioChoiceButton:
+			id: choice_rl
+
         	pos_hint: {'center_x': .4175, 'center_y': .25}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_rl
         	text: 'rear left'
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
@@ -427,17 +466,20 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
 
 		AudioChoiceButton:
+			id: choice_fl
+
         	pos_hint: {'center_x': .4175, 'center_y': .75}
         	size_hint: None, .2
         	width: self.height
 
-			id: choice_fl
         	text: 'front left'
+
         	color: 0, 0, 0, 0
         	disabled_color: 0, 0, 0, 0
 
@@ -452,6 +494,7 @@
 				PopMatrix
 
 			Image:
-				source: 'GUI/assets/arrow.png'
-				size: self.parent.size
 				pos: self.parent.pos
+				size: self.parent.size
+
+				source: 'GUI/assets/arrow.png'
