@@ -61,9 +61,6 @@ class PalilaExperiment(ConfigObj):
         self.question_id_list = []
         # Create list of parts in the overall dict
         self['parts'] = [part for part in self.sections if 'part' in part]
-        # Create a list of the questionnaire questions in the questionnaire dict
-        self['questionnaire']['questions'] = [question for question in self['questionnaire'].sections
-                                              if 'question' in question]
 
         # Create a list of audios in each part dict
         for part in self['parts']:
@@ -211,45 +208,73 @@ class PalilaExperiment(ConfigObj):
         for part in self['parts']:
             self._verify_part(part)
 
-    def _prepare_main_questionnaire(self) -> None:
+    def _prepare_questionnaire(self, questionnaire_dict: dict, part: str) -> dict:
         """
         Sets up the main questionnaire dictionary based on the config file.
         """
-        # Check for the default keyword in the main questionnaire
-        if 'default' in self['questionnaire'].keys():
-            self['questionnaire']['default'] = self['questionnaire'].as_bool('default')
+        if part == 'main':
+            # Check for the default keyword in the main questionnaire
+            if 'default' in questionnaire_dict.keys():
+                questionnaire_dict['default'] = bool(questionnaire_dict['default'])
+            else:
+                questionnaire_dict['default'] = False
+
+            # Get the default questionnaire setup if that is set
+            if questionnaire_dict['default']:
+                # Load the configfile
+                questionnaire_dict.update(
+                    ConfigObj(os.path.join(os.path.abspath('GUI'), 'default_questionnaire.palila'))
+                )
+
+            # Set the questionnaire's 'previous' to the welcome screen
+            questionnaire_dict['previous'] = 'welcome'
+
+        # Create a list of the questionnaire questions in the questionnaire dict
+        questionnaire_dict['questions'] = [question for question in questionnaire_dict.keys()
+                                           if 'question' in question]
+
+        # Check if the questionnaire is manually split over the multiple screens
+        if 'manual split' in questionnaire_dict:
+            manual_split = bool(questionnaire_dict['manual split'])
         else:
-            self['questionnaire']['default'] = False
+            manual_split = False
 
-        # Get the default questionnaire setup if that is set
-        if self['questionnaire']['default']:
-            # Load the configfile
-            self['questionnaire'].update(
-                ConfigObj(os.path.join(os.path.abspath('GUI'), 'default_questionnaire.palila'))
-            )
-            # Create a list of the questionnaire questions in the questionnaire dict
-            self['questionnaire']['questions'] = [question for question in self['questionnaire'].sections
-                                                  if 'question' in question]
-
-        # Set the questionnaire's 'previous' to the welcome screen
-        self['questionnaire']['previous'] = 'welcome'
+        # Initialise the dictionary that defines the split over multiple screens
+        screen_dict = dict()
 
         # Loop over the questionnaire questions
-        for iq, question in enumerate(self['questionnaire']['questions']):
+        for iq, question in enumerate(questionnaire_dict['questions']):
             # Replace tab characters in the question text
-            self['questionnaire'][question]['text'] = self['questionnaire'][question]['text'].replace('\t', '')
+            questionnaire_dict[question]['text'] = questionnaire_dict[question]['text'].replace('\t', '')
+
+            # Obtain the index of the screen to place the question
+            if manual_split:
+                screen_num = str(int(questionnaire_dict[question]['manual screen']))
+            else:
+                screen_num = str(int(iq + 1 // 7))
+
+            # Add this question's name to the correct screen in the screen_dict
+            if screen_num not in screen_dict:
+                screen_dict[screen_num] = [question]
+            else:
+                screen_dict[screen_num].append(question)
 
             # Extract the id to the overall question id list
-            if 'id' in self['questionnaire'][question]:
-                self.question_id_list.append(self['questionnaire'][question]['id'])
+            if 'id' in questionnaire_dict[question]:
+                self.question_id_list.append(questionnaire_dict[question]['id'])
             # Generate a not-so-nice (but standardised) id when it's not defined explicitly
             else:
                 # Extract the user input part, audio and question names from the brackets
                 question_id = question.replace('question ', '')
                 # Put those together and add to the list
-                qid = f'main-questionnaire-{question_id.zfill(2)}'
+                qid = f'{part}-questionnaire-{question_id.zfill(2)}'
                 self.question_id_list.append(qid)
-                self['questionnaire'][question]['id'] = qid
+                questionnaire_dict[question]['id'] = qid
+
+        # Store the split dictionary in the questionnaire dictionary
+        questionnaire_dict['screen dict'] = screen_dict
+
+        return questionnaire_dict
 
     def _prepare_part_audio(self, part: str, audio: str, question_overwrite: bool = False):
         """
@@ -307,38 +332,6 @@ class PalilaExperiment(ConfigObj):
             qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
             self.question_id_list.append(qid)
             self[part][audio][question]['id'] = qid
-
-    def _prepare_part_questionnaire(self, part):
-        """
-        Prepares the dictionary of the given part's questionnaire.
-
-        Parameters
-        ----------
-        part : str
-            Index of the part dictionary inside the overall dictionary.
-        """
-        # Create a list of the questionnaire questions in the questionnaire dict
-        self[part]['questionnaire']['questions'] = [question for question in
-                                                    self[part]['questionnaire'].sections
-                                                    if 'question' in question]
-        # Set up the part questionnaire questions
-        for iq, question in enumerate(self[part]['questionnaire']['questions']):
-            # Make sure the text is nice.
-            text_mod = self[part]['questionnaire'][question]['text'].replace('\t', '')
-            self[part]['questionnaire'][question]['text'] = text_mod
-
-            # Extract the id to the overall question id list
-            if 'id' in self[part]['questionnaire'][question]:
-                self.question_id_list.append(self[part]['questionnaire'][question]['id'])
-            # Generate a not-so-nice (but standardised) id when it's not defined explicitly
-            else:
-                # Extract the user input part, audio and question names from the brackets
-                part_id = part.replace('part ', '')
-                question_id = question.replace('question ', '')
-                # Put those together and add to the list
-                qid = f'{part_id.zfill(2)}-questionnaire-{question_id.zfill(2)}'
-                self.question_id_list.append(qid)
-                self[part]['questionnaire'][question]['id'] = qid
 
     def _prepare_part(self, ip: int, part: str, previous_part: str, previous_audio: str, previous_name: str, ):
         """
@@ -453,13 +446,13 @@ class PalilaExperiment(ConfigObj):
         # ==========================================================================================================
 
         if 'questionnaire' in self[part].sections:
-            current_name = f'{part}-questionnaire'
+            current_name = f'{part}-questionnaire-1'
             audio = 'questionnaire'
             # Set the 'previous' and the last question's 'next'
             self[part][previous_audio]['next'] = current_name
             self[part][audio]['previous'] = previous_name
 
-            self._prepare_part_questionnaire(part)
+            self._prepare_questionnaire(self[part]['questionnaire'], part)
 
             previous_name = current_name
             previous_audio = audio
@@ -504,12 +497,12 @@ class PalilaExperiment(ConfigObj):
             self['demo'] = 'no'
 
         # Prepare the main questionnaire
-        self._prepare_main_questionnaire()
+        self._prepare_questionnaire(self['questionnaire'], 'main')
 
         # Pre-define some values to start the parts loop
         previous_part = ''
         previous_audio = ''
-        previous_name = 'main-questionnaire'
+        previous_name = 'main-questionnaire-1'
 
         # Randomise the parts in this experiment if so desired
         if 'randomise' in self.keys() and self.as_bool('randomise'):
