@@ -13,10 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+------------------------------------------------------------------------------------------------------------------------
+
 Main module of the GUI package.
 
 Pulls in all functions from the modules in the package. It also defines the custom ScreenManager and App classes, which
 form the core of this package. Loads all the relevant kivy files for this package.
+
+------------------------------------------------------------------------------------------------------------------------
 """
 from kivy.uix.screenmanager import ScreenManager
 from kivy.core.window import Window
