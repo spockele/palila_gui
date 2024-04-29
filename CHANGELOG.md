@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - questionnaire.py and questionnaire.kv have been split into questionnaire_questions and questionnaire_screen.
   - Logic for splitting the questionnaire over multiple sceens is moved to an external function ```questionnaire_setup()```.
 
+- Repetition numbering of questions is now 1-indexed instead of 0-indexed.
+
 ### Deprecated
 
 
