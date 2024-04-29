@@ -75,7 +75,7 @@ class PalilaExperiment(ConfigObj):
                         # For each repeat
                         for ri in range(repeat):
                             # Create a new name and add to the list of audios
-                            new_name = audio + '_' + str(ri).zfill(2)
+                            new_name = audio + '_' + str(ri + 1).zfill(2)
                             self[part]['audios'].append(new_name)
                             # Copy this audio as a repeat
                             self[part][new_name] = {}

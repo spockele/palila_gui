@@ -85,10 +85,7 @@ class PalilaScreenManager(ScreenManager):
 
         # Little shortcut for the purpose of testing stuff
         override = self.experiment.name == 'gui_dev' and self.experiment.as_bool('override')
-        # Add the first questionnaire
-        # self.add_widget(QuestionnaireScreen(self.experiment['questionnaire'], self,
-        #                                     state_override=override, name='main-questionnaire'))
-
+        # Set up the first questionnaire
         questionnaire_setup(self.experiment['questionnaire'], self, override)
 
         # Loop over the experiment parts
@@ -110,8 +107,7 @@ class PalilaScreenManager(ScreenManager):
 
             # Add the final questionnaire if it is present
             if 'questionnaire' in self.experiment[part].sections:
-                # self.add_widget(QuestionnaireScreen(self.experiment[part]['questionnaire'],
-                #                                     manager=self, name=f'{part}-questionnaire'))
+                # Setup the questionnaire screens
                 questionnaire_setup(self.experiment[part]['questionnaire'], self, override, part=part)
 
                 # Check if a break should be added.
