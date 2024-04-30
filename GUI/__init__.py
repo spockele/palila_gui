@@ -128,8 +128,8 @@ class PalilaScreenManager(ScreenManager):
         """
         Navigate to the next screen, based on the string defined in the current screen.
         """
-        # Start the timer when leaving the main questionnaire
-        if 'main-questionnaire' not in self.current_screen.next_screen and 'main-questionnaire' in self.current:
+        # Start the timer when leaving the welcome screen
+        if self.current == 'welcome':
             self.answers.start_timer()
         elif self.current_screen.next_screen == 'final':
             self.answers.stop_timer()
