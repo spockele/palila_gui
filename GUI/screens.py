@@ -303,6 +303,8 @@ class TimedTextScreen(PalilaScreen):
         super().__init__(config_dict['previous'], config_dict['next'], lock=True, **kwargs)
 
         self.ids.intro_text.text = config_dict['text']
+        if '\n' not in config_dict['text']:
+            self.ids.intro_text.halign = 'center'
 
         self.ids.timer.max = float(config_dict['time'])
         self.timing_thread = ProgressBarThread(self.ids.timer)

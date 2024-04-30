@@ -260,7 +260,7 @@ class PalilaExperiment(ConfigObj):
             if manual_split:
                 screen_num = str(int(questionnaire_dict[question]['manual screen']))
             else:
-                screen_num = str(int(iq + 1 // 7))
+                screen_num = str(int(iq // 7))
 
             # Add this question's name to the correct screen in the screen_dict
             if screen_num not in screen_dict:
@@ -397,7 +397,7 @@ class PalilaExperiment(ConfigObj):
         break_interval = 0 if not breaks else int(self[part]['breaks']['interval'])
         break_time = 0 if not breaks else int(self[part]['breaks']['time'])
         break_text = self[part]['breaks']['text'] if breaks and 'text' in self[part]['breaks']\
-            else f'Please take some time to refocus during this {break_time} second break.'
+            else f'Please take some time to refocus during this break.'
         break_count = 0 if not breaks else 1
 
         # ==========================================================================================================

@@ -84,7 +84,7 @@ class AudioQuestion(BoxLayout):
         self.qid = question_dict['id']
         self.ids.question_text.text = question_dict['text']
         if '\n' in question_dict['text']:
-            self.ids.question_text.font_size = 38
+            self.ids.question_text.font_size = 42
         # Initialise variable to store current answer
         self.dependant = None
         self.dependant_id = None
@@ -134,6 +134,7 @@ class TextAQuestion(AudioQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
         self.ids.question_text.valign = 'center'
+        self.ids.question_text.font_size = 42
 
 
 class ButtonAQuestion(AudioQuestion):
