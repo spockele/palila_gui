@@ -246,11 +246,7 @@ class PalilaExperiment(ConfigObj):
         questionnaire_dict['questions'] = [question for question in questionnaire_dict.keys()
                                            if 'question' in question]
 
-        # Check if the questionnaire is manually split over the multiple screens
-        if 'manual split' in questionnaire_dict:
-            manual_split = bool(questionnaire_dict['manual split'])
-        else:
-            manual_split = False
+        manual_split = questionnaire_dict['manual split']
 
         # Initialise the dictionary that defines the split over multiple screens
         screen_dict = dict()
