@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 
 title: "Graphical User Interface for the Psychoacoustic Listening Laboratory (PALILA GUI)"
-version: v1.0.1
+version: v1.1.0
 date-released: 2024-05-17
 
 authors:
