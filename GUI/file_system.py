@@ -195,7 +195,7 @@ class PalilaExperiment(ConfigObj):
 
         # Check for the presence of a startup questionnaire.
         if 'questionnaire' not in self.sections:
-            raise SyntaxError(f'Experiment does not contain a startup questionnaire.')
+            self['questionnaire'] = {}
 
         # Check if the questionnaire is split properly
         if 'manual split' in self['questionnaire']:
@@ -281,12 +281,15 @@ class PalilaExperiment(ConfigObj):
                 qid = f'{part}-questionnaire-{question_id.zfill(2)}'
                 self.question_id_list.append(qid)
                 questionnaire_dict[question]['id'] = qid
-
+            # ==========================================================================================================
+            # todo: DEPRECATED CODE
+            # ---------------------
             if 'dependant' in questionnaire_dict[question]:
                 warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
                                        'in future versions. Please use the new system with "unlocked by" and "unlock '
                                        'condition" instead.',
                                        DeprecationWarning, f'{self.name}.palila', 0)
+            # ==========================================================================================================
 
         # Store the split dictionary in the questionnaire dictionary
         questionnaire_dict['screen dict'] = screen_dict
@@ -349,12 +352,15 @@ class PalilaExperiment(ConfigObj):
             qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
             self.question_id_list.append(qid)
             self[part][audio][question]['id'] = qid
-
-            # if 'dependant' in self[part][audio][question]:
-            #     warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
-            #                            'in future versions. Please use the new system with "unlocked by" and "unlock '
-            #                            'condition" instead.',
-            #                            DeprecationWarning, f'{self.name}.palila', 0)
+            # ==========================================================================================================
+            # todo: DEPRECATED CODE
+            # ---------------------
+            if 'dependant' in self[part][audio][question]:
+                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
+                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
+                                       'condition" instead.',
+                                       DeprecationWarning, f'{self.name}.palila', 0)
+            # ==========================================================================================================
 
     def _prepare_part(self, ip: int, part: str, previous_part: str, previous_audio: str, previous_name: str, ):
         """
