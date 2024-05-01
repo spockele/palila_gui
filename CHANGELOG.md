@@ -33,9 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Fixed
-
-
-### Security
+- Spinner Audio questions did not record their answer to the output file. This is fixed.
 
 
 
