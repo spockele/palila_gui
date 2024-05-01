@@ -26,14 +26,33 @@ override = no
 #		id = 'testing'
 #		text = 'Just Testing'
 #		type = MultipleChoice
-#		choices = 'Ok', 'Understood'
+#		choices = 'Ok', 'Understood', 'Ay Ay Captain'
 #		manual screen = 4
+#
+#	[[question 1.1]]
+#		id = 'testing'
+#		text = 'Just Testing'
+#		type = MultiMultipleChoice
+#		choices = 'Ok', 'Understood', 'Ay Ay Captain'
+#		manual screen = 4
+#
 #
 #	[[question 2]]
 #		id = 'testing_dep_1'
 #		text = 'This question is dependant on the previous one'
 #		type = MultipleChoice
 #		choices = 'Ok', 'Understood'
+#		manual screen = 4
+#
+#		unlocked by = 'testing'
+#		unlock condition = 'Ok'
+#
+#
+#	[[question 2.1]]
+#		id = 'testing_dep_1'
+#		text = 'This question is dependant on the previous one'
+#		type = MultiMultipleChoice
+#		choices = 'Ok', 'Understood', 'Ay Ay Captain'
 #		manual screen = 4
 #
 #		unlocked by = 'testing'
