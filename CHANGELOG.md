@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added a QuestionManager class to the questionnaire system to get closer to the system of audio questions.
 - Created a ButtonAQuestion superclass for all question types that use buttons to answer (MultipleChoice, IntegerScale, etc.)
+- Created a MultiMultipleChoiceQQuestion class to allow for multiple choice multiple answer questions in Questionnaires.
+- The number of replays of sound samples is now recorded in the output file:
+  - For audio screens with 1 sample: ```<part name>-<audio name>(_<repetition index>)-replays```
+  - For audio screens with 2 samples: ```<part name>-<audio name>(_<repetition index>)-replays-left``` and 
+```<part name>-<audio name>(_<repetition index>)-replays-right```
+  
 
 ### Changed
 1. Code restructure to make the audio and questionnaire question systems more uniform. 

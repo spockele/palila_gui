@@ -56,17 +56,17 @@ Pockelé, J.S. (2024). Graphical User Interface for the Psychoacoustic Listening
 
 ---
 ## Experiment Configuration
-The experiment configuration consists of the following additons/changes to this code, where ```<experiment_name>``` represents the name you use for your experiment:
-- An experiment config file (```<experiment_name>.palila```)
+The experiment configuration consists of the following additons/changes to this code, where ```<experiment name>``` represents the name you use for your experiment:
+- An experiment config file (```<experiment name>.palila```)
   - Defines the experiment (audios, questions, etc.).
   - An example can be found in ```gui_dev.palila```.
   - The structure of this file is described in the [following section](#configfile_structure).
-- An experiment file directory (```.\<experiment_name>```)
+- An experiment file directory (```.\<experiment name>```)
   - Contains the audio samples and the responses of the experiment.
   - See for example the ```.\gui_dev``` directory.
 - Modify line 5 in ```main.py``` file:
   ```
-  PalilaApp('<experiment_mame>').run()
+  PalilaApp('<experiment mame>').run()
   ```
 
 ### Config file structure (```.palila```)
@@ -177,6 +177,12 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
   - Recommended limit of 4-5 choices.
 
 
+- ```MultiMultipleChoice```: Multiple choice, multiple answer question with buttons.
+  - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
+  - Recommended limit of 4-5 choices.
+  - Records all selected answers separated by a semicolon (```;```)
+
+
 - ```Spinner```: Multiple choice question with a dropdown menu.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
 
@@ -233,23 +239,29 @@ CURRENT_PATH = os.path.abspath('<experiment_name>')
 ```
 The resulting ```.\<experiment_name>\responses_table.csv``` file will contain a table structured as follows:
 
-|                        | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
-|:----------------------:|:-------------------:|:-------------------:|-----|:---------------------------:|
+|     | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
+|:---:|:-------------------:|:-------------------:|-----|:---------------------------:|
 |  0  |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
 |  1  |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
 | ... |         ...         |         ...         | ... |             ...             |
 
 ### Standardised question IDs
-For all audio questions, and the questionnaire questions where no ID is defined, a standardised format ID will 
+For all audio questions, and for questionnaire questions with no custom ID, a standardised ```<question ID>``` will 
 be generated. The format is defined:
-- In the main questionnaire: ```main-questionnaire-{question name}```.
-- In ```[audio]``` sections: ```{part name}-{audio name}-{question name}```.
-- In part questionnaires: ```{part name}-questionnaire-{question name}```.
+- In the main questionnaire: ```main-questionnaire-<question name>```.
+- In part questionnaires: ```<part name>-questionnaire-<question name>```.
+- For audio questions: ```<part name>-<audio name>-<question name>```.
 - All question, audio and part names will be adjusted to at least 2 characters with ```str().zfill(2)```.
 
 The names (part, audio and question) are the ```<string>``` values defined in the brackets of the input file.\
-<b>NOTE</b>: When ```repeat``` is set in an ```[audio]``` section, a two digit (01, 02, ...) repetition index is added 
-as follows: ```{part name}-{audio name}_{repetition index}-{question name}``` to all repetitions of the same question.
+<b>NOTE</b>: When ```repeat``` is set in an ```[audio]``` section, a two digit (01, 02, ...) ```<repetition index>``` is added 
+as follows: ```<part name>-<audio name>_<repetition index>-<question name>``` to all repetitions of the same question.
+
+### Storing of audio replays
+In case an audio sample can be replayed, the number of replays is recorded under the following ```<question ID>``` format:
+- For audio screens with 1 sample: ```<part name>-<audio name>(_<repetition index>)-replays```
+- For audio screens with 2 samples: ```<part name>-<audio name>(_<repetition index>)-replays-left``` and 
+```<part name>-<audio name>(_<repetition index>)-replays-right```
 
 [//]: # (---)
 
