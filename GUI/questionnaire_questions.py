@@ -93,8 +93,11 @@ class QuestionnaireQuestion(FloatLayout):
             self.unlock_condition = question_dict['unlock condition']
         else:
             self.unlock_condition = None
-
+        # ==============================================================================================================
+        # todo: DEPRECATED CODE
+        # ---------------------
         self.dependant = None
+        # ==============================================================================================================
         self.answer_temp = ''
 
     def change_answer(self, answer: str) -> None:
