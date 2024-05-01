@@ -40,8 +40,8 @@ class QuestionnaireScreen(PalilaScreen):
             Dictionary that defines the questionnaire and its questions.
     """
 
-    def __init__(self, questionnaire_dict: dict, questions: list, back_function: callable = None, *args,
-                 state_override: bool = False, **kwargs):
+    def __init__(self, questionnaire_dict: dict, questions: list, *args,
+                 back_function: callable = None, state_override: bool = False, **kwargs):
 
         super().__init__(*args, lock=True, **kwargs)
 
@@ -183,10 +183,17 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
             else:
                 next_screen = questionnaire_dict['next']
 
-            new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
-                                             manager.navigate_previous, previous_screen, next_screen,
-                                             state_override=state_override,
-                                             name=f'{part}-questionnaire-{ii + 1}')
+            if ii:
+                new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
+                                                 previous_screen, next_screen,
+                                                 back_function=manager.navigate_previous, state_override=state_override,
+                                                 name=f'{part}-questionnaire-{ii + 1}',
+                                                 )
+            else:
+                new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
+                                                 previous_screen, next_screen,
+                                                 state_override=state_override, name=f'{part}-questionnaire-{ii + 1}',
+                                                 )
 
             manager.add_widget(new_screen)
 
