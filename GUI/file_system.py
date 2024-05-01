@@ -258,6 +258,12 @@ class PalilaExperiment(ConfigObj):
             # Replace tab characters in the question text
             questionnaire_dict[question]['text'] = questionnaire_dict[question]['text'].replace('\t', '')
 
+            # Convert multi into a boolean if it exists, otherwise set to False
+            if 'multi' in questionnaire_dict[question]:
+                questionnaire_dict[question]['multi'] = questionnaire_dict[question].as_bool('multi')
+            else:
+                questionnaire_dict[question]['multi'] = False
+
             # Obtain the index of the screen to place the question
             if manual_split:
                 screen_num = str(int(questionnaire_dict[question]['manual screen']))
@@ -345,6 +351,12 @@ class PalilaExperiment(ConfigObj):
         for question in self[part][audio]['questions']:
             # Remove tabs from the input file in the question text
             self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
+
+            # Convert multi into a boolean if it exists, otherwise set to False
+            if 'multi' in self[part][audio][question]:
+                self[part][audio][question]['multi'] = self[part][audio][question].as_bool('multi')
+            else:
+                self[part][audio][question]['multi'] = False
 
             # Generate a standardised question id
             # Extract the question name

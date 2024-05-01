@@ -122,8 +122,11 @@ class QuestionnaireQuestion(FloatLayout):
 
     def set_unlock(self):
         if self.unlock_condition is not None:
-            self.parent.questions[self.question_dict['unlocked by']].dependants.append(self)
+            self.parent.questions[self.question_dict['unlocked by']].assign_dependant(self)
             self.dependant_lock()
+
+    def assign_dependant(self, question):
+        self.dependants.append(question)
 
     def set_dependant(self):
         # ==============================================================================================================
@@ -324,6 +327,8 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
 
     Attributes
     ----------
+    buttons : list[QuestionnaireChoiceButton]
+        List of the available choice buttons
     choice : QuestionnaireChoiceButton = None
         Currently selected choice button
     """
@@ -333,17 +338,17 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
         self.choice_temp = None
 
         # Add every choice as a button and track their word lengths
-        self.choices = []
+        self.buttons = []
         lengths = []
         for choice in question_dict['choices']:
             choice_button = QuestionnaireChoiceButton(choice)
-            self.choices.append(choice_button)
+            self.buttons.append(choice_button)
             self.ids.question_input.add_widget(choice_button)
             lengths.append(len(choice))
         # Resize proportional to the root of the word lengths
         total = sum(lengths)
         for ii, length in enumerate(lengths):
-            self.choices[ii].size_hint_x = length ** .5 / total
+            self.buttons[ii].size_hint_x = length ** .5 / total
 
     def select_choice(self, choice: QuestionnaireChoiceButton):
         """
@@ -368,13 +373,13 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
             self.choice_temp = self.choice
         self.choice = None
 
-        for choice in self.choices:
+        for choice in self.buttons:
             choice.background_color = [.7, 1, .7, 1.]
 
         super().dependant_lock()
 
     def dependant_unlock(self):
-        for choice in self.choices:
+        for choice in self.buttons:
             choice.deselect()
 
         if self.choice_temp is not None:
@@ -383,3 +388,81 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
 
         super().dependant_unlock()
 
+
+class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
+    """
+    Question type for multiple choice.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
+    **kwargs
+        Keyword arguments. These are passed on to the kivy.uix.floatlayout.FloatLayout constructor.
+
+    Attributes
+    ----------
+    buttons : list[QuestionnaireChoiceButton]
+        List of the available choice buttons
+    choices : list[QuestionnaireChoiceButton] = []
+        Currently selected choice button(s)
+    """
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(question_dict, **kwargs)
+        self.choices = []
+        self.choice_temp = None
+
+        # Add every choice as a button and track their word lengths
+        self.buttons = []
+        lengths = []
+        for choice in question_dict['choices']:
+            choice_button = QuestionnaireChoiceButton(choice)
+            self.buttons.append(choice_button)
+            self.ids.question_input.add_widget(choice_button)
+            lengths.append(len(choice))
+        # Resize proportional to the root of the word lengths
+        total = sum(lengths)
+        for ii, length in enumerate(lengths):
+            self.buttons[ii].size_hint_x = length ** .5 / total
+
+    def assign_dependant(self, question):
+        raise AttributeError(f'MultiMultipleChoiceQQuestion currently does not support '
+                             f'conditionally unlocking other questions.')
+
+    def select_choice(self, choice: QuestionnaireChoiceButton):
+        if choice in self.choices:
+            choice.deselect()
+            self.choices.remove(choice)
+
+        else:
+            choice.select()
+            self.choices.append(choice)
+
+        answer_str = ''
+        for button in self.choices:
+            answer_str += f'{button.text};'
+
+        self.change_answer(answer_str)
+
+    def dependant_lock(self):
+        if self.choice_temp is None:
+            self.choice_temp = self.choices
+        self.choices = None
+
+        for choice in self.buttons:
+            choice.background_color = [.7, 1, .7, 1.]
+
+        super().dependant_lock()
+
+    def dependant_unlock(self):
+        for choice in self.buttons:
+            choice.deselect()
+
+        self.choices = []
+        if self.choice_temp is not None:
+            for choice in self.choice_temp:
+                self.select_choice(choice)
+
+            self.choice_temp = None
+
+        super().dependant_unlock()
