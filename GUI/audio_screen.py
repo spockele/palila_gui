@@ -343,6 +343,7 @@ class AQuestionManager(BoxLayout):
 
         for question in self.questions.values():
             question.set_dependant()
+            question.set_unlock()
 
     def unlock(self) -> None:
         """

@@ -85,21 +85,47 @@ class AudioQuestion(BoxLayout):
         self.ids.question_text.text = question_dict['text']
         if '\n' in question_dict['text']:
             self.ids.question_text.font_size = 42
-        # Initialise variable to store current answer
+
+        # ==============================================================================================================
+        # todo: DEPRECATED CODE
+        # ---------------------
         self.dependant = None
         self.dependant_id = None
+        # ==============================================================================================================
+
+        self.dependants: list[AudioQuestion] = list()
+        if 'unlocked by' in question_dict:
+            self.unlock_condition = question_dict['unlock condition']
+        else:
+            self.unlock_condition = None
 
         self.answer_temp = ''
 
     def change_answer(self, answer: str) -> None:
+        # ==============================================================================================================
+        # todo: DEPRECATED CODE
+        # ---------------------
         if self.dependant is not None:
             if answer == self.question_dict['dependant condition']:
                 self.dependant.dependant_unlock()
 
             else:
                 self.dependant.dependant_lock()
+        # ==============================================================================================================
+
+        for question in self.dependants:
+            if answer == question.unlock_condition and not self.disabled:
+                question.dependant_unlock()
+            else:
+                question.dependant_lock()
 
         self.parent.change_answer(self.qid, answer)
+
+    def set_unlock(self):
+        if self.unlock_condition is not None:
+            unlocked_by_id = self.question_dict['part-audio'] + self.question_dict['unlocked by'].zfill(2)
+            self.parent.questions[unlocked_by_id].dependants.append(self)
+            self.dependant_lock()
 
     def set_dependant(self):
         if 'dependant' in self.question_dict:
@@ -111,13 +137,17 @@ class AudioQuestion(BoxLayout):
                 self.dependant.dependant_lock()
 
     def dependant_lock(self):
-        self.answer_temp = self.parent.answers[self.qid]
+        if not self.answer_temp:
+            to_store = self.parent.answers[self.qid]
+            self.answer_temp = '' if to_store == 'n/a' else to_store
+
         self.change_answer('n/a')
         self.disabled = True
 
     def dependant_unlock(self):
-        self.change_answer(self.answer_temp)
         self.disabled = False
+        self.change_answer(self.answer_temp)
+        self.answer_temp = ''
 
 
 class TextAQuestion(AudioQuestion):
@@ -167,17 +197,23 @@ class ButtonAQuestion(AudioQuestion):
             self.choice.select()
 
     def dependant_lock(self):
-        self.choice_temp = self.choice
+        if self.choice_temp is None:
+            self.choice_temp = self.choice
         self.choice = None
-        for button in self.buttons:
-            button.background_color = [.7, 1., .7, 1.]
+
+        for choice in self.buttons:
+            choice.background_color = [.7, 1, .7, 1.]
+
         super().dependant_lock()
 
     def dependant_unlock(self):
-        for button in self.buttons:
-            button.deselect()
+        for choice in self.buttons:
+            choice.deselect()
 
-        self.select_choice(self.choice_temp)
+        if self.choice_temp is not None:
+            self.select_choice(self.choice_temp)
+            self.choice_temp = None
+
         super().dependant_unlock()
 
 
