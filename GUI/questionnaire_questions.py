@@ -88,35 +88,64 @@ class QuestionnaireQuestion(FloatLayout):
         self.ids.question_text.text = question_dict['text']
         self.qid = question_dict['id']
 
+        self.dependants: list[QuestionnaireQuestion] = list()
+        if 'unlocked by' in question_dict:
+            self.unlock_condition = question_dict['unlock condition']
+        else:
+            self.unlock_condition = None
+
         self.dependant = None
         self.answer_temp = ''
 
     def change_answer(self, answer: str) -> None:
+        # ==============================================================================================================
+        # todo: DEPRECATED CODE
+        # ---------------------
         if self.dependant is not None:
             if answer == self.question_dict['dependant condition']:
                 self.dependant.dependant_unlock()
 
             else:
                 self.dependant.dependant_lock()
+        # ==============================================================================================================
+
+        for question in self.dependants:
+            if answer == question.unlock_condition and not self.disabled:
+                question.dependant_unlock()
+            else:
+                question.dependant_lock()
 
         self.parent.change_answer(self.qid, answer)
 
+    def set_unlock(self):
+        if self.unlock_condition is not None:
+            self.parent.questions[self.question_dict['unlocked by']].dependants.append(self)
+            self.dependant_lock()
+
     def set_dependant(self):
+        # ==============================================================================================================
+        # todo: DEPRECATED CODE
+        # ---------------------
         if 'dependant' in self.question_dict:
             if 'dependant condition' not in self.question_dict:
                 raise SyntaxError(f'{self.qid} does not have a "dependant condition" to unlock its dependant question.')
             else:
                 self.dependant: QuestionnaireQuestion = self.parent.questions[self.question_dict['dependant']]
                 self.dependant.dependant_lock()
+        # ==============================================================================================================
 
     def dependant_lock(self):
-        self.answer_temp = self.parent.answers[self.qid]
+        if not self.answer_temp:
+            to_store = self.parent.answers[self.qid]
+            self.answer_temp = '' if to_store == 'n/a' else to_store
+
         self.change_answer('n/a')
         self.disabled = True
 
     def dependant_unlock(self):
-        self.change_answer(self.answer_temp)
         self.disabled = False
+        self.change_answer(self.answer_temp)
+        self.answer_temp = ''
 
     def border(self):
         """
@@ -332,16 +361,22 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
             self.change_answer(choice.text)
 
     def dependant_lock(self):
-        self.choice_temp = self.choice
+        if self.choice_temp is None:
+            self.choice_temp = self.choice
         self.choice = None
+
         for choice in self.choices:
             choice.background_color = [.7, 1, .7, 1.]
+
         super().dependant_lock()
 
     def dependant_unlock(self):
         for choice in self.choices:
             choice.deselect()
 
-        self.select_choice(self.choice_temp)
+        if self.choice_temp is not None:
+            self.select_choice(self.choice_temp)
+            self.choice_temp = None
+
         super().dependant_unlock()
 

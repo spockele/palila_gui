@@ -99,10 +99,11 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
         manual screen = <integer>           # -> In case of manual split = yes, this defines the screen to 
                                             #   put the question. Has no effect if manual split = no.
                                             #
-        dependant = <string>  (optional)              # -> Question ID of another questionnaire question, which is 
-                                                      #   locked until the condition in this question is met.
-        dependant condition = <string>  (optional)    # -> The value the answer of this question has to take to unlock 
-                                                      #   the dependant question.
+        unlocked by = <string>  (optional)            # -> Question ID of another questionnaire question, which locks 
+                                                      #   and unlocks this question until the answer in the other 
+                                                      #   question equals the value in 'unlock condition'.
+        unlock condition = <string>  (optional)       # -> The value the answer of the unlocking question has to take 
+                                                      #   to unlock this question.
 
 # ======================================================================================================================
         

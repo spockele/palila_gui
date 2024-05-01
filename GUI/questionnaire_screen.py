@@ -73,7 +73,12 @@ class QuestionnaireScreen(PalilaScreen):
 
         self.unlock_check()
         [question.border() for question in self.question_manager.questions.values()]
+        # ==============================================================================================================
+        # todo: DEPRECATED CODE
+        # ---------------------
         [question.set_dependant() for question in self.question_manager.questions.values()]
+        # ==============================================================================================================
+        [question.set_unlock() for question in self.question_manager.questions.values()]
 
     def unlock_check(self, question_state: bool = None):
         """

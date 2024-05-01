@@ -102,14 +102,14 @@ manual split = yes
 	choices = 'Yes', 'No'
 	manual screen = 2
 
-	dependant = 'which_protection'
-	dependant condition = 'Yes'
-
 [question which_protection]
 	id = 'which_protection'
 	type = FreeText
 	text = '''What noise do/did you have to protect yourself from?'''
 	manual screen = 2
+
+	unlocked by = 'work_protection'
+	unlock condition = 'Yes'
 
 
 [question ear_disease]
@@ -120,14 +120,14 @@ manual split = yes
 	choices = 'Yes', 'No'
 	manual screen = 3
 
-	dependant = 'which_disease'
-	dependant condition = 'Yes'
-
 [question which_disease]
 	id = 'which_disease'
 	type = FreeText
 	text = 'If yes, what kind of ear disease?'
 	manual screen = 3
+
+	unlocked by = 'ear_disease'
+	unlock condition = 'Yes'
 
 [question tinnitus]
 	id = 'tinnitus'
@@ -143,9 +143,6 @@ manual split = yes
 	choices = 'Yes', 'No'
 	manual screen = 3
 
-	dependant = 'cold_magnitude'
-	dependant condition = 'Yes'
-
 [question cold_magnitude]
 	id = 'cold_magnitude'
 	type = Spinner
@@ -153,6 +150,9 @@ manual split = yes
 		From 1 (very weak) to 5 (very strong)'''
 	choices = '1', '2', '3', '4', '5'
 	manual screen = 3
+
+	unlocked by = 'cold'
+	unlock condition = 'Yes'
 
 [question feeling]
 	id = 'feeling'
