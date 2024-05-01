@@ -72,8 +72,9 @@ def construct_progress_tracker(progress: int, division: list[int]):
     tracker = Tracker(size_hint_x=progress / total)
     progress_bar.add_widget(tracker)
 
+    pos = 0.
     for amount in division[:-1]:
-        pos = amount / total
+        pos += amount / total
         progress_bar.add_widget(PartIndicator(pos_hint={'center_x': pos, 'y': 0}))
 
     return progress_bar
