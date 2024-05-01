@@ -22,6 +22,7 @@ Module containing the classes that manage the interactions with files during the
 from configobj import ConfigObj, Section
 import pandas as pd
 import datetime
+import warnings
 import random
 import time
 import copy
@@ -54,7 +55,8 @@ class PalilaExperiment(ConfigObj):
     """
 
     def __init__(self, name: str) -> None:
-        super().__init__(os.path.abspath(f'{name}.palila'))
+        self.palila_path = os.path.abspath(f'{name}.palila')
+        super().__init__(self.palila_path)
         self.name = name
         self.path = os.path.abspath(f'{name}')
         self.response_path = os.path.join(self.path, 'responses')
@@ -280,6 +282,12 @@ class PalilaExperiment(ConfigObj):
                 self.question_id_list.append(qid)
                 questionnaire_dict[question]['id'] = qid
 
+            if 'dependant' in questionnaire_dict[question]:
+                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
+                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
+                                       'condition" instead.',
+                                       DeprecationWarning, f'{self.name}.palila', 0)
+
         # Store the split dictionary in the questionnaire dictionary
         questionnaire_dict['screen dict'] = screen_dict
 
@@ -341,6 +349,12 @@ class PalilaExperiment(ConfigObj):
             qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
             self.question_id_list.append(qid)
             self[part][audio][question]['id'] = qid
+
+            # if 'dependant' in self[part][audio][question]:
+            #     warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
+            #                            'in future versions. Please use the new system with "unlocked by" and "unlock '
+            #                            'condition" instead.',
+            #                            DeprecationWarning, f'{self.name}.palila', 0)
 
     def _prepare_part(self, ip: int, part: str, previous_part: str, previous_audio: str, previous_name: str, ):
         """
