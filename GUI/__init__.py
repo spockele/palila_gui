@@ -32,6 +32,7 @@ from .audio_screen import *
 from .file_system import *
 from .questionnaire_screen import *
 from .screens import *
+from .progress_tracker import construct_progress_tracker
 
 
 __all__ = ['PalilaApp', ]
@@ -76,30 +77,44 @@ class PalilaScreenManager(ScreenManager):
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
+        # Little shortcut for the purpose of testing stuff
+        override = self.experiment.as_bool('override')
+        # Determine the division of the audios over the parts for the progress tracker
+        division = [len(self.experiment[part]['audios']) for part in self.experiment['parts']]
+
         # Add the welcome screen
         self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
                                       '', 'main-questionnaire-1', name='welcome'))
+
         # Add the demo screen if that is required and set the correct screen as current
         if self.experiment.as_bool('demo'):
-            self.add_widget(AudioQuestionScreen({}, demo=True, name='demo'))
+            screen = AudioQuestionScreen({}, demo=True, name='demo')
+            tracker = construct_progress_tracker(sum(division) // 2 + 1, division)
+            screen.add_widget(tracker)
+            self.add_widget(screen)
             self.current = 'demo'
         else:
             self.current = 'welcome'
 
-        # Little shortcut for the purpose of testing stuff
-        override = self.experiment.name == 'gui_dev' and self.experiment.as_bool('override')
         # Set up the first questionnaire
         questionnaire_setup(self.experiment['questionnaire'], self, override)
 
+        # Initialise the counter for the progress bar
+        progress = 0
         # Loop over the experiment parts
         for part in self.experiment['parts']:
             # Add the introductions
             self.add_widget(TimedTextScreen(self.experiment[part]['intro'], name=f'{part}-intro'))
             # Within each part, loop over the audios
             for ia, audio in enumerate(self.experiment[part]['audios']):
+                # Up the progress counter by 1
+                progress += 1
                 # Create the AudioQuestionScreen and add it to the manager
-                self.add_widget(AudioQuestionScreen(self.experiment[part][audio],
-                                                    name=f'{part}-{audio}', state_override=override))
+                screen = AudioQuestionScreen(self.experiment[part][audio],
+                                             name=f'{part}-{audio}', state_override=override)
+                tracker = construct_progress_tracker(progress, division)
+                screen.add_widget(tracker)
+                self.add_widget(screen)
 
                 # Check if a break should be added.
                 if 'break' in self.experiment[part][audio]['next']:
