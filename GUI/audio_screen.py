@@ -90,6 +90,7 @@ class AudioQuestionScreen(PalilaScreen):
             self.ids.audio_managers.size_hint_x = 1.
             self.audio_manager_right.initialise_manager(self.config_dict['filepath_2'],
                                                         int(self.config_dict['max replays']), self)
+            self.audio_manager_right.active = True
             self.ids.extra_message.text = 'Listen to both samples at least once before answering the question.'
 
         # Add the questions from the input file to the question manager
@@ -108,6 +109,15 @@ class AudioQuestionScreen(PalilaScreen):
         for qid, answer in self.ids.question_manager.answers.items():
             # Store the answers, question by question
             self.manager.store_answer(qid, answer)
+
+        if int(self.config_dict['max replays']) > 1:
+            if self.audio_manager_right.active:
+                self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays-left',
+                                          str(self.audio_manager_left.count))
+                self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays-right',
+                                          str(self.audio_manager_right.count))
+            else:
+                self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays', self.audio_manager_left.count)
 
     def unlock_check(self, question_state: bool = None):
         """
@@ -265,6 +275,7 @@ class AudioManagerRight(AudioManager):
     """
     Subclass of GUI.AudioManager for the optional second one on the right side of the AudioQuestionScreen.
     """
+    active = False
     pass
 
 

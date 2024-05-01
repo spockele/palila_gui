@@ -336,18 +336,21 @@ class PalilaExperiment(ConfigObj):
 
             self[part][audio]['questions'] = self[part]['questions'].keys()
 
+        # Extract the part, audio and question names
+        part_id = part.replace('part ', '')
+        audio_id = audio.replace('audio ', '')
+        self[part][audio]['part-audio'] = f'{part_id.zfill(2)}-{audio_id.zfill(2)}'
+
         # Loop over the questions
         for question in self[part][audio]['questions']:
             # Remove tabs from the input file in the question text
             self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
+
             # Generate a standardised question id
-            # Extract the part, audio and question names
-            part_id = part.replace('part ', '')
-            audio_id = audio.replace('audio ', '')
+            # Extract the question name
             question_id = question.replace('question ', '')
 
-            self[part][audio][question]['part-audio'] = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-'
-
+            self[part][audio][question]['part-audio'] = self[part][audio]['part-audio'] + '-'
             # Put everything together and add to the list
             qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
             self.question_id_list.append(qid)
