@@ -5,43 +5,58 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+[//]: # (## [Unreleased])
 
-## [Unreleased]
+[//]: # (### Added)
+
+[//]: # (### Changed)
+
+[//]: # (### Deprecated)
+
+[//]: # (### Removed)
+
+[//]: # (### Fixed)
+
+## [v1.1.0] - tbd
 
 ### Added
-- Added a QuestionManager class to the questionnaire system to get closer to the system of audio questions.
-- Created a ButtonAQuestion superclass for all question types that use buttons to answer (MultipleChoice, IntegerScale, etc.)
-- Created a MultiMultipleChoiceQQuestion class to allow for multiple choice multiple answer questions in Questionnaires.
 - The number of replays of sound samples is now recorded in the output file:
   - For audio screens with 1 sample: ```<part name>-<audio name>(_<repetition index>)-replays```
   - For audio screens with 2 samples: ```<part name>-<audio name>(_<repetition index>)-replays-left``` and 
 ```<part name>-<audio name>(_<repetition index>)-replays-right```
+
+
+- Added a QuestionManager class to the questionnaire system to get closer to the system of audio questions.
+- Created a ButtonAQuestion superclass for all question types that use buttons to answer (MultipleChoice, IntegerScale, etc.)
+- Created a MultiMultipleChoiceQQuestion class to allow for multiple choice multiple answer questions in Questionnaires.
+- Progress bar at the bottom of the screen to show progression through the experiment.
   
 
 ### Changed
-1. Code restructure to make the audio and questionnaire question systems more uniform. 
-   - Answers are now stored directly in a ```QuestionManager.answers```, which is the Layout that holds the Question widgets.
-   - Changed the multitude of functions to trigger an answer change to one singular ```change_answer()``` function.
-   - The ```change_answer()``` function is now supplemented by a type-specific trigger function per question type.
-   - ChoiceButton classes are now functionally the same.
-   - questionnaire.py and questionnaire.kv have been split into questionnaire_questions and questionnaire_screen.
-   - Logic for splitting the questionnaire over multiple sceens is moved to an external function ```questionnaire_setup()```.
+- Code restructure to make the audio and questionnaire question systems more uniform. 
+  - Answers are now stored directly in a ```QuestionManager.answers```, which is the Layout that holds the Question widgets.
+  - Changed the multitude of functions to trigger an answer change to one singular ```change_answer()``` function.
+  - The ```change_answer()``` function is now supplemented by a type-specific trigger function per question type.
+  - ChoiceButton classes are now functionally the same.
+  - questionnaire.py and questionnaire.kv have been split into questionnaire_questions and questionnaire_screen.
+  - Logic for splitting the questionnaire over multiple sceens is moved to an external function ```questionnaire_setup()```.
 
-2. An empty questionnaire block now results in no questionnnaire screen appearing at all.
-3. Repetition numbering of questions is now 1-indexed instead of 0-indexed.
-4. Timer now starts when leaving the welcome screen instead of when leaving the startup questionnaire.
 
-5. Change in the logic behind the keywords ```dependant``` and ```dependant condition```:
-   - They are now defined in the conditionally unlocked question and renamed: ```unlocked by``` and ```unlock condition```.
+- Change in the logic behind the keywords ```dependant``` and ```dependant condition```:
+  - They are now defined in the conditionally unlocked question and renamed: ```unlocked by``` and ```unlock condition```.
+
+
+- An empty questionnaire block now results in no questionnnaire screen appearing at all.
+- Repetition numbering of questions is now 1-indexed instead of 0-indexed.
+- Timer now starts when leaving the welcome screen instead of when leaving the startup questionnaire.
 
 ### Deprecated
-- The keywords ```dependant``` and ```dependant condition``` will be removed.
+- The keywords ```dependant``` and ```dependant condition``` will be removed in future versions.
   - This version supports the old system where these are defined in the question that conditionally unlocks another.
   - Future versions will only support the new system as described in ```change 5.```.
 
 ### Removed
-- AnswerHolder removed from audio_questions.py.
-
+- N/A
 
 ### Fixed
 - Spinner Audio questions did not record their answer to the output file. This is fixed.
