@@ -70,7 +70,8 @@ class AudioQuestionScreen(PalilaScreen):
                  }
 
     def __init__(self, config_dict: dict, demo: bool = False, state_override: bool = False, **kwargs) -> None:
-        self.config_dict = config_dict if not demo else self.demo_dict
+        self.demo = demo
+        self.config_dict = config_dict if not self.demo else self.demo_dict
 
         super().__init__(self.config_dict['previous'], self.config_dict['next'], lock=True, **kwargs)
         self.state_override = state_override
@@ -106,6 +107,9 @@ class AudioQuestionScreen(PalilaScreen):
         """
         Store the answers when leaving the screen.
         """
+        if self.demo:
+            return
+
         for qid, answer in self.ids.question_manager.answers.items():
             # Store the answers, question by question
             self.manager.store_answer(qid, answer)
