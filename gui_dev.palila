@@ -90,10 +90,11 @@ override = no
 
 	[[audio 2]]
 		filename = 'prototyping_placeholder.wav'
+		filename_2 = 'prototyping_placeholder.wav'
 		max replays = 5
 
 		[[[question q1]]]
-			text = 'This is an example of a sound sample that can be repeated.'
+			text = 'This is an example of sound samples that can be replayed.'
 			type = Text
 
 	[[questionnaire]]
@@ -150,13 +151,13 @@ override = no
 			type = MultipleChoice
 			choices = 'Yes', 'No', 'Not Sure'
 
-			dependant = 'mcc'
-			dependant condition = 'Yes'
-
 		[[[question mcc]]]
 			text = '''This is another question, dependant on the answer of the above.'''
 			type = MultipleChoice
 			choices = 'Ok', 'Understood'
+
+			unlocked by = 'mc'
+			unlock condition = 'Yes'
 
 	[[audio 3]]
 		filename = 'prototyping_placeholder.wav'
