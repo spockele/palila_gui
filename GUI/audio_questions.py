@@ -28,13 +28,12 @@ class AudioChoiceButton(Button):
     ----------
     text : str
         Text to be displayed on the button.
-    font_size : int, optional
         Optional font size of the text. Defaults to 72.
     **kwargs
         Keyword arguments. These are passed on to the kivy.uix.button.Button constructor.
     """
-    def __init__(self, text: str = '', font_size: int = 72, **kwargs) -> None:
-        super().__init__(text=text, font_size=font_size, **kwargs)
+    def __init__(self, text: str = '', **kwargs) -> None:
+        super().__init__(text=text, **kwargs)
 
     def select(self) -> None:
         """
@@ -83,8 +82,6 @@ class AudioQuestion(BoxLayout):
         self.question_dict = question_dict
         self.qid = question_dict['id']
         self.ids.question_text.text = question_dict['text']
-        if '\n' in question_dict['text']:
-            self.ids.question_text.font_size = 42
 
         # ==============================================================================================================
         # todo: DEPRECATED CODE
@@ -164,7 +161,6 @@ class TextAQuestion(AudioQuestion):
     def __init__(self, question_dict: dict, **kwargs):
         super().__init__(question_dict, **kwargs)
         self.ids.question_text.valign = 'center'
-        self.ids.question_text.font_size = 42
 
 
 class ButtonAQuestion(AudioQuestion):
@@ -173,7 +169,7 @@ class ButtonAQuestion(AudioQuestion):
         self.buttons = []
         # Add the choices from the input file
         for choice in self.question_dict['choices']:
-            button = AudioChoiceButton(choice, font_size=48)
+            button = AudioChoiceButton(choice, font_size=42)
             self.buttons.append(button)
             self.ids.answer_options.add_widget(button)
 

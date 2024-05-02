@@ -235,7 +235,6 @@ class EndScreen(PalilaScreen):
         self.back_button = BackButton()
         self.back_button.pos_hint = {'right': .495, 'y': .015}
         self.back_button.size_hint = (.145, .1)
-        self.back_button.font_size = 32
         self.back_button.text = 'Back to first\nQuestionnaire'
         # Add the button to the screen
         self.add_widget(self.back_button)
