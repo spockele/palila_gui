@@ -320,9 +320,7 @@ class PalilaExperiment(ConfigObj):
         self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
         if 'filename_2' in self[part][audio].keys():
             self[part][audio]['filepath_2'] = os.path.join(self.path, self[part][audio]['filename_2'])
-        # Define the max number of replays
-        if 'max replays' not in self[part][audio].keys():
-            self[part][audio]['max replays'] = '1'
+
         # Extract the filler option
         if 'filler' not in self[part][audio].keys():
             self[part][audio]['filler'] = True
@@ -346,6 +344,17 @@ class PalilaExperiment(ConfigObj):
         part_id = part.replace('part ', '')
         audio_id = audio.replace('audio ', '')
         self[part][audio]['part-audio'] = f'{part_id.zfill(2)}-{audio_id.zfill(2)}'
+
+        # Define the max number of replays
+        if 'max replays' not in self[part][audio]:
+            self[part][audio]['max replays'] = '1'
+        # If that is more than 1, put counters in the question ID list.
+        elif int(self[part][audio]['max replays']) > 1:
+            if 'filename_2' in self[part][audio]:
+                self.question_id_list.append(f'{self[part][audio]["part-audio"]}-replays-left')
+                self.question_id_list.append(f'{self[part][audio]["part-audio"]}-replays-right')
+            else:
+                self.question_id_list.append(f'{self[part][audio]["part-audio"]}-replays')
 
         # Loop over the questions
         for question in self[part][audio]['questions']:
