@@ -123,7 +123,7 @@ class AudioQuestionScreen(PalilaScreen):
             else:
                 self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays', self.audio_manager_left.count)
 
-    def unlock_check(self, question_state: bool = None):
+    def unlock_check(self, question_state: bool = None) -> None:
         """
         Check whether the continue button can be unlocked.
 
@@ -214,7 +214,7 @@ class AudioManager(BoxLayout):
 
         self.parent_screen = parent_screen
 
-    def play(self):
+    def play(self) -> None:
         """
         Function that starts the audio.
         """
@@ -235,7 +235,7 @@ class AudioManager(BoxLayout):
             # Up the count
             self.count += 1
 
-    def _done_playing(self):
+    def _done_playing(self) -> None:
         """
         on_stop function for the audio.
         """
@@ -356,8 +356,13 @@ class AQuestionManager(BoxLayout):
             for ii in range(self.n_max - self.n_question):
                 self.add_widget(Filler())
 
+        # Loop over the questions and lock the dependent ones
         for question in self.questions.values():
+            # ==========================================================================================================
+            # todo: DEPRECATED CODE
+            # ---------------------
             question.set_dependant()
+            # ==========================================================================================================
             question.set_unlock()
 
     def unlock(self) -> None:
@@ -384,6 +389,16 @@ class AQuestionManager(BoxLayout):
         return total_state
 
     def change_answer(self, question_id: str, answer: str) -> None:
+        """
+        Update the answer of the question with the given ID.
+
+        Parameters
+        ----------
+        question_id : str
+            ID of the question for which to change the answer.
+        answer : str
+            The answer string to update to.
+        """
         self.answers[question_id] = answer
         # Have the AudioQuestionScreen check the state
         self.parent.parent.unlock_check(question_state=self.get_state() and not self.disabled)
