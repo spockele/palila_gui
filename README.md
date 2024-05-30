@@ -51,7 +51,7 @@ limitations under the License.
 ### Citation
 If you use this code for published research, please cite it as below:
 ```
-Pockelé, J.S. (2024). Graphical User Interface for the Psychoacoustic Listening Laboratory (PALILA GUI) (version v1.0.0). Zenodo. DOI: 10.5281/zenodo.11028965.
+Pockelé, J.S. (2024). Graphical User Interface for the Psychoacoustic Listening Laboratory (PALILA GUI) (version v1.1.0). Zenodo. DOI: 10.5281/zenodo.11028965.
 ```
 
 ---
