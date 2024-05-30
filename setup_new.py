@@ -41,7 +41,7 @@ override = no
     [[questions]]
         [[[question q1]]]
             text = '''What number from 0 to 10 best shows how much you would be bothered, disturbed
-                or annoyed by this sound?'''
+or annoyed by this sound?'''
             type = IntegerScale
 
             min = 0
