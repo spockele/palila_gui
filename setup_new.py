@@ -102,7 +102,7 @@ if __name__ == '__main__':
         lines = py_file.readlines()
     # Overwrite the run line in the main python file
     for li, line in enumerate(lines):
-        if 'PalilaApp' in line:
+        if 'PalilaApp' in line and '.run()' in line:
             lines[li] = f"    PalilaApp('{experiment_name}').run()\n"
     # Rewrite the main python file
     with open('main.py', 'w') as py_file:
