@@ -12,9 +12,10 @@
 :: See the License for the specific language governing permissions and
 :: limitations under the License.
 
+:: Terminal script to run the respone merging script
 
 @echo off
 
 .\venv\Scripts\python.exe -m merge_responses
 
-set /p n="Succesfully merged the particpant responses. Press any key to exit. "
+set /p n="Press any key to exit. "

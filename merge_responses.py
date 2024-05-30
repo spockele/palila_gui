@@ -13,10 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+------------------------------------------------------------------------------------------------------------------------
+
 Script to merge all response files in an experiment to one response table file.
 Removes the participant ID and shuffles the results. Will not interpret NaN values in the original response files.
 Output can be found in the experiment directory, as 'responses_table.csv'.
 The table is 1-indexed for all the MATLAB freaks ;)
+
+------------------------------------------------------------------------------------------------------------------------
 """
 import pandas as pd
 from random import shuffle
