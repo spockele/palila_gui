@@ -46,40 +46,6 @@
         spacing: 20
 
 
-<SpinnerAQuestion>
-	Spinner:
-		id: spinner
-
-		pos_hint: {'center_x': .5}
-		size_hint: .55, .35
-
-		text: root.text
-
-		text_size: .96 * self.size[0], self.size[1]
-		halign: 'left'
-		valign: 'center'
-
-		on_text: root.spinner_input()
-
-		Image:
-			source: 'GUI/assets/arrow.png'
-			size: .1 * self.parent.size[0], .7 * self.parent.size[1]
-			pos: self.parent.pos[0] + .85 * self.parent.size[0], self.parent.pos[1] + .15 * self.parent.size[1]
-
-			canvas.before:
-				PushMatrix
-				Rotate:
-					axis: 0, 0, 1
-					angle: -90
-					origin: self.center
-
-			canvas.after:
-				PopMatrix
-
-	Widget:
-		size_hint_y: .14
-
-
 <IntegerScaleAQuestion>
     FloatLayout:
         size_hint_y: .6
@@ -122,142 +88,6 @@
                     pos: self.pos
                     size: self.size
                     radius: [self.size[1] / 2.5]
-
-
-<SliderAQuestion>
-	BoxLayout:
-        id: answer_options
-
-        size_hint_y: .5
-
-        orientation: 'horizontal'
-        spacing: 30
-
-        Label:
-            id: left_note
-
-            size_hint: .15, 1
-
-            text: ''
-
-            text_size: self.size
-            halign: 'right'
-            valign: 'center'
-
-        FloatLayout:
-        	id: slider_holder
-
-			size_hint: .7, 1.
-
-        	Widget:
-        		pos_hint: {'center_x': .5, 'y': .20}
-        		size_hint: .01, .6
-
-        		canvas.after:
-        			Color:
-        				rgba: .8, .8, .8, 1.
-        			RoundedRectangle:
-        				size: self.size
-        				pos: self.pos
-        				radius: (5., )
-
-        	Widget:
-        		pos_hint: {'center_x': 0, 'y': .20}
-        		size_hint: .01, .6
-
-        		canvas.after:
-        			Color:
-        				rgba: .8, .8, .8, 1.
-        			RoundedRectangle:
-        				size: self.size
-        				pos: self.pos
-        				radius: (5., )
-
-        	Widget:
-        		pos_hint: {'center_x': 1., 'y': .20}
-        		size_hint: .01, .6
-
-        		canvas.after:
-        			Color:
-        				rgba: .8, .8, .8, 1.
-        			RoundedRectangle:
-        				size: self.size
-        				pos: self.pos
-        				radius: (5., )
-
-			Slider:
-				id: slider
-
-				pos_hint: {'center_x': .5, 'center_y': .5}
-				size_hint: 1., 1.
-
-				background_disabled_horizontal: 'GUI/assets/Slider_background_disabled.png'
-				background_horizontal: 'GUI/assets/Slider_background.png'
-				border_horizontal: 15, 15, 15, 15
-
-				cursor_disabled_image: 'GUI/assets/Slider_cursor_disabled.png'
-				cursor_image: 'GUI/assets/Slider_cursor.png'
-				cursor_height: 100
-				cursor_width: 30
-
-				padding: 0
-
-				min: root.min
-				max: root.max
-				step: root.step
-				value: root.value
-
-				on_value: root.slider_input()
-
-        	Label:
-        		pos_hint: {'center_x': slider.value_normalized, 'y': .82}
-        		size_hint: .06, .33
-
-        		text: str(slider.value)
-
-        		text_size: self.size
-        		halign: 'center'
-        		valign: 'bottom'
-
-        		canvas.before:
-        			Color:
-        				rgba: root.slider_color
-        			RoundedRectangle:
-        				size: self.size
-        				pos: self.pos
-        				radius: (5., )
-
-        	Label:
-        		pos_hint: {'center_x': 0., 'top': .175}
-        		size_hint: .1, .15
-
-        		text: str(root.min)
-
-        	Label:
-        		pos_hint: {'center_x': .5, 'top': .175}
-        		size_hint: .1, .15
-
-        		text: str((root.max + root.min) / 2.)
-
-        	Label:
-        		pos_hint: {'center_x': 1., 'top': .175}
-        		size_hint: .1, .15
-
-        		text: str(root.max)
-
-        Label:
-            id: right_note
-
-            size_hint: .15, 1
-
-            text: ''
-
-            text_size: self.size
-            halign: 'left'
-            valign: 'center'
-
-    Widget:
-    	size_hint_y: .05
 
 
 <PointCompassAQuestion>
@@ -494,3 +324,173 @@
 				size: self.parent.size
 
 				source: 'GUI/assets/arrow.png'
+
+
+<SpinnerAQuestion>
+	Spinner:
+		id: spinner
+
+		pos_hint: {'center_x': .5}
+		size_hint: .55, .35
+
+		text: root.text
+
+		text_size: .96 * self.size[0], self.size[1]
+		halign: 'left'
+		valign: 'center'
+
+		on_text: root.spinner_input()
+
+		Image:
+			source: 'GUI/assets/arrow.png'
+			size: .1 * self.parent.size[0], .7 * self.parent.size[1]
+			pos: self.parent.pos[0] + .85 * self.parent.size[0], self.parent.pos[1] + .15 * self.parent.size[1]
+
+			canvas.before:
+				PushMatrix
+				Rotate:
+					axis: 0, 0, 1
+					angle: -90
+					origin: self.center
+
+			canvas.after:
+				PopMatrix
+
+	Widget:
+		size_hint_y: .14
+
+
+<SliderAQuestion>
+	BoxLayout:
+        id: answer_options
+
+        size_hint_y: .5
+
+        orientation: 'horizontal'
+        spacing: 30
+
+        Label:
+            id: left_note
+
+            size_hint: .15, 1
+
+            text: ''
+
+            text_size: self.size
+            halign: 'right'
+            valign: 'center'
+
+        FloatLayout:
+        	id: slider_holder
+
+			size_hint: .7, 1.
+
+        	Widget:
+        		pos_hint: {'center_x': .5, 'y': .20}
+        		size_hint: .01, .6
+
+        		canvas.after:
+        			Color:
+        				rgba: .8, .8, .8, 1.
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+        	Widget:
+        		pos_hint: {'center_x': 0, 'y': .20}
+        		size_hint: .01, .6
+
+        		canvas.after:
+        			Color:
+        				rgba: .8, .8, .8, 1.
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+        	Widget:
+        		pos_hint: {'center_x': 1., 'y': .20}
+        		size_hint: .01, .6
+
+        		canvas.after:
+        			Color:
+        				rgba: .8, .8, .8, 1.
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+			Slider:
+				id: slider
+
+				pos_hint: {'center_x': .5, 'center_y': .5}
+				size_hint: 1., 1.
+
+				background_disabled_horizontal: 'GUI/assets/Slider_background_disabled.png'
+				background_horizontal: 'GUI/assets/Slider_background.png'
+				border_horizontal: 15, 15, 15, 15
+
+				cursor_disabled_image: 'GUI/assets/Slider_cursor_disabled.png'
+				cursor_image: 'GUI/assets/Slider_cursor.png'
+				cursor_height: 100
+				cursor_width: 30
+
+				padding: 0
+
+				min: root.min
+				max: root.max
+				step: root.step
+				value: root.value
+
+				on_value: root.slider_input()
+
+        	Label:
+        		pos_hint: {'center_x': slider.value_normalized, 'y': .82}
+        		size_hint: .06, .33
+
+        		text: str(slider.value)
+
+        		text_size: self.size
+        		halign: 'center'
+        		valign: 'bottom'
+
+        		canvas.before:
+        			Color:
+        				rgba: root.slider_color
+        			RoundedRectangle:
+        				size: self.size
+        				pos: self.pos
+        				radius: (5., )
+
+        	Label:
+        		pos_hint: {'center_x': 0., 'top': .175}
+        		size_hint: .1, .15
+
+        		text: str(root.min)
+
+        	Label:
+        		pos_hint: {'center_x': .5, 'top': .175}
+        		size_hint: .1, .15
+
+        		text: str((root.max + root.min) / 2.)
+
+        	Label:
+        		pos_hint: {'center_x': 1., 'top': .175}
+        		size_hint: .1, .15
+
+        		text: str(root.max)
+
+        Label:
+            id: right_note
+
+            size_hint: .15, 1
+
+            text: ''
+
+            text_size: self.size
+            halign: 'left'
+            valign: 'center'
+
+    Widget:
+    	size_hint_y: .05
