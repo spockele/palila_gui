@@ -26,10 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ```<part name>-<audio name>(_<repetition index>)-replays-right```
 
 
-- Added a QuestionManager class to the questionnaire system to get closer to the system of audio questions.
-- Created a ButtonAQuestion superclass for all question types that use buttons to answer (MultipleChoice, IntegerScale, etc.)
-- Created a MultiMultipleChoiceQQuestion class to allow for multiple choice multiple answer questions in Questionnaires.
+- A QuestionManager class to the questionnaire system to get closer to the system of audio questions.
+- A ButtonAQuestion superclass for all question types that use buttons to answer (MultipleChoice, IntegerScale, etc.)
+- A MultiMultipleChoiceQQuestion class to allow for multiple choice multiple answer questions in Questionnaires.
 - Progress bar at the bottom of the screen to show progression through the experiment.
+- A script to easily and quickly set up a new experiment.
   
 
 ### Changed
