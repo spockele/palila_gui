@@ -107,6 +107,7 @@ class AudioQuestionScreen(PalilaScreen):
         """
         Store the answers when leaving the screen.
         """
+        # Do not store answers if this screen is in demo mode
         if self.demo:
             return
 
