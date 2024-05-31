@@ -302,7 +302,7 @@ class PalilaExperiment(ConfigObj):
 
         return questionnaire_dict
 
-    def _prepare_part_audio(self, part: str, audio: str, question_overwrite: bool = False):
+    def _prepare_part_audio(self, part: str, audio: str, question_overwrite: bool = False) -> None:
         """
         Prepares a specific audio's dictionary.
 
@@ -337,7 +337,7 @@ class PalilaExperiment(ConfigObj):
                 self[part][audio][key] = {}
                 for subkey, sub_value in value.items():
                     self[part][audio][key][subkey] = copy.deepcopy(sub_value)
-
+            # Add the ids of the questions to the list in this audio
             self[part][audio]['questions'] = self[part]['questions'].keys()
 
         # Extract the part, audio and question names
@@ -386,7 +386,8 @@ class PalilaExperiment(ConfigObj):
                                        DeprecationWarning, f'{self.name}.palila', 0)
             # ==========================================================================================================
 
-    def _prepare_part(self, ip: int, part: str, previous_part: str, previous_audio: str, previous_name: str, ):
+    def _prepare_part(self, ip: int, part: str, previous_part: str,
+                      previous_audio: str, previous_name: str, ) -> tuple[str, str]:
         """
         Prepares the full dictionary of a part of the experiment.
 
@@ -536,17 +537,21 @@ class PalilaExperiment(ConfigObj):
         # ==============================================================================================================
 
         if 'welcome' not in self.keys():
+            # Add the default message if it is not defined in the input file
             self['welcome'] = 'Welcome to this listening experiment.\nPlease enter your participant ID:'
         else:
             # Fix the welcome message.
             self['welcome'] = self['welcome'].replace('\t', '')
 
         if 'goodbye' not in self.keys():
+            # Add the default message if it is not defined in the input file
             self['goodbye'] = 'Thank you for your participation in this experiment!'
         else:
+            # Fix the goodbye message.
             self['goodbye'] = self['goodbye'].replace('\t', '')
 
         if 'demo' not in self.keys():
+            # Set up the demo variable
             self['demo'] = 'no'
 
         # Prepare the main questionnaire
@@ -611,6 +616,7 @@ class PalilaAnswers:
         else:
             self.pid = None
 
+        # Initialise the indicator to show if the timer is running.
         self.timing = False
 
     def set_pid(self, pid: str) -> None:
@@ -647,14 +653,9 @@ class PalilaAnswers:
     def stop_timer(self) -> None:
         """
         Determine the completion time with the previously set start time.
-
-        Raises
-        ------
-        RuntimeError
-            In case the timer value in the PalilaAnswers().out DataFrame was not set before calling this function.
         """
         if self.out.loc['response', 'timer'] == '':
-            raise RuntimeError('No start time was set in the timer. Cannot determine completion time.')
+            print('No start time was set in the timer. Cannot determine completion time.')
         elif self.timing:
             self.timing = False
             self.out.loc['response', 'timer'] = str(time.time() - float(self.out.loc['response', 'timer']))
@@ -663,4 +664,4 @@ class PalilaAnswers:
                   f'{str(round(float(self.out.loc["response", "timer"]) % 60)).zfill(2)} minutes.')
 
         else:
-            raise RuntimeError('Timer has already stopped.')
+            print('Timer has already stopped.')
