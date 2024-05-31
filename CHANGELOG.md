@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Change in the logic behind the keywords ```dependant``` and ```dependant condition```:
   - They are now defined in the conditionally unlocked question and renamed: ```unlocked by``` and ```unlock condition```.
+  - All question types now allow for conditional locking/unlocking.
 
 
 - An empty questionnaire block now results in no questionnnaire screen appearing at all.
