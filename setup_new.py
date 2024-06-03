@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # Ask user for the experiment name.
     experiment_name = input('Enter a name for your experiment: ')
 
-    # Don't do any of the create and/or replace actions in case of gui_dev
+    # Don't do any of these actions in case of gui_dev
     if not experiment_name == 'gui_dev':
         # Check if an experiment directory with this name already exists.
         if os.path.isdir(experiment_name):
