@@ -16,7 +16,7 @@ Graphical user interface for listening experiments in the
 - Windows 10 or 11.
 - [Python](https://www.python.org/) version 3.11 or newer. 
   - Enable <b><u>'Add Python to PATH'</u></b> while installing.
-- A touchscreen device with a resolution of 1920 x 1200.
+- A touchscreen device with a resolution of 1920 x 1200 at 100% screen scaling.
   - Other resolutions will result in visual defects.
 
 ### Installation
