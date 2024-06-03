@@ -99,8 +99,8 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
                                             #   put the question. Has no effect if manual split = no.
                                             #
         unlocked by = <string>  (optional)            # -> Question ID of another questionnaire question, which locks 
-                                                      #   and unlocks this question until the answer in the other 
-                                                      #   question equals the value in 'unlock condition'.
+                                                      #   this question until the answer in the other question equals 
+                                                      #   the value in 'unlock condition'.
         unlock condition = <string>  (optional)       # -> The value the answer of the unlocking question has to take 
                                                       #   to unlock this question.
 
@@ -136,10 +136,11 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
         repeat = <integer> (optional)       # -> Defines the number of times this audio is repeated in the part.
                                             #   Defaults to 1.
                                             
-        dependant = <string>  (optional)              # -> Question name of another audio question, which is 
-                                                      #   locked until the condition in this question is met.
-        dependant condition = <string>  (optional)    # -> The value the answer of this question has to take to unlock 
-                                                      #   the dependant question.
+        unlocked by = <string>  (optional)            # -> Question ID of another audio question, which locks 
+                                                      #   this question until the answer in the other question 
+                                                      #   equals the value in 'unlock condition'.
+        unlock condition = <string>  (optional)       # -> The value the answer of the unlocking question has to take 
+                                                      #   to unlock this question.
                                             
         [[[question <string>]]]             # -> SubSubSection defining a single question for the audio sample.
             type = <string>                     # -> Defines the type of question. 
