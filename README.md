@@ -56,18 +56,17 @@ Pockelé, J.S. (2024). Graphical User Interface for the Psychoacoustic Listening
 
 ---
 ## Experiment Configuration
-The experiment configuration consists of the following additons/changes to this code, where ```<experiment name>``` represents the name you use for your experiment:
-- An experiment config file (```<experiment name>.palila```)
+The experiment configuration consists of the following files in this directory, where ```<experiment name>``` represents the name you use for your experiment:
+- An experiment configuration file (```<experiment name>.palila```)
   - Defines the experiment (audios, questions, etc.).
   - An example can be found in ```gui_dev.palila```.
   - The structure of this file is described in the [following section](#configfile_structure).
 - An experiment file directory (```.\<experiment name>```)
   - Contains the audio samples and the responses of the experiment.
   - See for example the ```.\gui_dev``` directory.
-- Modify line 5 in ```main.py``` file:
-  ```
-  PalilaApp('<experiment mame>').run()
-  ```
+
+The script ```setup_new.bat``` will create the configuration file and experiment file directory for you, and do the necessary modification in the code for it to run.
+
 
 ### Config file structure (```.palila```)
 <a id="configfile_structure"></a>
