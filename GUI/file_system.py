@@ -554,6 +554,10 @@ class PalilaExperiment(ConfigObj):
             # Set up the demo variable
             self['demo'] = 'no'
 
+        if 'override' not in self.keys():
+            # Set up the demo variable
+            self['override'] = 'no'
+
         # Prepare the main questionnaire
         self._prepare_questionnaire(self['questionnaire'], 'main')
 

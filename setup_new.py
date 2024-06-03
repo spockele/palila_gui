@@ -30,7 +30,6 @@ NEW_STRING = """## This is your experiment input file.
 pid mode = auto
 randomise = no
 demo = no
-override = no
 
 [questionnaire]
     default = yes
