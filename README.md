@@ -97,7 +97,7 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
         text = <string>                     # -> Defines the question text.
         manual screen = <integer>           # -> In case of manual split = yes, this defines the screen to 
                                             #   put the question. Has no effect if manual split = no.
-                                            #
+                                            
         unlocked by = <string>  (optional)            # -> Question ID of another questionnaire question, which locks 
                                                       #   this question until the answer in the other question equals 
                                                       #   the value in 'unlock condition'.
@@ -120,7 +120,7 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
     
     [[intro]] (optional)                # -> Optional introduction message to the experiment part.
         text = <string>                     # -> Introduction message text.
-        time = <integer>                      # -> Duration of the intro timer in seconds.
+        time = <integer>                    # -> Duration of the intro timer in seconds.
         
     [[questions]] (optional)            # -> Optional SubSection to define the questions for all audios in this part.
                                         #   See below how to define questions. Questions in [Audio <string>] will be 
@@ -254,14 +254,14 @@ be generated. The format is defined:
 - All question, audio and part names will be adjusted to at least 2 characters with ```str().zfill(2)```.
 
 The names (part, audio and question) are the ```<string>``` values defined in the brackets of the input file.\
-<b>NOTE</b>: When ```repeat``` is set in an ```[audio]``` section, a two digit (01, 02, ...) ```<repetition index>``` is added 
-as follows: ```<part name>-<audio name>_<repetition index>-<question name>``` to all repetitions of the same question.
+<b>NOTE</b>: When ```repeat``` is set in an ```[audio]``` section, a two digit (01, 02, ...) ```<repetition index>``` is
+added between the audio and question name as follows:```<part name>-<audio name>_<repetition index>-<question name>```.
 
 ### Storing of audio replays
-In case an audio sample can be replayed, the number of replays is recorded under the following ```<question ID>``` format:
+In case an audio sample can be replayed, the number of replays is stored under the following ```<question ID>``` format:
 - For audio screens with 1 sample: ```<part name>-<audio name>(_<repetition index>)-replays```
 - For audio screens with 2 samples: ```<part name>-<audio name>(_<repetition index>)-replays-left``` and 
-```<part name>-<audio name>(_<repetition index>)-replays-right```
+```<part name>-<audio name>(_<repetition index>)-replays-right```, where 'left' and 'right' correspond to ```filename``` and ```filename_2```, respectively.
 
 [//]: # (---)
 
