@@ -299,12 +299,12 @@ class AQuestionManager(BoxLayout):
 
     Attributes
     ----------
-    n_max : int = 2
-        Maximum number of questions that will fit this manager.
     n_question : int
         Number of questions in this manager.
-    answered : dict of str:bool
-        Dictionary that tracks which questions have been answered.
+    questions : dict[str, QQuestion]
+        Dictionary that links the question IDs to the questions.
+    answers : dict[str, str]
+        Dictionary that stores the answers linked to question IDs.
     """
 
     n_max = 2
@@ -313,8 +313,9 @@ class AQuestionManager(BoxLayout):
         super().__init__(**kwargs)
         self.n_question = 0
         self.questions = {}
-        self.disabled = True
         self.answers = {}
+        # By default, disable this widget in Kivy
+        self.disabled = True
 
     def add_question(self, question_dict: dict) -> None:
         """
@@ -336,12 +337,15 @@ class AQuestionManager(BoxLayout):
             question_type = getattr(audio_questions, f'{question_dict["type"]}AQuestion')
             question: audio_questions.AudioQuestion = question_type(question_dict)
 
-            self.questions[question_dict['id']] = question
-            self.answers[question_dict['id']] = 'n/a' if question_dict["type"] == 'Text' else ''
             # Add the question to the widgets
             self.add_widget(question)
             # Update the counter
             self.n_question += 1
+
+            # Link the ID to the instance
+            self.questions[question_dict['id']] = question
+            # Create a spot in the answer dictionary
+            self.answers[question_dict['id']] = 'n/a' if question_dict["type"] == 'Text' else ''
 
         # Throw hands if the space is full
         else:
@@ -363,12 +367,13 @@ class AQuestionManager(BoxLayout):
 
         # Loop over the questions and lock the dependent ones
         for question in self.questions.values():
+            question.set_unlock()
+
             # ==========================================================================================================
             # todo: DEPRECATED CODE
             # ---------------------
             question.set_dependant()
             # ==========================================================================================================
-            question.set_unlock()
 
     def unlock(self) -> None:
         """
