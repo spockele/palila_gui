@@ -55,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - The keywords ```dependant``` and ```dependant condition``` will be removed in future versions.
   - This version supports the old system where these are defined in the question that conditionally unlocks another.
-  - Future versions will only support the new system as described in ```change 5.```.
+  - Future versions will only support the new system as described in ```change 2.```.
 
 ### Removed
 - N/A
