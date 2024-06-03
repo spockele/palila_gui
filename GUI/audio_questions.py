@@ -15,7 +15,7 @@ limitations under the License.
 
 ------------------------------------------------------------------------------------------------------------------------
 
-Module with all the code for the modular questions.
+Module with all the code for the modular audio questions.
 
 ------------------------------------------------------------------------------------------------------------------------
 """
@@ -144,6 +144,7 @@ class AudioQuestion(BoxLayout):
                 # Under all other conditions, lock the dependent question again.
                 question.dependant_lock()
 
+        # Communicate with the question manager
         self.parent.change_answer(self.qid, answer)
 
     def set_unlock(self) -> None:
@@ -154,9 +155,20 @@ class AudioQuestion(BoxLayout):
             # Determine the id of the question that unlocks this one
             unlocked_by_id = self.question_dict['part-audio'] + self.question_dict['unlocked by'].zfill(2)
             # Add this question to that question's dependents list
-            self.parent.questions[unlocked_by_id].dependants.append(self)
+            self.parent.questions[unlocked_by_id].assign_dependant(self)
             # Lock this question
             self.dependant_lock()
+
+    def assign_dependant(self, question) -> None:
+        """
+        Assign the given question as a dependent.
+
+        Parameters
+        ----------
+        question : AudioQuestion
+            The question to add to the list of dependant questions.
+        """
+        self.dependants.append(question)
 
     # ==================================================================================================================
     # todo: DEPRECATED CODE
@@ -251,7 +263,7 @@ class ButtonAQuestion(AudioQuestion):
 
     def select_choice(self, choice: AudioChoiceButton) -> None:
         """
-        Question triggered by an AudioChoiceButton.
+        Question triggered by pressing an AudioChoiceButton.
 
         Parameters
         ----------
