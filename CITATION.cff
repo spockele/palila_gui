@@ -13,5 +13,5 @@ authors:
 
 url: "https://github.com/spockele/palila_gui"
 identifier:
-	- type: doi
-	  value: 10.5281/zenodo.11028965
+- type: doi
+  value: 10.5281/zenodo.11028965
