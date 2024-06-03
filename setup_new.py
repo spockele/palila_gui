@@ -106,3 +106,14 @@ if __name__ == '__main__':
     # Rewrite the main python file
     with open('main.py', 'w') as py_file:
         py_file.writelines(lines)
+
+    # Read the current response merger python file of the GUI
+    with open('merge_responses.py', 'r') as py_file:
+        lines = py_file.readlines()
+    # Overwrite the path definition line in the python file
+    for li, line in enumerate(lines):
+        if 'CURRENT_PATH = os.path.abspath(' in line:
+            lines[li] = f"CURRENT_PATH = os.path.abspath('{experiment_name}')\n"
+    # Rewrite the python file
+    with open('merge_responses.py', 'w') as py_file:
+        py_file.writelines(lines)
