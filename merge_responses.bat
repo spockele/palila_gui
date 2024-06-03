@@ -12,7 +12,7 @@
 :: See the License for the specific language governing permissions and
 :: limitations under the License.
 
-:: Terminal script to run the respone merging script
+:: Terminal script to run the response merging script
 
 @echo off
 
