@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
-## [v1.1.0] - tbd
+## [v1.1.0] - 3 June 2024
 
 ### Added
 - The number of replays of sound samples is now recorded in the output file:
