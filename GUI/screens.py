@@ -38,7 +38,7 @@ class BackButton(Button):
     Button subclass with special functionality to go back
     """
 
-    def set_arrow(self):
+    def set_arrow(self) -> None:
         """
         Set an arrow in the BackButton using the Image Widget.
         """
@@ -56,12 +56,12 @@ class ContinueButton(Button):
     **kwargs
         Keyword arguments. These are passed on to the kivy.uix.button.Button constructor.
     """
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         # Button is always locked initially
         self.disabled = True
 
-    def set_arrow(self):
+    def set_arrow(self) -> None:
         """
         Set an arrow in the ContinueButton using the Image Widget.
         """
@@ -69,7 +69,7 @@ class ContinueButton(Button):
         self.ids.continue_bttn_image.source = 'GUI/assets/arrow.png'
         self.ids.continue_bttn_image.opacity = 1.
 
-    def on_release(self):
+    def on_release(self) -> None:
         """
         Click action button to do the navigation if the button is unlocked
         """
@@ -80,14 +80,14 @@ class ContinueButton(Button):
         if ready:
             self.parent.manager.navigate_next()
 
-    def unlock(self, *_):
+    def unlock(self, *_) -> None:
         """
         Set the button state to unlocked
         """
         self.disabled = False
         self.parent.ids.continue_lbl.text = ''
 
-    def lock(self, *_):
+    def lock(self, *_) -> None:
         """
         Set the button state to locked
         """
@@ -117,10 +117,7 @@ class PalilaScreen(Screen):
     next_screen : str
         Name of the next screen in the ScreenManager.
     """
-    def __init__(self, previous_screen: str, next_screen: str, lock: bool = False, **kwargs):
-        """
-
-        """
+    def __init__(self, previous_screen: str, next_screen: str, lock: bool = False, **kwargs) -> None:
         super().__init__(**kwargs)
         self.previous_screen = previous_screen
         self.next_screen = next_screen
@@ -128,19 +125,13 @@ class PalilaScreen(Screen):
         if not lock:
             self.ids.continue_bttn.unlock()
 
-    def pre_navigation(self):
-        """
-        Placeholder for any pre-navigation functionality of the Screen
-        """
-        return True
-
-    def reset_continue_label(self, *_):
+    def reset_continue_label(self, *_) -> None:
         """
         Function to call for resetting the continue label
         """
         self.ids.continue_lbl.text = ''
 
-    def set_next_screen(self, next_screen: str):
+    def set_next_screen(self, next_screen: str) -> None:
         """
         Set a new next screen for this screen.
 
@@ -173,7 +164,7 @@ class WelcomeScreen(PalilaScreen):
         If an invalid string is passed for the PID mode.
     """
 
-    def __init__(self, pid_mode: str, welcome_text: str, *args, **kwargs):
+    def __init__(self, pid_mode: str, welcome_text: str, *args, **kwargs) -> None:
         super().__init__(*args, lock=True, **kwargs)
 
         if pid_mode == 'auto':
@@ -189,7 +180,7 @@ class WelcomeScreen(PalilaScreen):
 
         self.ids.welcome.text = welcome_text
 
-    def pre_navigation(self):
+    def pre_navigation(self) -> None:
         """
         Function setting the PID before navigating
         """
@@ -197,9 +188,7 @@ class WelcomeScreen(PalilaScreen):
             # Set the PID in case the entry box is not disabled
             self.manager.set_pid(self.ids.pid_entry.text)
 
-        return True
-
-    def check_lock(self, input_text: str):
+    def check_lock(self, input_text: str) -> None:
         """
         Function to properly set the lock of the Continue Button with each text entry
         """
@@ -224,7 +213,7 @@ class EndScreen(PalilaScreen):
         Keyword arguments. These are passed on to the PalilaScreen constructor.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         # First readjust the continue button
         self.ids.continue_bttn.font_size = 32
@@ -239,7 +228,7 @@ class EndScreen(PalilaScreen):
         # Add the button to the screen
         self.add_widget(self.back_button)
 
-    def back_function(self, *_):
+    def back_function(self, *_) -> None:
         """
         Function for the on_release of the BackButton.
         """
@@ -250,7 +239,7 @@ class EndScreen(PalilaScreen):
         # Actually navigate using the PalilaScreenManager
         self.manager.navigate_previous()
 
-    def on_parent(self, *_):
+    def on_parent(self, *_) -> None:
         """
         Assigns the BackButton's on_release when this screen gets a parent.
         This is needed, because the current screen requires a parent which is not always the case.
@@ -272,13 +261,13 @@ class FinalScreen(PalilaScreen):
         Keyword arguments. These are passed on to the PalilaScreen constructor.
     """
 
-    def __init__(self, *args, goodbye: str, **kwargs):
+    def __init__(self, *args, goodbye: str, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.ids.continue_bttn.text = ''
         self.ids.continue_bttn.disabled = True
         self.ids.goodbye.text = goodbye
 
-    def on_enter(self, *args):
+    def on_enter(self, *args) -> None:
         """
         Stop the timer and save results when entering this screen.
         """
@@ -298,7 +287,7 @@ class TimedTextScreen(PalilaScreen):
     **kwargs
         Keyword arguments. These are passed on to the PalilaScreen constructor.
     """
-    def __init__(self, config_dict: dict, **kwargs):
+    def __init__(self, config_dict: dict, **kwargs) -> None:
         super().__init__(config_dict['previous'], config_dict['next'], lock=True, **kwargs)
 
         self.ids.intro_text.text = config_dict['text']
@@ -310,7 +299,7 @@ class TimedTextScreen(PalilaScreen):
 
         self.ids.continue_lbl.text = ''
 
-    def on_enter(self, *_):
+    def on_enter(self, *_) -> None:
         """
         Start the timer and ProgressBar when entering the screen.
         """

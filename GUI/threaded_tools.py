@@ -39,7 +39,7 @@ class ProgressBarThread(threading.Thread):
     progress_bar : ProgressBar
         ProgressBar instance to keep track of.
     """
-    def __init__(self, progress_bar: ProgressBar, **kwargs):
+    def __init__(self, progress_bar: ProgressBar, **kwargs) -> None:
         super().__init__(**kwargs)
         self.progress_bar = progress_bar
 
