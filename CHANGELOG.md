@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
+## [v1.1.1] - 10 June 2024
+
+### Fixed
+Hotfix for a critical navigation issue that makes v1.1.0 unusable.
+This issue was related to the incomplete removal of the unused pre-navigation function of the PalilaScreen class
+
+
 ## [v1.1.0] - 3 June 2024
 
 ### Added

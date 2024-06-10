@@ -79,12 +79,7 @@ class ContinueButton(Button):
         """
         Click action button to do the navigation if the button is unlocked
         """
-        # Have the parent screen do its pre-navigation actions (which should return a boolean)
-        # The pre-navigation should do any messaging towards the user
-        ready = self.parent.pre_navigation()
-        # When the screen is ready, navigate
-        if ready:
-            self.parent.manager.navigate_next()
+        self.parent.manager.navigate_next()
 
     def unlock(self, *_) -> None:
         """
@@ -186,7 +181,7 @@ class WelcomeScreen(PalilaScreen):
 
         self.ids.welcome.text = welcome_text
 
-    def pre_navigation(self) -> None:
+    def on_pre_leave(self) -> None:
         """
         Function setting the PID before navigating
         """
