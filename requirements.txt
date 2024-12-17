@@ -1,5 +1,5 @@
-configobj==5.0.8
+configobj==5.0.9
 Kivy==2.3.0
-numpy==1.26.4
-pandas==2.2.0
-scipy==1.12.0
+numpy==2.2.0
+pandas==2.2.3
+scipy==1.14.1

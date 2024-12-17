@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
+## [v1.1.2] - 17 December 2024
+
+### Changed
+- Updated Python package dependencies to latest versions.
+
+### Fixed
+- Changed configobj version to 5.0.9 in response to fix of [CVE-2023-26112 ReDoS attack vulnerability](https://nvd.nist.gov/vuln/detail/CVE-2023-26112).
+
+
 ## [v1.1.1] - 10 June 2024
 
 ### Fixed
