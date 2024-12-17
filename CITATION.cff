@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 
 title: "Graphical User Interface for the Psychoacoustic Listening Laboratory (PALILA GUI)"
-version: v1.1.1
-date-released: 2024-06-10
+version: v1.1.2
+date-released: 2024-12-17
 
 authors:
 - family-names: "Pockelé"
