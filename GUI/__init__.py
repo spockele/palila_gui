@@ -1,43 +1,41 @@
 """
-Copyright (c) 2024 Josephine Siebert Pockelé
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-------------------------------------------------------------------------------------------------------------------------
-
 Main module of the GUI package.
 
 Pulls in all functions from the modules in the package. It also defines the custom ScreenManager and App classes, which
 form the core of this package. Loads all the relevant kivy files for this package.
-
-------------------------------------------------------------------------------------------------------------------------
 """
+
+# Copyright (c) 2024 Josephine Siebert Pockelé
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from kivy.uix.screenmanager import ScreenManager
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.config import Config
 from kivy.lang import Builder
 from kivy.app import App
 
+import warnings
+
+from .progress_tracker import ProgressTracker
+from .questionnaire_screen import *
 from .audio_screen import *
 from .file_system import *
-from .questionnaire_screen import *
 from .screens import *
-from .progress_tracker import ProgressTracker
 
 
-__all__ = ['PalilaApp', ]
+__all__ = ['main', ]
 
 Builder.load_file('GUI/audio_screen.kv')
 Builder.load_file('GUI/audio_questions.kv')
@@ -230,3 +228,11 @@ class PalilaApp(App):
 
         # Required return of the ScreenManager
         return main_layout
+
+
+def main(experiment: str) -> None:
+    """
+    Main run function of the GUI.
+    """
+    warnings.simplefilter('always', DeprecationWarning)
+    PalilaApp(experiment).run()

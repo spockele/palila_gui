@@ -12,22 +12,11 @@
 :: See the License for the specific language governing permissions and
 :: limitations under the License.
 
+:: Terminal script to run the response merging script
 
 @echo off
-echo Starting setup for PALILA Graphical User Interface...
 
-if exist .\venv (
-	echo Python venv already exists. Continuing...
-	) else (
-	echo Setting up Python Virtual environment in .\venv
-	python -m venv .\venv
-	)
-echo.
-echo Updating virtual environment...
-.\venv\Scripts\python.exe -m pip install --upgrade pip setuptools
-echo.
-echo Installing required Python packages...
-.\venv\Scripts\python.exe -m pip install -r .\requirements.txt
+.\venv\Scripts\python.exe -c "import support_scripts;support_scripts.merge_responses()"
 
 echo.
-set /p n="Setup complete. Press any button to exit setup... "
+set /p n="Press enter to exit. "

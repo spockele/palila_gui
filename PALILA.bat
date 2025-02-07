@@ -17,7 +17,7 @@
 
 @echo off
 
-.\venv\Scripts\python.exe -m main
+.\venv\Scripts\python.exe -c "from GUI import main;main('testing')"
 
 echo.
-set /p n="Press any key to exit. "
+set /p n="Press enter to exit. "

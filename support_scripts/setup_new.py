@@ -1,24 +1,21 @@
 """
-Copyright (c) 2024 Josephine Siebert Pockelé
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-------------------------------------------------------------------------------------------------------------------------
-
 Script to quickly set up a new experiment in the GUI.
-
-------------------------------------------------------------------------------------------------------------------------
 """
+
+# Copyright (c) 2024 Josephine Siebert Pockelé
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import shutil
 import os
 
@@ -53,7 +50,10 @@ or annoyed by this sound?'''
 """
 
 
-if __name__ == '__main__':
+def main():
+    """
+    Run function of this script.
+    """
     # Ask user for the experiment name.
     experiment_name = input('Enter a name for your experiment: ')
 
@@ -97,23 +97,14 @@ if __name__ == '__main__':
         shutil.copyfile('gui_dev/tone500Hz.wav', f'{experiment_name}/tone500Hz.wav')
 
     # Read the current main python file of the GUI
-    with open('main.py', 'r') as py_file:
-        lines = py_file.readlines()
+    with open('PALILA.bat', 'r') as bat_file:
+        lines = bat_file.readlines()
     # Overwrite the run line in the main python file
     for li, line in enumerate(lines):
-        if 'PalilaApp' in line and '.run()' in line:
-            lines[li] = f"    PalilaApp('{experiment_name}').run()\n"
-    # Rewrite the main python file
-    with open('main.py', 'w') as py_file:
-        py_file.writelines(lines)
+        if "from GUI import main" in line:
+            current_name = line.split("\'")[1]
+            lines[li] = line.replace(current_name, experiment_name)
 
-    # Read the current response merger python file of the GUI
-    with open('merge_responses.py', 'r') as py_file:
-        lines = py_file.readlines()
-    # Overwrite the path definition line in the python file
-    for li, line in enumerate(lines):
-        if 'CURRENT_PATH = os.path.abspath(' in line:
-            lines[li] = f"CURRENT_PATH = os.path.abspath('{experiment_name}')\n"
-    # Rewrite the python file
-    with open('merge_responses.py', 'w') as py_file:
-        py_file.writelines(lines)
+    # Rewrite the main python file
+    with open('PALILA.bat', 'w') as bat_file:
+        bat_file.writelines(lines)

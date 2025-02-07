@@ -17,7 +17,7 @@
 
 @echo off
 
-.\venv\Scripts\python.exe -m setup_new
+.\venv\Scripts\python.exe -c "from support_scripts.setup_new import main;main()"
 
 echo.
-set /p n="Press any key to exit. "
+set /p n="Press enter to exit. "
