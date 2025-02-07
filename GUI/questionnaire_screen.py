@@ -56,16 +56,6 @@ class QuestionnaireScreen(PalilaScreen):
         self.questions = questions
         # Store the state override variable.
         self.state_override = state_override
-        # Create a link to the question manager from the Kivy code.
-        self.question_manager: QQuestionManager = self.ids.question_manager
-
-        # Add the questions from the list to this screen.
-        for question in self.questions:
-            self.question_manager.add_question(self.questionnaire_dict[question])
-
-        # Fill up the empty space.
-        for _ in range(7 - len(self.questions)):
-            self.question_manager.add_widget(Filler())
 
         # In case it's not the first screen (indicated by the presence of a back_function), set up the back button
         if back_function is not None:
@@ -80,6 +70,17 @@ class QuestionnaireScreen(PalilaScreen):
             back_button.set_arrow()
             # Add the button to the screen
             self.add_widget(back_button)
+
+        # Create a link to the question manager from the Kivy code.
+        self.question_manager: QQuestionManager = self.ids.question_manager
+
+        # Add the questions from the list to this screen.
+        for question in self.questions:
+            self.question_manager.add_question(self.questionnaire_dict[question])
+
+        # Fill up the empty space.
+        for _ in range(7 - len(self.questions)):
+            self.question_manager.add_widget(Filler())
 
         # Do the unlock check
         self.unlock_check()
@@ -169,6 +170,7 @@ class QQuestionManager(BoxLayout):
         question_dict : dict
             Dictionary with all the information to construct the question.
         """
+        # TODO: see how to merge this with AQuestionManager
         # Get the question type class.
         question_type = getattr(questionnaire_questions, f'{question_dict["type"]}QQuestion')
         # Create the instance of it.
@@ -182,18 +184,20 @@ class QQuestionManager(BoxLayout):
         # Create a spot in the answer dictionary
         self.answers[question_dict['id']] = ''
 
-    def get_state(self):
+    def get_state(self) -> bool:
         """
-        Get the completion state of this questionnaire.
+        Get an indication if all questions have been answered in this manager.
+
+        Returns
+        -------
+        bool
+            Indication if all questions have been answered in this manager.
         """
-        # Start a variable to store the total state
         total_state = True
 
-        # Loop over all questions
         for qid, answer in self.answers.items():
             total_state = total_state and bool(answer)
 
-        # Return the final state
         return total_state
 
     def change_answer(self, question_id: str, answer: str) -> None:
@@ -207,6 +211,7 @@ class QQuestionManager(BoxLayout):
         answer : str
             The answer string to update to.
         """
+        # TODO: Check if parent level can be equalised with AQuestionManager
         self.answers[question_id] = answer
         # Have the QuestionnaireScreen check the state
         self.parent.unlock_check(question_state=self.get_state() and not self.disabled)

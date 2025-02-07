@@ -88,16 +88,8 @@ class AudioQuestion(BoxLayout):
         super().__init__(**kwargs)
         # Store the input information
         self.question_dict = question_dict
-        self.qid = question_dict['id']
         self.ids.question_text.text = question_dict['text']
-
-        # ==============================================================================================================
-        # Initial setup of the original dependent unlock system
-        # TODO: DEPRECATED CODE
-        # ---------------------
-        self.dependant = None
-        self.dependant_id = None
-        # ==============================================================================================================
+        self.qid = question_dict['id']
 
         # Initialise the list of dependent questions
         # TODO: Change the spelling of 'dependants' to 'dependents'
@@ -110,6 +102,14 @@ class AudioQuestion(BoxLayout):
 
         # Initialise a variable to temporarily store answers.
         self.answer_temp = ''
+
+        # ==============================================================================================================
+        # Initial setup of the original dependent unlock system
+        # TODO: DEPRECATED CODE
+        # ---------------------
+        self.dependant = None
+        self.dependant_id = None
+        # ==============================================================================================================
 
     def change_answer(self, answer: str) -> None:
         """
@@ -137,7 +137,7 @@ class AudioQuestion(BoxLayout):
         for question in self.dependants:
             # Check if the unlock condition of this dependent question is met.
             # Also ensure this does not happen with this question disabled. Otherwise, undesired unlocks will happen.
-            if answer == question.unlock_condition and not self.disabled:
+            if any(a in question.unlock_condition.split(';') for a in answer.split(';')) and not self.disabled:
                 # Unlock the dependant question.
                 question.dependant_unlock()
             else:
@@ -151,6 +151,7 @@ class AudioQuestion(BoxLayout):
         """
         Add this question to the dependents list of the 'unlocked by' question.
         """
+        # TODO: check how to make this compatible with the QuestionnaireQuestion equivalent
         if self.unlock_condition is not None:
             # Determine the id of the question that unlocks this one
             unlocked_by_id = self.question_dict['part-audio'] + self.question_dict['unlocked by'].zfill(2)
@@ -251,15 +252,16 @@ class ButtonAQuestion(AudioQuestion):
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
-        self.buttons = []
+        self.choice = None
+        self.choice_temp = None
+
+        # TODO: Check how to unify this with MultipleChoiceQQuestion
         # Add the choices from the input file
+        self.buttons = []
         for choice in self.question_dict['choices']:
             button = AudioChoiceButton(choice, font_size=42)
             self.buttons.append(button)
             self.ids.answer_options.add_widget(button)
-
-        self.choice = None
-        self.choice_temp = None
 
     def select_choice(self, choice: AudioChoiceButton) -> None:
         """
@@ -435,19 +437,17 @@ class SpinnerAQuestion(AudioQuestion):
         """
         Function to be triggered by an input on the spinner.
         """
-        # Communicate
-        self.change_answer(self.ids.spinner.text)
-        # Adjust look
+        # Make the spinner green.
         self.ids.spinner.background_color = [.5, 1., .5, 1.]
+        # Store the answer.
+        self.change_answer(self.ids.spinner.text)
 
     def dependant_lock(self) -> None:
         """
         Lock this question when it is locked by another question.
         """
-        # Change the look of the spinner
-        self.ids.spinner.background_color = [.7, 1., .7, 1.]
-        # Do the superclass actions
         super().dependant_lock()
+        self.ids.spinner.background_color = [.7, 1., .7, 1.]
 
     def dependant_unlock(self) -> None:
         """

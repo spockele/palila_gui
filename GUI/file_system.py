@@ -257,7 +257,7 @@ class PalilaExperiment(ConfigObj):
         for iq, question in enumerate(questionnaire_dict['questions']):
             # Replace tab characters in the question text
             questionnaire_dict[question]['text'] = questionnaire_dict[question]['text'].replace('\t', '')
-
+            # TODO: Check where this multi is used, try to use in MultipleChoice questions
             # Convert multi into a boolean if it exists, otherwise set to False
             if 'multi' in questionnaire_dict[question]:
                 questionnaire_dict[question]['multi'] = questionnaire_dict[question].as_bool('multi')
@@ -360,7 +360,7 @@ class PalilaExperiment(ConfigObj):
         for question in self[part][audio]['questions']:
             # Remove tabs from the input file in the question text
             self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
-
+            # TODO: Check where this multi is used, try to use in MultipleChoice questions
             # Convert multi into a boolean if it exists, otherwise set to False
             if 'multi' in self[part][audio][question]:
                 self[part][audio][question]['multi'] = self[part][audio][question].as_bool('multi')

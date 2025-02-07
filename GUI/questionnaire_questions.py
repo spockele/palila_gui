@@ -90,21 +90,27 @@ class QuestionnaireQuestion(FloatLayout):
 
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(**kwargs)
+        # Store the input information
         self.question_dict = question_dict
         self.ids.question_text.text = question_dict['text']
         self.qid = question_dict['id']
 
+        # Initialise the list of dependent questions
+        # TODO: Change the spelling of 'dependants' to 'dependents'
         self.dependants: list[QuestionnaireQuestion] = list()
         if 'unlocked by' in question_dict:
             self.unlock_condition = question_dict['unlock condition']
         else:
             self.unlock_condition = None
+
+        # Initialise a variable to temporarily store answers.
+        self.answer_temp = ''
+
         # ==============================================================================================================
         # todo: DEPRECATED CODE
         # ---------------------
         self.dependant = None
         # ==============================================================================================================
-        self.answer_temp = ''
 
     def change_answer(self, answer: str) -> None:
         """
@@ -146,6 +152,7 @@ class QuestionnaireQuestion(FloatLayout):
         """
         Add this question to the dependents list of the 'unlocked by' question.
         """
+        # TODO: check how to make this compatible with the AudioQuestion equivalent
         if self.unlock_condition is not None:
             # Add this question to that question's dependents list
             self.parent.questions[self.question_dict['unlocked by']].assign_dependant(self)
@@ -402,7 +409,12 @@ class SpinnerQQuestion(QuestionnaireQuestion):
         """
         Unlock this question when it is locked by another question.
         """
-        self.spinner_input()
+        # Change the look back to its previous state, based on whether there is an answer
+        if self.ids.spinner.text:
+            self.ids.spinner.background_color = [.5, 1., .5, 1.]
+        else:
+            self.ids.spinner.background_color = [1., 1., 1., 1.]
+        # Do the superclass actions
         super().dependant_unlock()
 
 
@@ -430,6 +442,7 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
         self.choice = None
         self.choice_temp = None
 
+        # TODO: Check how to unify this with ButtonAQuestion
         # Add every choice as a button and track their word lengths
         self.buttons = []
         lengths = []
@@ -471,26 +484,34 @@ class MultipleChoiceQQuestion(QuestionnaireQuestion):
         """
         Lock this question when it is locked by another question.
         """
+        # Check if there is already a temporary answer
         if self.choice_temp is None:
+            # Store the current choice to the temporary variable, if not
             self.choice_temp = self.choice
+        # Remove the current choice
         self.choice = None
 
+        # Loop over the buttons and recolor them to the locked state
         for choice in self.buttons:
             choice.background_color = [.7, 1, .7, 1.]
 
+        # Run the superclass lock function
         super().dependant_lock()
 
     def dependant_unlock(self) -> None:
         """
         Unlock this question when it is locked by another question.
         """
+        # Reset all buttons
         for choice in self.buttons:
             choice.deselect()
 
+        # Set the temporarily stored choice as the current one
         if self.choice_temp is not None:
             self.select_choice(self.choice_temp)
             self.choice_temp = None
 
+        # Run the superclass unlock function
         super().dependant_unlock()
 
 

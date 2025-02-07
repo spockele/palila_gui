@@ -83,7 +83,6 @@ class AudioQuestionScreen(PalilaScreen):
         # Get better references to the audio and question managers
         self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left
         self.audio_manager_right: AudioManagerRight = AudioManagerRight()
-        self.question_manager: AQuestionManager = self.ids.question_manager
 
         # Initialise the audio managers with the audios defined in the input file
         self.audio_manager_left.initialise_manager(self.config_dict['filepath'],
@@ -98,14 +97,31 @@ class AudioQuestionScreen(PalilaScreen):
             self.audio_manager_right.active = True
             self.ids.extra_message.text = 'Listen to both samples at least once before answering the question.'
 
+        self.audio_block = False
+
+        # Create a link to the question manager from the Kivy code.
+        self.question_manager: AQuestionManager = self.ids.question_manager
+
         # Add the questions from the input file to the question manager
         for question in self.config_dict['questions']:
             self.question_manager.add_question(self.config_dict[question])
-        # Readjust the question manager after adding all questions
-        self.question_manager.readjust(self.config_dict['filler'])
 
-        self.audio_block = False
+        # Fill empty space if needed.
+        if self.config_dict['filler']:
+            # Fill up the empty space.
+            for _ in range(2 - len(self.question_manager.questions)):
+                self.question_manager.add_widget(Filler())
+
+        # Do the unlock check
         self.unlock_check()
+        # Set the dependency locks for all questions, now that they are part of this screen.
+        [question.set_unlock() for question in self.question_manager.questions.values()]
+
+        # ==============================================================================================================
+        # todo: DEPRECATED CODE
+        # ---------------------
+        [question.set_dependant() for question in self.question_manager.questions.values()]
+        # ==============================================================================================================
 
     def on_pre_leave(self, *_) -> None:
         """
@@ -331,6 +347,7 @@ class AQuestionManager(BoxLayout):
         OverflowError:
             If the question that is passed makes the question count go over the limit.
         """
+        # TODO: see how to merge this with QQuestionManager
         # Check if the space is full
         if self.n_question < self.n_max:
             # Add the question according to the input file
@@ -351,37 +368,13 @@ class AQuestionManager(BoxLayout):
         else:
             raise OverflowError(f'Audio contains more than {self.n_max} questions.')
 
-    def readjust(self, filler: bool) -> None:
-        """
-        Fill the empty space to avoid weird sizing of the questions.
-
-        Parameters
-        ----------
-        filler : bool
-            Indicate whether to fill the empty space or not.
-        """
-        if filler:
-            # Add filler widgets in the leftover space
-            for ii in range(self.n_max - self.n_question):
-                self.add_widget(Filler())
-
-        # Loop over the questions and lock the dependent ones
-        for question in self.questions.values():
-            question.set_unlock()
-
-            # ==========================================================================================================
-            # todo: DEPRECATED CODE
-            # ---------------------
-            question.set_dependant()
-            # ==========================================================================================================
-
     def unlock(self) -> None:
         """
         Unlock this question manager.
         """
         self.disabled = False
 
-    def get_state(self) -> None:
+    def get_state(self) -> bool:
         """
         Get an indication if all questions have been answered in this manager.
 
@@ -390,10 +383,9 @@ class AQuestionManager(BoxLayout):
         bool
             Indication if all questions have been answered in this manager.
         """
-        # Start a variable to store the total state
         total_state = True
+
         for qid, answer in self.answers.items():
-            # Update the total state via the boolean "and" operator
             total_state = total_state and bool(answer)
 
         return total_state
@@ -409,6 +401,7 @@ class AQuestionManager(BoxLayout):
         answer : str
             The answer string to update to.
         """
+        # TODO: Check if parent level can be equalised with QQuestionManager
         self.answers[question_id] = answer
         # Have the AudioQuestionScreen check the state
         self.parent.parent.unlock_check(question_state=self.get_state() and not self.disabled)
