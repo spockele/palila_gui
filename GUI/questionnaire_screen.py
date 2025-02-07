@@ -239,7 +239,7 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
         for ii, screen_num in enumerate(screen_nums):
             if ii:
                 # When this is not the last screen, define the previous indexed screen as previous to this one
-                previous_screen = f'{part}-questionnaire-{ii}'
+                previous_screen = f'{part}-questionnaire {ii}'
             else:
                 # In case this is the first questionnaire screen, set the previous screen to the one defined
                 # in the setup dictionary
@@ -248,7 +248,7 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
             # Check if this is the last questionnaire screen.
             if screen_num < max(screen_nums):
                 # If not, define the next one by the index + 2
-                next_screen = f'{part}-questionnaire-{ii + 2}'
+                next_screen = f'{part}-questionnaire {ii + 2}'
             else:
                 # The last screen continues into the defined next screen.
                 next_screen = questionnaire_dict['next']
@@ -258,13 +258,13 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
                 new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
                                                  previous_screen, next_screen,
                                                  back_function=manager.navigate_previous, state_override=state_override,
-                                                 name=f'{part}-questionnaire-{ii + 1}',
+                                                 name=f'{part}-questionnaire {ii + 1}',
                                                  )
             else:
                 # Special case for the first questionnaire screen
                 new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
                                                  previous_screen, next_screen,
-                                                 state_override=state_override, name=f'{part}-questionnaire-{ii + 1}',
+                                                 state_override=state_override, name=f'{part}-questionnaire {ii + 1}',
                                                  )
             # Add the questionnaire screen to the ScreenManager
             manager.add_widget(new_screen)

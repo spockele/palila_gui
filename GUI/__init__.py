@@ -23,6 +23,8 @@ form the core of this package. Loads all the relevant kivy files for this packag
 ------------------------------------------------------------------------------------------------------------------------
 """
 from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.config import Config
 from kivy.lang import Builder
@@ -33,6 +35,7 @@ from .file_system import *
 from .questionnaire_screen import *
 from .screens import *
 from .progress_tracker import construct_progress_tracker
+from .progress_tracker import ProgressTracker
 
 
 __all__ = ['PalilaApp', ]
@@ -73,24 +76,22 @@ class PalilaScreenManager(ScreenManager):
         # Go about initialising the Screens based on the input file
         self._initialise_screens()
 
+        self.tracker = ProgressTracker(self.screen_names, size_hint=(1., .015, ))
+
     def _initialise_screens(self) -> None:
         """
         Internal function to initialise the Screens from the PalilaExperiment instance
         """
         # Little shortcut for the purpose of testing stuff
         override = self.experiment.as_bool('override')
-        # Determine the division of the audios over the parts for the progress tracker
-        division = [len(self.experiment[part]['audios']) for part in self.experiment['parts']]
 
         # Add the welcome screen
         self.add_widget(WelcomeScreen(self.experiment['pid mode'], self.experiment['welcome'],
-                                      '', 'main-questionnaire-1', name='welcome'))
+                                      '', 'main-questionnaire 1', name='welcome'))
 
         # Add the demo screen if that is required and set the correct screen as current
         if self.experiment.as_bool('demo'):
             screen = AudioQuestionScreen({}, demo=True, name='demo')
-            tracker = construct_progress_tracker(sum(division) // 2 + 1, division)
-            screen.add_widget(tracker)
             self.add_widget(screen)
             self.current = 'demo'
         else:
@@ -112,8 +113,6 @@ class PalilaScreenManager(ScreenManager):
                 # Create the AudioQuestionScreen and add it to the manager
                 screen = AudioQuestionScreen(self.experiment[part][audio],
                                              name=f'{part}-{audio}', state_override=override)
-                tracker = construct_progress_tracker(progress, division)
-                screen.add_widget(tracker)
                 self.add_widget(screen)
 
                 # Check if a break should be added.
@@ -136,7 +135,7 @@ class PalilaScreenManager(ScreenManager):
                                                     name=break_name))
 
         # Add the Final two screens
-        self.add_widget(EndScreen('main-questionnaire-1', 'final', name='end'))
+        self.add_widget(EndScreen('main-questionnaire 1', 'final', name='end'))
         self.add_widget(FinalScreen('end', '', goodbye=self.experiment['goodbye'], name='final'))
 
     def navigate_next(self) -> None:
@@ -148,6 +147,8 @@ class PalilaScreenManager(ScreenManager):
             self.answers.start_timer()
         elif self.current_screen.next_screen == 'final':
             self.answers.stop_timer()
+
+        self.tracker.track(self.current)
 
         # Set the transition direction and the new current screen
         self.transition.direction = 'left'
@@ -220,9 +221,13 @@ class PalilaApp(App):
         # Set the screen to a fixed resolution
         Window.fullscreen = 'auto'
 
+        main_layout = GridLayout(cols=1, )
         # Create the ScreenManager and pass the experiment along
         manager = PalilaScreenManager(self.experiment, self.answers)
         Config.set('kivy', 'exit_on_escape', '0')
 
+        main_layout.add_widget(manager)
+        main_layout.add_widget(manager.tracker)
+
         # Required return of the ScreenManager
-        return manager
+        return main_layout

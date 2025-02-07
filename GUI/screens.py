@@ -237,6 +237,7 @@ class EndScreen(PalilaScreen):
         #  in order to come back without going through the whole experiment.
         going_to: PalilaScreen = self.manager.get_screen(self.previous_screen)
         going_to.set_next_screen(self.name)
+        self.manager.tracker.track(self.name, back_to_main_questionnaire=True)
         # Actually navigate using the PalilaScreenManager
         self.manager.navigate_previous()
 

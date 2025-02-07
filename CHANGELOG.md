@@ -17,6 +17,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
+[Unreleased]
+### Added
+
+### Changed
+- Revamp of the progress bar: static regardless of screen, turns green when part is completed, resets when returning to main questionnaire.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+- When returning to the main questionnaire from the end screen, the full questionnaire is now accessible.
+- Pressing play on an audio now locks the continue button, to avoid the audio playing in the next screen.
+
+
 ## [v1.1.2] - 17 December 2024
 
 ### Changed

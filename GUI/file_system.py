@@ -500,7 +500,7 @@ class PalilaExperiment(ConfigObj):
         # ==========================================================================================================
 
         if 'questionnaire' in self[part].sections:
-            current_name = f'{part}-questionnaire-1'
+            current_name = f'{part}-questionnaire 1'
             audio = 'questionnaire'
             # Set the 'previous' and the last question's 'next'
             self[part][previous_audio]['next'] = current_name
@@ -564,7 +564,7 @@ class PalilaExperiment(ConfigObj):
         # Pre-define some values to start the parts loop
         previous_part = ''
         previous_audio = ''
-        previous_name = 'main-questionnaire-1'
+        previous_name = 'main-questionnaire 1'
 
         # Randomise the parts in this experiment if so desired
         if 'randomise' in self.keys() and self.as_bool('randomise'):

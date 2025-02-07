@@ -98,13 +98,13 @@
 
 <Screen>
     Image:
-        pos_hint: {'x': .05, 'y': .02}
+        pos_hint: {'x': .05, 'y': .05}
         size_hint: .1, .09
 
         source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
 
     Image:
-        pos_hint: {'x': .88, 'y': .02}
+        pos_hint: {'x': .88, 'y': 0.05}
         size_hint: .07, .09
 
         fit_mode: 'contain'
@@ -115,7 +115,7 @@
 	Label:
 		id: continue_lbl
 
-		pos_hint: {'center_x': .5, 'y': .115}
+		pos_hint: {'center_x': .5, 'y': .1}
 		size_hint: .3, .05
 
 		text: 'Complete this screen before continuing'
@@ -123,7 +123,7 @@
     ContinueButton:
     	id: continue_bttn
 
-        pos_hint: {'center_x': .5, 'y': .015}
+        pos_hint: {'center_x': .5, 'y': 0.01}
         size_hint: .3, .1
 
         text: 'Continue'
