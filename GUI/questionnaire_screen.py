@@ -124,6 +124,20 @@ class QuestionnaireScreen(PalilaScreen):
         self.unlock_check()
         super().on_pre_enter(*args)
 
+    def set_next_screen(self, next_screen: str) -> None:
+        """
+        Set a new next screen for this questionnaire.
+
+        Parameters
+        ----------
+        next_screen: str
+            The name of the new next screen
+        """
+        if 'questionnaire' in self.next_screen:
+            self.manager.get_screen(self.next_screen).set_next_screen(next_screen)
+        else:
+            self.next_screen = next_screen
+
 
 class QQuestionManager(BoxLayout):
     """
