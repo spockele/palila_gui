@@ -132,7 +132,7 @@ class QuestionnaireQuestion(FloatLayout):
         for question in self.dependants:
             # Check if the unlock condition of this dependent question is met.
             # Also ensure this does not happen with this question disabled. Otherwise, undesired unlocks will happen.
-            if answer == question.unlock_condition and not self.disabled:
+            if any(a in question.unlock_condition.split(';') for a in answer.split(';')) and not self.disabled:
                 # Unlock the dependant question.
                 question.dependant_unlock()
             else:
@@ -533,13 +533,6 @@ class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
         for ii, length in enumerate(lengths):
             self.buttons[ii].size_hint_x = length ** .5 / total
 
-    def assign_dependant(self, question):
-        """
-        This question type does not support dependent questions yet, due to the multiple answer system.
-        """
-        raise AttributeError(f'MultiMultipleChoiceQQuestion currently does not support '
-                             f'conditionally unlocking other questions.')
-
     def select_choice(self, choice: QuestionnaireChoiceButton) -> None:
         """
         Question triggered by pressing a QuestionnaireChoiceButton.
@@ -564,7 +557,7 @@ class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
             answer_str += f'{button.text};'
 
         # Store this change in answer
-        self.change_answer(answer_str)
+        self.change_answer(answer_str[:-1])
 
     def dependant_lock(self) -> None:
         """
