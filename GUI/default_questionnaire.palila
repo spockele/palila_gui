@@ -16,41 +16,35 @@
 manual split = yes
 
 [question age]
-	id = 'age'
 	type = FreeNumber
 	text = 'Age: '
 	manual screen = 1
 
 [question gender]
-	id = 'gender'
 	type = MultipleChoice
 	text = 'Gender identity:'
 	choices = 'Man', 'Woman', 'Other', 'Prefer not to say'
 	manual screen = 1
 
 [question education]
-	id = 'education'
 	type = Spinner
 	text = 'Highest completed level of school/education: '
 	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
 	manual screen = 1
 
 [question employment]
-	id = 'employment'
 	type = Spinner
 	text = 'Current employment status: '
 	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work', 'Unable to work'
 	manual screen = 1
 
 [question how_found]
-	id = 'how_found'
 	type = Spinner
 	text = 'How did you find out about this experiment?'
 	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Email', 'Other'
 	manual screen = 1
 
 [question affiliation]
-	id = 'affiliation'
 	type = Spinner
 	text = '''Your current, most direct affiliation with TU Delft:'''
 	choices = 'Prefer not to say', 'Student / employee at TU Delft', 'Student / employee at a partner university', 'Employee at a partner company', 'None of the above'
@@ -58,14 +52,12 @@ manual split = yes
 
 
 [question hearing_rating]
-	id = 'hearing_rating'
 	type = Spinner
 	text = 'How good do you think your hearing is?'
 	choices = 'Excellent', 'Very Good', 'Good', 'Fair', 'Poor'
 	manual screen = 2
 
 [question accident]
-	id = 'accident'
 	type = MultipleChoice
 	text = '''Have you had an accident involving your head
 		that affected your hearing?'''
@@ -73,21 +65,18 @@ manual split = yes
 	manual screen = 2
 
 [question hearing_aid]
-	id = 'hearing_aid'
 	type = MultipleChoice
 	text = 'Do you normally use a hearing aid?'
 	choices = 'Yes', 'No'
 	manual screen = 2
 
 [question wearing_aid]
-	id = 'wearing_aid'
 	type = MultipleChoice
 	text = 'Are you currently wearing a hearing aid?'
 	choices = 'Yes', 'No'
 	manual screen = 2
 
 [question blast_trauma]
-	id = 'blast_trauma'
 	type = MultipleChoice
 	text = '''Have you suffered a shooting or explosion injury
 		(blast trauma)?'''
@@ -95,7 +84,6 @@ manual split = yes
 	manual screen = 2
 
 [question work_protection]
-	id = 'work_protection'
 	type = MultipleChoice
 	text = '''Do you have to wear hearing protection at work,
 		or did you have to in the past?'''
@@ -103,7 +91,6 @@ manual split = yes
 	manual screen = 2
 
 [question which_protection]
-	id = 'which_protection'
 	type = FreeText
 	text = '''What noise do/did you have to protect yourself from?'''
 	manual screen = 2
@@ -113,7 +100,6 @@ manual split = yes
 
 
 [question ear_disease]
-	id = 'ear_disease'
 	type = MultipleChoice
 	text = '''Have you suffered, or are you currently
 		suffering from any ear disease?'''
@@ -121,7 +107,6 @@ manual split = yes
 	manual screen = 3
 
 [question which_disease]
-	id = 'which_disease'
 	type = FreeText
 	text = 'If yes, what kind of ear disease?'
 	manual screen = 3
@@ -130,21 +115,18 @@ manual split = yes
 	unlock condition = 'Yes'
 
 [question tinnitus]
-	id = 'tinnitus'
 	type = MultipleChoice
 	text = 'Do you suffer from ringing in the ears (tinnitus)?'
 	choices = 'Yes', 'No'
 	manual screen = 3
 
 [question cold]
-	id = 'cold'
 	type = MultipleChoice
 	text = 'Do you currently have a cold?'
 	choices = 'Yes', 'No'
 	manual screen = 3
 
 [question cold_magnitude]
-	id = 'cold_magnitude'
 	type = Spinner
 	text = '''How bad is your cold?
 		From 1 (very weak) to 5 (very strong)'''
@@ -155,14 +137,12 @@ manual split = yes
 	unlock condition = 'Yes'
 
 [question feeling]
-	id = 'feeling'
 	type = MultipleChoice
 	text = 'Are you currently feeling well?'
 	choices = 'Yes', 'No'
 	manual screen = 3
 
 [question tired]
-	id = 'tired'
 	type = MultipleChoice
 	text = 'Are you currently feeling very tired?'
 	choices = 'Yes', 'No'

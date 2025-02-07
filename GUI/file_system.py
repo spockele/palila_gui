@@ -243,6 +243,12 @@ class PalilaExperiment(ConfigObj):
 
             # Set the questionnaire's 'previous' to the welcome screen
             questionnaire_dict['previous'] = 'welcome'
+            # Set the part ID correctly
+            part_id = 'main'
+
+        else:
+            # Extract the part, audio and question names
+            part_id = part.replace('part ', '')
 
         # Create a list of the questionnaire questions in the questionnaire dict
         questionnaire_dict['questions'] = [question for question in questionnaire_dict.keys()
@@ -255,15 +261,34 @@ class PalilaExperiment(ConfigObj):
 
         # Loop over the questionnaire questions
         for iq, question in enumerate(questionnaire_dict['questions']):
+            # ==========================================================================================================
+            # todo: DEPRECATED CODE
+            # ---------------------
             if questionnaire_dict[question]['type'] == 'MultiMultipleChoice':
                 warnings.warn_explicit('The MultiMultipleChoice question type will be removed in the future. '
                                        'For multiple-choice-multiple-answer questions, use MultipleChoice with the '
                                        'multi = yes.',
                                        DeprecationWarning, f'{self.name}.palila', 0)
+
+            if 'id' in questionnaire_dict[question]:
+                warnings.warn_explicit('The id option for Questionnaire questions is deprecated and will be '
+                                       'removed in future versions. Please use the part between brackets as id.',
+                                       DeprecationWarning, f'{self.name}.palila', 0)
+
+            if 'dependant' in questionnaire_dict[question]:
+                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
+                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
+                                       'condition" instead.',
+                                       DeprecationWarning, f'{self.name}.palila', 0)
+            # ==========================================================================================================
+
+            # Identify the part name for use in the Question class.
+            questionnaire_dict[question]['part-audio'] = f'{part_id.zfill(2)}-questionnaire-'
+
             # Replace tab characters in the question text
             questionnaire_dict[question]['text'] = questionnaire_dict[question]['text'].replace('\t', '')
-            # TODO: Check where this multi is used, try to use in MultipleChoice questions
-            # Convert multi into a boolean if it exists, otherwise set to False
+
+            # Convert multi for multiple-answer questions into a boolean, if it exists, otherwise set to False
             if 'multi' in questionnaire_dict[question]:
                 questionnaire_dict[question]['multi'] = questionnaire_dict[question].as_bool('multi')
             else:
@@ -281,26 +306,13 @@ class PalilaExperiment(ConfigObj):
             else:
                 screen_dict[screen_num].append(question)
 
-            # Extract the id to the overall question id list
-            if 'id' in questionnaire_dict[question]:
-                self.question_id_list.append(questionnaire_dict[question]['id'])
-            # Generate a not-so-nice (but standardised) id when it's not defined explicitly
-            else:
-                # Extract the user input part, audio and question names from the brackets
-                question_id = question.replace('question ', '')
-                # Put those together and add to the list
-                qid = f'{part}-questionnaire-{question_id.zfill(2)}'
-                self.question_id_list.append(qid)
-                questionnaire_dict[question]['id'] = qid
-            # ==========================================================================================================
-            # todo: DEPRECATED CODE
-            # ---------------------
-            if 'dependant' in questionnaire_dict[question]:
-                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
-                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
-                                       'condition" instead.',
-                                       DeprecationWarning, f'{self.name}.palila', 0)
-            # ==========================================================================================================
+            # Generate a not-so-nice (but standardised) id.
+            # Extract the user input part, audio and question names from the brackets
+            question_id = question.replace('question ', '')
+            # Put those together and add to the list
+            qid = f'{part_id.zfill(2)}-questionnaire-{question_id.zfill(2)}'
+            self.question_id_list.append(qid)
+            questionnaire_dict[question]['id'] = qid
 
         # Store the split dictionary in the questionnaire dictionary
         questionnaire_dict['screen dict'] = screen_dict
@@ -363,6 +375,19 @@ class PalilaExperiment(ConfigObj):
 
         # Loop over the questions
         for question in self[part][audio]['questions']:
+            # ==========================================================================================================
+            # todo: DEPRECATED CODE
+            # ---------------------
+            if 'dependant' in self[part][audio][question]:
+                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
+                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
+                                       'condition" instead.',
+                                       DeprecationWarning, f'{self.name}.palila', 0)
+            # ==========================================================================================================
+
+            # Identify the part and audio names for use in the Question class.
+            self[part][audio][question]['part-audio'] = self[part][audio]['part-audio'] + '-'
+
             # Remove tabs from the input file in the question text
             self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
             # TODO: Check where this multi is used, try to use in MultipleChoice questions
@@ -375,21 +400,10 @@ class PalilaExperiment(ConfigObj):
             # Generate a standardised question id
             # Extract the question name
             question_id = question.replace('question ', '')
-
-            self[part][audio][question]['part-audio'] = self[part][audio]['part-audio'] + '-'
             # Put everything together and add to the list
             qid = f'{part_id.zfill(2)}-{audio_id.zfill(2)}-{question_id.zfill(2)}'
             self.question_id_list.append(qid)
             self[part][audio][question]['id'] = qid
-            # ==========================================================================================================
-            # todo: DEPRECATED CODE
-            # ---------------------
-            if 'dependant' in self[part][audio][question]:
-                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
-                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
-                                       'condition" instead.',
-                                       DeprecationWarning, f'{self.name}.palila', 0)
-            # ==========================================================================================================
 
     def _prepare_part(self, ip: int, part: str, previous_part: str,
                       previous_audio: str, previous_name: str, ) -> tuple[str, str]:

@@ -28,8 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 - The Questionnaire ```MultiMultipleChoice``` question type will be removed in future versions. Multiple-choice-multiple-answer questions can be created using the ```MultipleChoice``` type with ```multi = yes```
+- Questionnaire question IDs should now be defined in the brackets. They will always be standardised to the ```[part_id]-questionnaire-[question_id]``` format. 
 
 ### Removed
+- The deprecated keywords ```dependant``` and ```dependant condition``` are now fully removed. They are now defined in the conditionally unlocked question and renamed: ```unlocked by``` and ```unlock condition```.
 
 ### Fixed
 - When returning to the main questionnaire from the end screen, the full questionnaire is now accessible.
