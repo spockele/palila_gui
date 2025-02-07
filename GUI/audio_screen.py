@@ -233,6 +233,7 @@ class AudioManager(BoxLayout):
             self.audio.play()
             self.playing = True
             self.parent_screen.audio_block = True
+            self.parent_screen.ids.continue_bttn.lock()
             # Reflect the audio playing in the play button and text
             self.ids.bttn_image.source = 'GUI/assets/hearing.png'
             self.ids.bttn.background_color = [.5, .5, 1, 1]
@@ -268,9 +269,8 @@ class AudioManager(BoxLayout):
             self.ids.bttn.background_color = [.5, 1, .5, 1]
             self.ids.txt.text = ''
 
-        # Unlock the rest of the screen when the audio has been played once
-        if self.count == 1:
-            self.parent_screen.unlock_check()
+        # Unlock the rest of the screen when the audio has been played
+        self.parent_screen.unlock_check()
 
 
 class AudioManagerLeft(AudioManager):
