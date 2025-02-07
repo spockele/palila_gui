@@ -34,7 +34,7 @@ Now you can run the GUI with ```PALILA.bat```
 Technische Universiteit Delft hereby disclaims all copyright interest in the program “PALILA GUI”, a graphical user interface software for psychoacoustic listening epxeriments, written by the Author(s). 
 Henri Werij, Faculty of Aerospace Engineering, Technische Universiteit Delft. 
 
-Copyright (c) 2024, Josephine Siebert Pockelé
+Copyright (c) 2025, Josephine Siebert Pockelé
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

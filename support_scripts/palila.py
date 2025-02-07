@@ -2,7 +2,7 @@
 Scripts to run the GUI with Pycharm without problems.
 """
 
-# Copyright (c) 2024 Josephine Siebert Pockelé
+# Copyright (c) 2025 Josephine Siebert Pockelé
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

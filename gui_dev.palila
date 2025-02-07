@@ -1,4 +1,4 @@
-## 	Copyright (c) 2024 Josephine Siebert Pockelé
+## 	Copyright (c) 2025 Josephine Siebert Pockelé
 ##
 ## 	Licensed under the Apache License, Version 2.0 (the "License");
 ## 	you may not use this file except in compliance with the License.
@@ -17,49 +17,44 @@ pid mode = auto
 randomise = no
 demo = no
 
-override = no
+override = yes
 
 [questionnaire]
 	default = yes
 
-#	[[question 1]]
-#		id = 'testing'
+#	[[question testing]]
 #		text = 'Just Testing'
 #		type = MultipleChoice
 #		choices = 'Ok', 'Understood', 'Ay Ay Captain'
 #		manual screen = 4
 #
-#	[[question 1.1]]
-#		id = 'testing'
+#	[[question testing]]
 #		text = 'Just Testing'
-#		type = MultiMultipleChoice
+#		type = MultipleChoice
 #		choices = 'Ok', 'Understood', 'Ay Ay Captain'
 #		manual screen = 4
+#       multi = yes
 #
-#
-#	[[question 2]]
-#		id = 'testing_dep_1'
+#	[[question testing_dep_1]]
 #		text = 'This question is dependant on the previous one'
 #		type = MultipleChoice
 #		choices = 'Ok', 'Understood'
 #		manual screen = 4
 #
 #		unlocked by = 'testing'
-#		unlock condition = 'Ok'
+#		unlock condition = 'Ok;Understood'
 #
-#
-#	[[question 2.1]]
-#		id = 'testing_dep_1'
+#	[[question testing_dep_1]]
 #		text = 'This question is dependant on the previous one'
-#		type = MultiMultipleChoice
+#		type = MultipleChoice
 #		choices = 'Ok', 'Understood', 'Ay Ay Captain'
 #		manual screen = 4
+#		multi = yes
 #
 #		unlocked by = 'testing'
 #		unlock condition = 'Ok'
 #
-#	[[question 3]]
-#		id = 'testing_dep_2'
+#	[[question testing_dep_2]]
 #		text = 'This question is dependant on the first one'
 #		type = MultipleChoice
 #		choices = 'Ok', 'Understood'
@@ -68,8 +63,7 @@ override = no
 #		unlocked by = 'testing'
 #		unlock condition = 'Understood'
 #
-#	[[question 4]]
-#		id = 'testing_dep_3'
+#	[[question testing_dep_3]]
 #		text = 'This question is dependant on the previous one'
 #		type = MultipleChoice
 #		choices = 'Ok', 'Understood'

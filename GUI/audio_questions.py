@@ -2,7 +2,7 @@
 Module with all the code for the modular audio questions.
 """
 
-# Copyright (c) 2024 Josephine Siebert Pockelé
+# Copyright (c) 2025 Josephine Siebert Pockelé
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,29 +47,9 @@ class TextAQuestion(AudioQuestion):
 
 class ButtonAQuestion(ButtonQuestion, AudioQuestion):
     """
-    General class for questions involving buttons. Subclass of GUI.AudioQuestion.
-
-    Parameters
-    ----------
-    question_dict: dict
-        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
-    **kwargs
-        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
-
-    Attributes
-    ----------
-    buttons : list[AudioChoiceButton]
-        List of all the buttons in this question.
-    choice : AudioChoiceButton
-        Currently selected button.
-    choice_temp : AudioChoiceButton
-        Variable to temporarily store the last selected button when this question is locked.
+    General class for questions involving buttons. Subclass of GUI.ButtonQuestion and GUI.AudioQuestion.
     """
-    def __init__(self, question_dict: dict, **kwargs) -> None:
-        super().__init__(question_dict, **kwargs)
-
-        for choice in self.buttons:
-            choice.font_size = 42
+    pass
 
 
 class MultipleChoiceAQuestion(ButtonAQuestion):
