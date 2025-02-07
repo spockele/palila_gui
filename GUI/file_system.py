@@ -255,6 +255,11 @@ class PalilaExperiment(ConfigObj):
 
         # Loop over the questionnaire questions
         for iq, question in enumerate(questionnaire_dict['questions']):
+            if questionnaire_dict[question]['type'] == 'MultiMultipleChoice':
+                warnings.warn_explicit('The MultiMultipleChoice question type will be removed in the future. '
+                                       'For multiple-choice-multiple-answer questions, use MultipleChoice with the '
+                                       'multi = yes.',
+                                       DeprecationWarning, f'{self.name}.palila', 0)
             # Replace tab characters in the question text
             questionnaire_dict[question]['text'] = questionnaire_dict[question]['text'].replace('\t', '')
             # TODO: Check where this multi is used, try to use in MultipleChoice questions

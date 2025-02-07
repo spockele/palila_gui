@@ -17,15 +17,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
-[Unreleased]
+# [v1.2.0] - Unreleased
 ### Added
 
 ### Changed
 - Revamp of the progress bar: static regardless of screen, turns green when part is completed, resets when returning to main questionnaire.
 - Removed final semicolon \(;\) from the multiple choice, multiple answer question type.
-- Removed AttributeError from MultiMulipleChoiceQQuestion, because it was not relevant.
+- Removed ```AttributeError``` from ```MultiMulipleChoiceQQuestion```, because it was not relevant.
+- Added way to enter multiple ```unlock_condition``` items by using a semicolon.
 
 ### Deprecated
+- The Questionnaire ```MultiMultipleChoice``` question type will be removed in future versions. Multiple-choice-multiple-answer questions can be created using the ```MultipleChoice``` type with ```multi = yes```
 
 ### Removed
 

@@ -420,105 +420,7 @@ class SpinnerQQuestion(QuestionnaireQuestion):
 
 class MultipleChoiceQQuestion(QuestionnaireQuestion):
     """
-    Question type for multiple choice.
-
-    Parameters
-    ----------
-    question_dict: dict
-        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
-    **kwargs
-        Keyword arguments. These are passed on to the kivy.uix.floatlayout.FloatLayout constructor.
-
-    Attributes
-    ----------
-    buttons : list[QuestionnaireChoiceButton]
-        List of the available choice buttons
-    choice : QuestionnaireChoiceButton = None
-        Currently selected choice button
-    """
-
-    def __init__(self, question_dict: dict, **kwargs) -> None:
-        super().__init__(question_dict, **kwargs)
-        self.choice = None
-        self.choice_temp = None
-
-        # TODO: Check how to unify this with ButtonAQuestion
-        # Add every choice as a button and track their word lengths
-        self.buttons = []
-        lengths = []
-        for choice in question_dict['choices']:
-            choice_button = QuestionnaireChoiceButton(choice)
-            self.buttons.append(choice_button)
-            self.ids.question_input.add_widget(choice_button)
-            lengths.append(len(choice))
-
-        # Resize the buttons proportional to the square root of the word lengths.
-        total = sum(lengths)
-        for ii, length in enumerate(lengths):
-            self.buttons[ii].size_hint_x = length ** .5 / total
-
-    def select_choice(self, choice: QuestionnaireChoiceButton) -> None:
-        """
-        Sets the current answer, based on the input ChoiceButton.
-
-        Parameters
-        ----------
-        choice : QuestionnaireChoiceButton
-            The button that has been selected.
-        """
-        if self.choice is not None:
-            # Deselect the current answer if there is one
-            self.choice.deselect()
-
-        if self.choice == choice:
-            # Remove the current answer if the same button is pressed
-            self.choice = None
-            self.change_answer('')
-        else:
-            # Set the current answer to the entered button otherwise
-            self.choice = choice
-            self.choice.select()
-            self.change_answer(choice.text)
-
-    def dependant_lock(self) -> None:
-        """
-        Lock this question when it is locked by another question.
-        """
-        # Check if there is already a temporary answer
-        if self.choice_temp is None:
-            # Store the current choice to the temporary variable, if not
-            self.choice_temp = self.choice
-        # Remove the current choice
-        self.choice = None
-
-        # Loop over the buttons and recolor them to the locked state
-        for choice in self.buttons:
-            choice.background_color = [.7, 1, .7, 1.]
-
-        # Run the superclass lock function
-        super().dependant_lock()
-
-    def dependant_unlock(self) -> None:
-        """
-        Unlock this question when it is locked by another question.
-        """
-        # Reset all buttons
-        for choice in self.buttons:
-            choice.deselect()
-
-        # Set the temporarily stored choice as the current one
-        if self.choice_temp is not None:
-            self.select_choice(self.choice_temp)
-            self.choice_temp = None
-
-        # Run the superclass unlock function
-        super().dependant_unlock()
-
-
-class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
-    """
     Question type for multiple choice, multiple answer.
-    TODO: figure out a way to merge this with MultipleChoiceQQuestion.
 
     Parameters
     ----------
@@ -537,8 +439,9 @@ class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
 
     def __init__(self, question_dict: dict, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
-        self.choices = []
+        self.choices: list[QuestionnaireChoiceButton] = []
         self.choice_temp = None
+        self.multi = question_dict['multi']
 
         # Add every choice as a button and track their word lengths
         self.buttons = []
@@ -568,6 +471,10 @@ class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
             self.choices.remove(choice)
 
         else:
+            if not self.multi:
+                [chc.deselect() for chc in self.choices]
+                self.choices = []
+
             # Set the current answer to the entered button otherwise
             choice.select()
             self.choices.append(choice)
@@ -586,6 +493,7 @@ class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
         """
         # Store the currently selected answers
         if self.choice_temp is None:
+            # Store the current choice to the temporary variable, if not
             self.choice_temp = self.choices
 
         # Reset the choices variable
@@ -620,3 +528,16 @@ class MultiMultipleChoiceQQuestion(QuestionnaireQuestion):
 
         # Do the superclass actions
         super().dependant_unlock()
+
+
+# ======================================================================================================================
+# todo: DEPRECATED CODE
+# ---------------------
+class MultiMultipleChoiceQQuestion(MultipleChoiceQQuestion):
+    """
+    Class to maintain compatibility with previous versions.
+    """
+    def __init__(self, question_dict: dict, **kwargs) -> None:
+        question_dict['multi'] = True
+        super().__init__(question_dict, **kwargs)
+# ======================================================================================================================
