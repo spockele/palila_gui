@@ -89,12 +89,6 @@ class QuestionnaireScreen(PalilaScreen):
         # Set the dependency locks for all questions, now that they are part of this screen.
         [question.set_unlock() for question in self.question_manager.questions.values()]
 
-        # ==============================================================================================================
-        # todo: DEPRECATED CODE
-        # ---------------------
-        [question.set_dependant() for question in self.question_manager.questions.values()]
-        # ==============================================================================================================
-
     def unlock_check(self, question_state: bool = None):
         """
         Check for unlocking the continue button.

@@ -117,12 +117,6 @@ class AudioQuestionScreen(PalilaScreen):
         # Set the dependency locks for all questions, now that they are part of this screen.
         [question.set_unlock() for question in self.question_manager.questions.values()]
 
-        # ==============================================================================================================
-        # todo: DEPRECATED CODE
-        # ---------------------
-        [question.set_dependant() for question in self.question_manager.questions.values()]
-        # ==============================================================================================================
-
     def on_pre_leave(self, *_) -> None:
         """
         Store the answers when leaving the screen.

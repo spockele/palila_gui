@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - The deprecated keywords ```dependant``` and ```dependant condition``` are now fully removed. They are now defined in the conditionally unlocked question and renamed: ```unlocked by``` and ```unlock condition```.
+- ```PointCompassAQuestion``` type has been removed, because it is unnecessarily complex.
 
 ### Fixed
 - When returning to the main questionnaire from the end screen, the full questionnaire is now accessible.

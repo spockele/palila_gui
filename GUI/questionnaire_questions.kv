@@ -14,11 +14,13 @@
 
 
 <QuestionnaireQuestion>
+    orientation: 'horizontal'
+    spacing: 10
+
 	Label:
 		id: question_text
 
-		pos_hint: {'x': 0., 'y': 0.}
-		size_hint: root.text_width, 1.
+		size_hint_x: root.text_width
 
 		text: ''
 
@@ -26,70 +28,76 @@
 		halign: 'right'
 		valign: 'center'
 
-	Widget:
-		pos: root.pos
-		size: root.size
-
-		canvas:
-			Color:
-				rgba: root.bordercolor
-			Line:
-				points: self.x, self.y - .05 * self.height, self.x + self.width, self.y - .05 * self.height
-				width: 1.5
+#	Widget:
+#		pos: root.pos
+#		size: root.size
+#
+#		canvas:
+#			Color:
+#				rgba: root.bordercolor
+#			Line:
+#				points: self.x, self.y - .05 * self.height, self.x + self.width, self.y - .05 * self.height
+#				width: 1.5
 
 
 <FreeNumberQQuestion>
-	FreeNumberTextInput:
-		id: number_input
+    FloatLayout:
+        size_hint_x: root.answer_width
 
-		size_hint: root.answer_width, 1.
-		pos_hint: {'right': 1, 'y': 0.}
+        FreeNumberTextInput:
+            id: number_input
 
-		text: ''
+            size_hint: 1., 1.
+            pos_hint: {'right': 1, 'y': 0.}
 
-		multiline: False
+            text: ''
 
-		on_text:
-			root.number_input()
+            multiline: False
 
-	Label:
-		id: number_overlay
+            on_text:
+                root.number_input()
 
-		pos_hint: {'right': 1, 'y': 0.}
-		size_hint: root.answer_width, 1.
+        Label:
+            id: number_overlay
 
-		text: 'Enter a number here'
+            size_hint: 1., 1.
+            pos_hint: {'right': 1, 'y': 0.}
 
-		color: (.7, .7, .7, 1.)
-		text_size: .96 * self.size[0], self.size[1]
-		halign: 'left'
-		valign: 'center'
+            text: 'Enter a number here'
+
+            color: (.7, .7, .7, 1.)
+            text_size: .96 * self.size[0], self.size[1]
+            halign: 'left'
+            valign: 'center'
 
 
 <FreeTextQQuestion>
-	TextInput:
-		id: text_input
+    FloatLayout:
+        size_hint_x: root.answer_width
 
-		pos_hint: {'right': 1, 'y': 0.}
-		size_hint: root.answer_width, 1.
+        TextInput:
+            id: text_input
 
-		text: ''
+            size_hint: 1., 1.
+            pos_hint: {'right': 1, 'y': 0.}
 
-		on_text:
-			root.text_input()
+            text: ''
 
-	Label:
-		id: text_overlay
+            on_text:
+                root.text_input()
 
-		pos_hint: {'right': 1, 'y': 0.}
-		size_hint: root.answer_width, 1.
+        Label:
+            id: text_overlay
 
-		text: 'Enter your answer here'
+            size_hint: 1., 1.
+            pos_hint: {'right': 1, 'y': 0.}
 
-		color: (.7, .7, .7, 1.)
-		text_size: .96 * self.size[0], self.size[1]
-		halign: 'left'
-		valign: 'center'
+            text: 'Enter your answer here'
+
+            color: (.7, .7, .7, 1.)
+            text_size: .96 * self.size[0], self.size[1]
+            halign: 'left'
+            valign: 'center'
 
 
 <Dropdown>
@@ -107,8 +115,7 @@
 	Spinner:
 		id: spinner
 
-		pos_hint: {'right': 1, 'y': 0.}
-		size_hint: root.answer_width, 1.
+		size_hint_x: root.answer_width
 
 		text_size: .96 * self.size[0], self.size[1]
 		halign: 'left'
@@ -135,10 +142,9 @@
 
 <MultipleChoiceQQuestion>:
 	BoxLayout:
-		id: question_input
+		id: answer_options
 
-		pos_hint: {'right': 1, 'y': 0.}
-		size_hint: root.answer_width, 1.
+		size_hint_x: root.answer_width
 
 		orientation: 'horizontal'
 		spacing: 10
@@ -146,10 +152,9 @@
 
 <MultiMultipleChoiceQQuestion>:
 	BoxLayout:
-		id: question_input
+		id: answer_options
 
-		pos_hint: {'right': 1, 'y': 0.}
-		size_hint: root.answer_width, 1.
+		size_hint_x: root.answer_width
 
 		orientation: 'horizontal'
 		spacing: 10

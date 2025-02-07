@@ -175,13 +175,7 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
 - ```MultipleChoice```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
-
-
-- ```MultiMultipleChoice```: Multiple choice, multiple answer question with buttons.
-  - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
-  - Recommended limit of 4-5 choices.
-  - Records all selected answers separated by a semicolon (```;```)
-
+  - For multiple answers, set ```multi = yes```.
 
 - ```Spinner```: Multiple choice question with a dropdown menu.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
@@ -220,9 +214,6 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
 
-
-- ```PointCompass```: A question with an 8-point direction compass to test directionality.
-  - Requires no additional input arguments.
 ---
 ## Output file format
 Results from an experiment will be output as individual ```.csv``` files in the directory 
