@@ -34,7 +34,6 @@ from .audio_screen import *
 from .file_system import *
 from .questionnaire_screen import *
 from .screens import *
-from .progress_tracker import construct_progress_tracker
 from .progress_tracker import ProgressTracker
 
 
