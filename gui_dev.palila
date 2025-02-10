@@ -111,8 +111,7 @@ override = yes
 			type = Text
 
 	[[questionnaire]]
-		[[[question 1]]]
-			id = 'showcase'
+		[[[question showcase]]]
 			text = '''This is an optional questionnaire
 				at the end of a part: '''
 			type = MultipleChoice
@@ -217,10 +216,3 @@ override = yes
 
 			left note = 'Not nice'
 			right note = 'Very nice'
-
-	[[audio 5]]
-		filename = 'prototyping_placeholder.wav'
-
-		[[[question dir]]]
-			text = 'This is a compass questions, where participants can enter a direction in 8 points.'
-			type = PointCompass
