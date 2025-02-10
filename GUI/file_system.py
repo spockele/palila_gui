@@ -271,12 +271,6 @@ class PalilaExperiment(ConfigObj):
                 warnings.warn_explicit('The id option for Questionnaire questions is deprecated and will be '
                                        'removed in future versions. Please use the part between brackets as id.',
                                        DeprecationWarning, f'{self.name}.palila', 0)
-
-            if 'dependant' in questionnaire_dict[question]:
-                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
-                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
-                                       'condition" instead.',
-                                       DeprecationWarning, f'{self.name}.palila', 0)
             # ==========================================================================================================
 
             # Identify the part name for use in the Question class.
@@ -372,16 +366,6 @@ class PalilaExperiment(ConfigObj):
 
         # Loop over the questions
         for question in self[part][audio]['questions']:
-            # ==========================================================================================================
-            # todo: DEPRECATED CODE
-            # ---------------------
-            if 'dependant' in self[part][audio][question]:
-                warnings.warn_explicit('The keywords "dependant" and "dependant condition" will be removed '
-                                       'in future versions. Please use the new system with "unlocked by" and "unlock '
-                                       'condition" instead.',
-                                       DeprecationWarning, f'{self.name}.palila', 0)
-            # ==========================================================================================================
-
             # Identify the part and audio names for use in the Question class.
             self[part][audio][question]['part-audio'] = self[part][audio]['part-audio'] + '-'
 
