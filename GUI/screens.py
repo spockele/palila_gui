@@ -23,9 +23,11 @@ from kivy.config import Config
 from kivy.clock import Clock
 
 from .threaded_tools import ProgressBarThread
+from .questions import QuestionManager
 
 
-__all__ = ['PalilaScreen', 'WelcomeScreen', 'EndScreen', 'FinalScreen', 'TimedTextScreen', 'Filler', 'BackButton']
+__all__ = ['PalilaScreen', 'WelcomeScreen', 'EndScreen', 'FinalScreen', 'TimedTextScreen', 'QuestionScreen',
+           'Filler', 'BackButton']
 
 
 class Filler(Widget):
@@ -303,3 +305,82 @@ class TimedTextScreen(PalilaScreen):
         """
         self.timing_thread.start()
         Clock.schedule_once(self.ids.continue_bttn.unlock, self.ids.timer.max)
+
+
+class QuestionScreen(PalilaScreen):
+    """
+    Class that defines the question screens. Subclass of GUI.screens.PalilaScreen.
+
+    Parameters
+    ----------
+    config_dict: dict
+
+    questions: list
+
+    state_override: bool, optional (default=False)
+
+    **kwargs
+        Keyword arguments. These are passed on to the GUI.screens.PalilaScreen constructor.
+
+    Attributes
+    ----------
+    config_dict : dict
+        Dictionary that defines the elements of the QuestionScreen.
+    """
+
+    def __init__(self,
+                 config_dict: dict,
+                 questions: list,
+                 n_max: int,
+                 state_override: bool = False,
+                 **kwargs
+                 ) -> None:
+
+        self.config_dict = config_dict
+        self.questions = questions
+
+        super().__init__(self.config_dict['previous'], self.config_dict['next'], **kwargs)
+
+        # Store the state override variable.
+        self.state_override = state_override
+
+        # Create a link to the question manager from the Kivy code.
+        self.question_manager: QuestionManager = self.ids.question_manager
+
+        # Add the questions from the list to this screen.
+        for question in self.questions:
+            self.question_manager.add_question(self.config_dict[question])
+
+        # Fill up the empty space.
+        for _ in range(n_max - len(self.questions)):
+            self.question_manager.add_widget(Filler())
+
+    def unlock_check(self):
+        """
+        Check for unlocking the continue button.
+        """
+        question_state = self.question_manager.get_state()
+
+        # If all questions are answered and the audio is listened to: unlock the continue button.
+        if question_state or self.state_override:
+            self.reset_continue_label()
+            self.ids.continue_bttn.unlock()
+
+        else:
+            # Otherwise, make sure the continue button is locked.
+            self.ids.continue_bttn.lock()
+
+    def on_pre_leave(self, *_):
+        """
+        Store all answers before leaving the screen.
+        """
+        for qid, answer in self.question_manager.answers.items():
+            self.manager.store_answer(qid, answer)
+
+    def on_pre_enter(self, *_):
+        """
+        Set up the dependency unlocks and do the unlock check
+        """
+        # Set the dependency locks for all questions, now that they are part of this screen.
+        [question.set_unlock() for question in self.question_manager.questions.values()]
+        self.unlock_check()

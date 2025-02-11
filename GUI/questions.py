@@ -101,7 +101,7 @@ class QuestionManager(BoxLayout):
         for qid, answer in self.answers.items():
             total_state = total_state and bool(answer)
 
-        return total_state
+        return total_state and not self.disabled
 
     def change_answer(self, question_id: str, answer: str) -> None:
         """
@@ -116,7 +116,7 @@ class QuestionManager(BoxLayout):
         """
         self.answers[question_id] = answer
         # Have the AudioQuestionScreen check the state
-        self.parent.unlock_check(question_state=self.get_state() and not self.disabled)
+        self.parent.unlock_check()
 
 
 class ChoiceButton(Button):

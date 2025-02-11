@@ -21,7 +21,7 @@ from kivy.core.audio import SoundLoader
 import os
 
 from .threaded_tools import ProgressBarThread
-from .screens import PalilaScreen, Filler
+from .screens import QuestionScreen, Filler
 from .questions import QuestionManager
 from . import audio_questions
 
@@ -29,9 +29,9 @@ from . import audio_questions
 __all__ = ['AudioQuestionScreen', ]
 
 
-class AudioQuestionScreen(PalilaScreen):
+class AudioQuestionScreen(QuestionScreen):
     """
-    Class that defines the overall audio question screens. Subclass of .screens.PalilaScreen.
+    Class that defines the overall audio question screens. Subclass of GUI.screens.QuestionScreen.
 
     Parameters
     ----------
@@ -39,6 +39,8 @@ class AudioQuestionScreen(PalilaScreen):
         Dictionary that defines the audio and related questions.
     demo : bool, optional
         Set this screen up as the demonstration to show participants. Defaults to False.
+    state_override: bool, optional (default=False)
+
     **kwargs
         Keyword arguments. These are passed on to the .screens.PalilaScreen constructor.
 
@@ -70,12 +72,17 @@ class AudioQuestionScreen(PalilaScreen):
                                 'min': '0', 'max': '10', 'step': '.50', 'id': 'demo-02'}
                  }
 
-    def __init__(self, config_dict: dict, demo: bool = False, state_override: bool = False, **kwargs) -> None:
-        self.demo = demo
-        self.config_dict = config_dict if not self.demo else self.demo_dict
+    def __init__(self,
+                 config_dict: dict,
+                 demo: bool = False,
+                 state_override: bool = False,
+                 **kwargs
+                 ) -> None:
 
-        super().__init__(self.config_dict['previous'], self.config_dict['next'], lock=True, **kwargs)
-        self.state_override = state_override
+        self.demo = demo
+        config_dict = config_dict if not self.demo else self.demo_dict
+
+        super().__init__(config_dict, config_dict['questions'], 2, state_override=state_override, lock=True, **kwargs)
 
         # Get better references to the audio and question managers
         self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left
@@ -96,23 +103,7 @@ class AudioQuestionScreen(PalilaScreen):
 
         self.audio_playing = False
 
-        # Create a link to the question manager from the Kivy code.
-        self.question_manager: AQuestionManager = self.ids.question_manager
-
-        # Add the questions from the input file to the question manager
-        for question in self.config_dict['questions']:
-            self.question_manager.add_question(self.config_dict[question])
-
-        # Fill up the empty space.
-        for _ in range(2 - len(self.question_manager.questions)):
-            self.question_manager.add_widget(Filler())
-
-        # Do the unlock check
-        self.unlock_check()
-        # Set the dependency locks for all questions, now that they are part of this screen.
-        [question.set_unlock() for question in self.question_manager.questions.values()]
-
-    def on_pre_leave(self, *_) -> None:
+    def on_pre_leave(self, *args) -> None:
         """
         Store the answers when leaving the screen.
         """
@@ -120,27 +111,22 @@ class AudioQuestionScreen(PalilaScreen):
         if self.demo:
             return
 
-        for qid, answer in self.ids.question_manager.answers.items():
-            # Store the answers, question by question
-            self.manager.store_answer(qid, answer)
+        else:
+            super().on_pre_leave(*args)
 
-        if int(self.config_dict['max replays']) > 1:
-            if self.audio_manager_right.active:
-                self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays-left',
-                                          str(self.audio_manager_left.count))
-                self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays-right',
-                                          str(self.audio_manager_right.count))
-            else:
-                self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays', self.audio_manager_left.count)
+            if int(self.config_dict['max replays']) > 1:
+                if self.audio_manager_right.active:
+                    self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays-left',
+                                              str(self.audio_manager_left.count))
+                    self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays-right',
+                                              str(self.audio_manager_right.count))
+                else:
+                    self.manager.store_answer(f'{self.config_dict["part-audio"]}-replays',
+                                              self.audio_manager_left.count)
 
-    def unlock_check(self, question_state: bool = None) -> None:
+    def unlock_check(self) -> None:
         """
         Check whether the continue button can be unlocked.
-
-        Parameters
-        ----------
-        question_state : bool, optional
-            The state of the QuestionManager. Defaults to a check of the QuestionManager state
         """
         audio_state_left = self.audio_manager_left.count >= 1
         audio_state_right = self.audio_manager_right.n_max is None or self.audio_manager_right.count >= 1
@@ -150,16 +136,8 @@ class AudioQuestionScreen(PalilaScreen):
             self.question_manager.unlock()
             self.ids.extra_message.text = ''
 
-            if question_state is None:
-                question_state = self.question_manager.get_state()
+            super().unlock_check()
 
-            # If all questions are answered and the audio is listened to: unlock the continue button
-            if question_state or self.state_override:
-                self.reset_continue_label()
-                self.ids.continue_bttn.unlock()
-            # Make sure the continue button is locked if not
-            else:
-                self.ids.continue_bttn.lock()
         else:
             self.ids.continue_bttn.lock()
 
@@ -181,8 +159,6 @@ class AudioManager(BoxLayout):
         The maximum number of replays. Initialised as None.
     thread : .threaded_tools.ProgressBarThread
         The threading instance linked to the ProgressBar to make it dynamic. Initialised as None.
-    playing : bool
-        Boolean that indicates whether audio is currently playing.
     count : int
         Integer that keeps track of the times the audio has been played.
     parent_screen : AudioQuestionScreen
