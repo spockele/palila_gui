@@ -49,7 +49,12 @@ class ButtonAQuestion(ButtonQuestion, AudioQuestion):
     """
     General class for questions involving buttons. Subclass of GUI.ButtonQuestion and GUI.AudioQuestion.
     """
-    pass
+    def __init__(self, question_dict: dict, **kwargs):
+        super().__init__(question_dict, **kwargs)
+
+        # Increase the button text font size.
+        for button in self.buttons:
+            button.font_size = 42
 
 
 class MultipleChoiceAQuestion(ButtonAQuestion):
