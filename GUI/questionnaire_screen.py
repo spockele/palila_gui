@@ -202,7 +202,6 @@ class QQuestionManager(BoxLayout):
         answer : str
             The answer string to update to.
         """
-        # TODO: Check if parent level can be equalised with AQuestionManager
         self.answers[question_id] = answer
         # Have the QuestionnaireScreen check the state
         self.parent.unlock_check(question_state=self.get_state() and not self.disabled)

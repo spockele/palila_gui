@@ -116,8 +116,8 @@
 
 <AudioQuestionScreen>:
     BoxLayout:
-        pos_hint: {'center_x': .5, 'y': .165}
-        size_hint: .95, .815
+        pos_hint: {'center_x': .5, 'top': .98}
+        size_hint: .95, .18
 
         orientation: 'vertical'
         spacing: 20
@@ -143,7 +143,8 @@
 
 			color: 1, .5, .5, 1.
 
-        AQuestionManager:
-            id: question_manager
+    AQuestionManager:
+        id: question_manager
 
-            size_hint_y: .8
+        pos_hint: {'center_x': .5, 'y': .15}
+        size_hint: .9, .65

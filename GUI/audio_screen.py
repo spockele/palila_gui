@@ -392,7 +392,6 @@ class AQuestionManager(BoxLayout):
         answer : str
             The answer string to update to.
         """
-        # TODO: Check if parent level can be equalised with QQuestionManager
         self.answers[question_id] = answer
         # Have the AudioQuestionScreen check the state
-        self.parent.parent.unlock_check(question_state=self.get_state() and not self.disabled)
+        self.parent.unlock_check(question_state=self.get_state() and not self.disabled)
