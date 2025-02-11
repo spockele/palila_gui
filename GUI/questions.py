@@ -21,7 +21,98 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
 
-__all__ = ['Question', 'SpinnerQuestion', 'ButtonQuestion']
+__all__ = ['QuestionManager', 'Question', 'SpinnerQuestion', 'ButtonQuestion']
+
+
+class QuestionManager(BoxLayout):
+    """
+    Subclass of kivy.uix.boxlayout.BoxLayout that defines and manages the question part of an AudioQuestionScreen.
+
+    Parameters
+    ----------
+    **kwargs
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
+
+    Attributes
+    ----------
+    questions : dict[str, QQuestion]
+        Dictionary that links the question IDs to the questions.
+    answers : dict[str, str]
+        Dictionary that stores the answers linked to question IDs.
+    """
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.questions = {}
+        self.answers = {}
+
+    @staticmethod
+    def question_class_from_type(question_type: str) -> type:
+        """
+
+        Parameters
+        ----------
+        question_type: str
+        """
+        pass
+
+    def add_question(self, question_dict: dict) -> None:
+        """
+        Adds a question to the allocated space.
+
+        Parameters
+        ----------
+        question_dict : dict
+            Dictionary which defines the question to be added.
+        """
+        # Get the question type class.
+        question_type = self.question_class_from_type(question_dict['type'])
+        # Create the instance of it.
+        question: Question = question_type(question_dict)
+
+        # Add the question to the widgets
+        self.add_widget(question)
+
+        # Link the ID to the instance
+        self.questions[question_dict['id']] = question
+        # Create a spot in the answer dictionary
+        self.answers[question_dict['id']] = 'n/a' if question_dict['type'] == 'Text' else ''
+
+    def unlock(self) -> None:
+        """
+        Unlock this question manager.
+        """
+        self.disabled = False
+
+    def get_state(self) -> bool:
+        """
+        Get an indication if all questions have been answered in this manager.
+
+        Returns
+        -------
+        bool
+            Indication if all questions have been answered in this manager.
+        """
+        total_state = True
+
+        for qid, answer in self.answers.items():
+            total_state = total_state and bool(answer)
+
+        return total_state
+
+    def change_answer(self, question_id: str, answer: str) -> None:
+        """
+        Update the answer of the question with the given ID.
+
+        Parameters
+        ----------
+        question_id : str
+            ID of the question for which to change the answer.
+        answer : str
+            The answer string to update to.
+        """
+        self.answers[question_id] = answer
+        # Have the AudioQuestionScreen check the state
+        self.parent.unlock_check(question_state=self.get_state() and not self.disabled)
 
 
 class ChoiceButton(Button):

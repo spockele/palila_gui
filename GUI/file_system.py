@@ -101,6 +101,8 @@ class PalilaExperiment(ConfigObj):
             # Create a list of questions in each audio dict
             for audio in self[part]['audios']:
                 self[part][audio]['questions'] = [question for question in self[part][audio].sections]
+                if len(self[part][audio]['questions']) > 2:
+                    raise OverflowError(f'{part}: {audio}: There are more than 2 questions for this audio.')
 
         print(f'Successfully loaded "{self.name}.palila".\nVerifying experiment setup...')
         # Verify and prepare for the GUI
@@ -296,6 +298,9 @@ class PalilaExperiment(ConfigObj):
                 screen_dict[screen_num] = [question]
             else:
                 screen_dict[screen_num].append(question)
+                if len(screen_dict[screen_num]) > 7:
+                    raise OverflowError(f'Questionnaire in {part} has more than 7 questions on screen {screen_num}. '
+                                        f'Rearrange the questions so there are only 7 questions per screen.')
 
             # Generate a not-so-nice (but standardised) id.
             # Extract the user input part, audio and question names from the brackets
@@ -347,6 +352,8 @@ class PalilaExperiment(ConfigObj):
                     self[part][audio][key][subkey] = copy.deepcopy(sub_value)
             # Add the ids of the questions to the list in this audio
             self[part][audio]['questions'] = self[part]['questions'].keys()
+            if len(self[part][audio]['questions']) > 2:
+                raise OverflowError(f'{part}: There are more than the maximum of 2 questions per audio.')
 
         # Extract the part, audio and question names
         part_id = part.replace('part ', '')

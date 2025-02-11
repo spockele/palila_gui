@@ -22,6 +22,7 @@ import os
 
 from .threaded_tools import ProgressBarThread
 from .screens import PalilaScreen, Filler
+from .questions import QuestionManager
 from . import audio_questions
 
 
@@ -295,7 +296,8 @@ class AudioManagerRight(AudioManager):
     pass
 
 
-class AQuestionManager(BoxLayout):
+# class AQuestionManager(BoxLayout):
+class AQuestionManager(QuestionManager):
     """
     Subclass of kivy.uix.boxlayout.BoxLayout that defines and manages the question part of an AudioQuestionScreen.
 
@@ -306,92 +308,83 @@ class AQuestionManager(BoxLayout):
 
     Attributes
     ----------
-    n_question : int
-        Number of questions in this manager.
     questions : dict[str, QQuestion]
         Dictionary that links the question IDs to the questions.
     answers : dict[str, str]
         Dictionary that stores the answers linked to question IDs.
     """
-
-    n_max = 2
-
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.n_question = 0
-        self.questions = {}
-        self.answers = {}
+        # self.questions = {}
+        # self.answers = {}
         # By default, disable this widget in Kivy
         self.disabled = True
 
-    def add_question(self, question_dict: dict) -> None:
+    @staticmethod
+    def question_class_from_type(question_type: str) -> type:
         """
-        Adds a question to the allocated space.
 
         Parameters
         ----------
-        question_dict : dict
-            Dictionary which defines the question to be added.
-
-        Raises
-        ------
-        OverflowError:
-            If the question that is passed makes the question count go over the limit.
+        question_type: str
         """
-        # TODO: see how to merge this with QQuestionManager
-        # Check if the space is full
-        if self.n_question < self.n_max:
-            # Add the question according to the input file
-            question_type = getattr(audio_questions, f'{question_dict["type"]}AQuestion')
-            question: audio_questions.AudioQuestion = question_type(question_dict)
+        return getattr(audio_questions, f'{question_type}AQuestion')
 
-            # Add the question to the widgets
-            self.add_widget(question)
-            # Update the counter
-            self.n_question += 1
-
-            # Link the ID to the instance
-            self.questions[question_dict['id']] = question
-            # Create a spot in the answer dictionary
-            self.answers[question_dict['id']] = 'n/a' if question_dict["type"] == 'Text' else ''
-
-        # Throw hands if the space is full
-        else:
-            raise OverflowError(f'Audio contains more than {self.n_max} questions.')
-
-    def unlock(self) -> None:
-        """
-        Unlock this question manager.
-        """
-        self.disabled = False
-
-    def get_state(self) -> bool:
-        """
-        Get an indication if all questions have been answered in this manager.
-
-        Returns
-        -------
-        bool
-            Indication if all questions have been answered in this manager.
-        """
-        total_state = True
-
-        for qid, answer in self.answers.items():
-            total_state = total_state and bool(answer)
-
-        return total_state
-
-    def change_answer(self, question_id: str, answer: str) -> None:
-        """
-        Update the answer of the question with the given ID.
-
-        Parameters
-        ----------
-        question_id : str
-            ID of the question for which to change the answer.
-        answer : str
-            The answer string to update to.
-        """
-        self.answers[question_id] = answer
-        # Have the AudioQuestionScreen check the state
-        self.parent.unlock_check(question_state=self.get_state() and not self.disabled)
+    # def add_question(self, question_dict: dict) -> None:
+    #     """
+    #     Adds a question to the allocated space.
+    #
+    #     Parameters
+    #     ----------
+    #     question_dict : dict
+    #         Dictionary which defines the question to be added.
+    #     """
+    #     # Get the question type class.
+    #     question_type = getattr(audio_questions, f'{question_dict["type"]}AQuestion')
+    #     # Create the instance of it.
+    #     question: audio_questions.AudioQuestion = question_type(question_dict)
+    #
+    #     # Add the question to the widgets
+    #     self.add_widget(question)
+    #
+    #     # Link the ID to the instance
+    #     self.questions[question_dict['id']] = question
+    #     # Create a spot in the answer dictionary
+    #     self.answers[question_dict['id']] = 'n/a' if question_dict["type"] == 'Text' else ''
+    #
+    # def unlock(self) -> None:
+    #     """
+    #     Unlock this question manager.
+    #     """
+    #     self.disabled = False
+    #
+    # def get_state(self) -> bool:
+    #     """
+    #     Get an indication if all questions have been answered in this manager.
+    #
+    #     Returns
+    #     -------
+    #     bool
+    #         Indication if all questions have been answered in this manager.
+    #     """
+    #     total_state = True
+    #
+    #     for qid, answer in self.answers.items():
+    #         total_state = total_state and bool(answer)
+    #
+    #     return total_state
+    #
+    # def change_answer(self, question_id: str, answer: str) -> None:
+    #     """
+    #     Update the answer of the question with the given ID.
+    #
+    #     Parameters
+    #     ----------
+    #     question_id : str
+    #         ID of the question for which to change the answer.
+    #     answer : str
+    #         The answer string to update to.
+    #     """
+    #     self.answers[question_id] = answer
+    #     # Have the AudioQuestionScreen check the state
+    #     self.parent.unlock_check(question_state=self.get_state() and not self.disabled)

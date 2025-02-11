@@ -20,6 +20,7 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.boxlayout import BoxLayout
 
 from .screens import PalilaScreen, BackButton, Filler
+from .questions import QuestionManager
 from . import questionnaire_questions
 
 
@@ -131,7 +132,8 @@ class QuestionnaireScreen(PalilaScreen):
             self.next_screen = next_screen
 
 
-class QQuestionManager(BoxLayout):
+# class QQuestionManager(BoxLayout):
+class QQuestionManager(QuestionManager):
     """
     Subclass of kivy.uix.boxlayout.BoxLayout that defines and manages the question part of an AudioQuestionScreen.
 
@@ -147,64 +149,73 @@ class QQuestionManager(BoxLayout):
     answers : dict[str, str]
         Dictionary that stores the answers linked to question IDs.
     """
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.questions = {}
-        self.answers = {}
+    # def __init__(self, **kwargs):
+    #     super().__init__(**kwargs)
+    #     self.questions = {}
+    #     self.answers = {}
 
-    def add_question(self, question_dict: dict) -> None:
+    @staticmethod
+    def question_class_from_type(question_type: str) -> type:
         """
-        Add a questionnaire question to this question manager.
 
         Parameters
         ----------
-        question_dict : dict
-            Dictionary with all the information to construct the question.
+        question_type: str
         """
-        # TODO: see how to merge this with AQuestionManager
-        # Get the question type class.
-        question_type = getattr(questionnaire_questions, f'{question_dict["type"]}QQuestion')
-        # Create the instance of it.
-        question_instance: questionnaire_questions.QuestionnaireQuestion = question_type(question_dict)
-
-        # Add the instance to the screen and the list.
-        self.add_widget(question_instance)
-
-        # Link the ID to the instance
-        self.questions[question_dict['id']] = question_instance
-        # Create a spot in the answer dictionary
-        self.answers[question_dict['id']] = ''
-
-    def get_state(self) -> bool:
-        """
-        Get an indication if all questions have been answered in this manager.
-
-        Returns
-        -------
-        bool
-            Indication if all questions have been answered in this manager.
-        """
-        total_state = True
-
-        for qid, answer in self.answers.items():
-            total_state = total_state and bool(answer)
-
-        return total_state
-
-    def change_answer(self, question_id: str, answer: str) -> None:
-        """
-        Update the answer of the question with the given ID.
-
-        Parameters
-        ----------
-        question_id : str
-            ID of the question for which to change the answer.
-        answer : str
-            The answer string to update to.
-        """
-        self.answers[question_id] = answer
-        # Have the QuestionnaireScreen check the state
-        self.parent.unlock_check(question_state=self.get_state() and not self.disabled)
+        return getattr(questionnaire_questions, f'{question_type}QQuestion')
+    #
+    # def add_question(self, question_dict: dict) -> None:
+    #     """
+    #     Add a questionnaire question to this question manager.
+    #
+    #     Parameters
+    #     ----------
+    #     question_dict : dict
+    #         Dictionary with all the information to construct the question.
+    #     """
+    #     # Get the question type class.
+    #     question_type = getattr(questionnaire_questions, f'{question_dict["type"]}QQuestion')
+    #     # Create the instance of it.
+    #     question_instance: questionnaire_questions.QuestionnaireQuestion = question_type(question_dict)
+    #
+    #     # Add the instance to the screen and the list.
+    #     self.add_widget(question_instance)
+    #
+    #     # Link the ID to the instance
+    #     self.questions[question_dict['id']] = question_instance
+    #     # Create a spot in the answer dictionary
+    #     self.answers[question_dict['id']] = ''
+    #
+    # def get_state(self) -> bool:
+    #     """
+    #     Get an indication if all questions have been answered in this manager.
+    #
+    #     Returns
+    #     -------
+    #     bool
+    #         Indication if all questions have been answered in this manager.
+    #     """
+    #     total_state = True
+    #
+    #     for qid, answer in self.answers.items():
+    #         total_state = total_state and bool(answer)
+    #
+    #     return total_state
+    #
+    # def change_answer(self, question_id: str, answer: str) -> None:
+    #     """
+    #     Update the answer of the question with the given ID.
+    #
+    #     Parameters
+    #     ----------
+    #     question_id : str
+    #         ID of the question for which to change the answer.
+    #     answer : str
+    #         The answer string to update to.
+    #     """
+    #     self.answers[question_id] = answer
+    #     # Have the QuestionnaireScreen check the state
+    #     self.parent.unlock_check(question_state=self.get_state() and not self.disabled)
 
 
 def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_override: bool,
