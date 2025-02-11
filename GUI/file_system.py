@@ -334,12 +334,6 @@ class PalilaExperiment(ConfigObj):
         if 'filename_2' in self[part][audio].keys():
             self[part][audio]['filepath_2'] = os.path.join(self.path, self[part][audio]['filename_2'])
 
-        # Extract the filler option
-        if 'filler' not in self[part][audio].keys():
-            self[part][audio]['filler'] = True
-        else:
-            self[part][audio]['filler'] = self[part][audio].as_bool('filler')
-
         # Obtain the questions in case of question overwrite from the part
         if question_overwrite:
             # First remove the ones that may be in the audio dictionary

@@ -60,7 +60,6 @@ class AudioQuestionScreen(PalilaScreen):
                  'next': 'welcome',
                  'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'),
                  'max replays': '2',
-                 'filler': True,
                  'questions': ['question 1', 'question 2'],
                  'question 1': {'type': 'IntegerScale',
                                 'text': 'This screen is a demonstration.\nSelect a number on the scale:',
@@ -104,11 +103,9 @@ class AudioQuestionScreen(PalilaScreen):
         for question in self.config_dict['questions']:
             self.question_manager.add_question(self.config_dict[question])
 
-        # Fill empty space if needed.
-        if self.config_dict['filler']:
-            # Fill up the empty space.
-            for _ in range(2 - len(self.question_manager.questions)):
-                self.question_manager.add_widget(Filler())
+        # Fill up the empty space.
+        for _ in range(2 - len(self.question_manager.questions)):
+            self.question_manager.add_widget(Filler())
 
         # Do the unlock check
         self.unlock_check()
