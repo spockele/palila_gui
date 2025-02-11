@@ -28,18 +28,18 @@ from kivy.app import App
 
 import warnings
 
-from .progress_tracker import ProgressTracker
 from .questionnaire_screen import *
 from .audio_screen import *
 from .file_system import *
 from .screens import *
+from .tools import *
 
 
 __all__ = ['main', ]
 
 Builder.load_file('GUI/audio_screen.kv')
 Builder.load_file('GUI/audio_questions.kv')
-Builder.load_file('GUI/numpad_bubble.kv')
+Builder.load_file('GUI/tools.kv')
 Builder.load_file('GUI/questionnaire_questions.kv')
 Builder.load_file('GUI/questionnaire_screen.kv')
 

@@ -16,12 +16,13 @@ Module with all the code for the modular questions.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 
 
-__all__ = ['QuestionManager', 'Question', 'SpinnerQuestion', 'ButtonQuestion']
+__all__ = ['QuestionManager', 'Question', 'SpinnerQuestion', 'ButtonQuestion',
+           'FreeNumberTextInput', ]
 
 
 class QuestionManager(BoxLayout):
@@ -151,6 +152,23 @@ class ChoiceButton(Button):
         Use the AudioQuestion class to do the selection.
         """
         self.parent.parent.select_choice(self)
+
+
+class FreeNumberTextInput(TextInput):
+    """
+    Subclass of the TextInput to accommodate the NumPad Bubble for entering text with touchscreens.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def on_touch_down(self, touch) -> None:
+        """
+        Overload of on_touch_down method to trigger the NumPad Bubble.
+        """
+        if self.collide_point(*touch.pos):
+            self.parent.parent.trigger_numpad(self)
+
+        super().on_touch_down(touch)
 
 
 class Question(BoxLayout):

@@ -12,6 +12,39 @@
 ## 	See the License for the specific language governing permissions and
 ## 	limitations under the License.
 
+<PartIndicator>:
+    size_hint: .003, 1.,
+
+    canvas:
+        Color:
+            rgba: (.2, .2, .2, 1.)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+<Tracker>
+    size_hint_y: .6
+
+    canvas:
+        Color:
+            rgba: self.rgba
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+<TrackFiller>
+    pos_hint: {'x': 0, 'y': 0}
+    size_hint: 1., .6,
+
+    canvas:
+        Color:
+            rgba: (.7, .7, .7, 1.)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
 
 <NumPadBubble>
 	pos_hint: {'center_x': .25, 'center_y': .5}

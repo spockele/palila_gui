@@ -22,8 +22,8 @@ from kivy.uix.widget import Widget
 from kivy.config import Config
 from kivy.clock import Clock
 
-from .threaded_tools import ProgressBarThread
 from .questions import QuestionManager
+from .tools import ProgressBarThread
 
 
 __all__ = ['PalilaScreen', 'WelcomeScreen', 'EndScreen', 'FinalScreen', 'TimedTextScreen', 'QuestionScreen',

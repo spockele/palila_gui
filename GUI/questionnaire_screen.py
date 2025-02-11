@@ -18,11 +18,10 @@ Module containing the overall classes and functions for the Questionnaire screen
 
 from kivy.properties import ColorProperty, NumericProperty
 from kivy.uix.screenmanager import ScreenManager
-from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 
 from .screens import QuestionScreen, BackButton
-from .numpad_bubble import NumPadBubble
+from .tools import NumPadBubble
 from .questions import *
 
 
@@ -125,23 +124,6 @@ class QuestionnaireQuestion(Question):
         Add the top borderline to the question.
         """
         self.bordercolor = [.8, .8, .8, 1.]
-
-
-class FreeNumberTextInput(TextInput):
-    """
-    Subclass of the TextInput to accommodate the NumPad Bubble for entering text with touchscreens.
-    """
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def on_touch_down(self, touch) -> None:
-        """
-        Overload of on_touch_down method to trigger the NumPad Bubble.
-        """
-        if self.collide_point(*touch.pos):
-            self.parent.parent.trigger_numpad(self)
-
-        super().on_touch_down(touch)
 
 
 class FreeNumberQQuestion(QuestionnaireQuestion):

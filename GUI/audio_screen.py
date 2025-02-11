@@ -21,7 +21,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.audio import SoundLoader
 import os
 
-from .threaded_tools import ProgressBarThread
+from .tools import ProgressBarThread
 from .screens import QuestionScreen
 from .questions import *
 

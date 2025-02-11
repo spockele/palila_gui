@@ -1,5 +1,5 @@
 """
-Module with the code to set the progressbar at the bottom of the audio screens.
+Module with the code for smaller tools used by parts of the GUI.
 """
 
 # Copyright (c) 2025 Josephine Siebert Pockelé
@@ -16,47 +16,19 @@ Module with the code to set the progressbar at the bottom of the audio screens.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+from kivy.uix.behaviors.focus import FocusBehavior
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.progressbar import ProgressBar
 from kivy.properties import ListProperty
-from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
+from kivy.uix.bubble import Bubble
+
+import threading
+import time
 
 
-# The kivy language string to be used.
-Builder.load_string(
-    '''
-<PartIndicator>:
-    size_hint: .003, 1., 
-    
-    canvas:
-        Color:
-            rgba: (.2, .2, .2, 1.)
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            
-<Tracker>
-    size_hint_y: .6
-    
-    canvas:
-        Color:
-            rgba: self.rgba
-        Rectangle:
-            pos: self.pos
-            size: self.size
-          
-<TrackFiller>
-    pos_hint: {'x': 0, 'y': 0}
-    size_hint: 1., .6, 
-    
-    canvas:
-        Color:
-            rgba: (.7, .7, .7, 1.)
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    '''
-)
+__all__ = ['ProgressTracker', 'ProgressBarThread', 'NumPadBubble', ]
 
 
 class PartIndicator(Widget):
@@ -188,3 +160,82 @@ class ProgressTracker(FloatLayout):
         for div, widget in self.tracker_widgets.items():
             if self.tracker[div] == self.counts[div]:
                 widget.rgba = [.4, .8, .4, 1]
+
+
+class ProgressBarThread(threading.Thread):
+    """
+    Thread subclass to manage a timed ProgressBar.
+
+    Parameters
+    ----------
+    progress_bar : ProgressBar
+        ProgressBar instance to keep track of.
+    **kwargs
+        Keyword arguments. These are passed on to the threading.Thread constructor.
+
+    Attributes
+    ----------
+    progress_bar : ProgressBar
+        ProgressBar instance to keep track of.
+    """
+    def __init__(self, progress_bar: ProgressBar, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.progress_bar = progress_bar
+
+    def run(self) -> None:
+        """
+        Run function of the Thread. Will update the progress bar every 0.1 seconds until it is full.
+        """
+        # Set initial time
+        t0 = time.time()
+        dt = .1
+        # Do while the time is below the max of the progress bar
+        while time.time() - t0 <= self.progress_bar.max + dt:
+            # Update the progress bar value
+            self.progress_bar.value = time.time() - t0
+            # # Hold to not overload the system
+            time.sleep(dt)
+
+
+class NumPadBubble(Bubble):
+    """
+    A pop-up numpad that is linked to a widget.
+
+    Parameters
+    ----------
+    **kwargs
+        Keyword arguments. These are passed on to the kivy.uix.bubble.Bubble constructor.
+
+    Attributes
+    ----------
+    coupled_widget : kivy.uix.widget.Widget
+        The widget to which the NumPadBubble is linked. The NumPad will edit text in this Widget
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.coupled_widget = None
+
+    def on_touch_down(self, touch):
+        """
+        Overload of on_touch_down method. Manages the focus and whether to remove this widget based on touch location.
+        """
+        if self.collide_point(*touch.pos):
+            FocusBehavior.ignored_touch.append(touch)
+        elif not self.coupled_widget.collide_point(*touch.pos):
+            self.parent.remove_widget(self)
+
+        super().on_touch_down(touch)
+
+    def add_text(self, value: str):
+        """
+        Function linked to the number buttons, to enter the number to the coupled widget's text.
+        """
+        if self.coupled_widget is not None:
+            self.coupled_widget.text += value
+
+    def remove_text(self):
+        """
+        Function linked to the backspace button, to remove the last number in the coupled widget's text.
+        """
+        if self.coupled_widget is not None:
+            self.coupled_widget.text = self.coupled_widget.text[:-1]
