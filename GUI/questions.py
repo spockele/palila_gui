@@ -26,7 +26,8 @@ __all__ = ['QuestionManager', 'Question', 'SpinnerQuestion', 'ButtonQuestion']
 
 class QuestionManager(BoxLayout):
     """
-    Subclass of kivy.uix.boxlayout.BoxLayout that defines and manages the question part of an AudioQuestionScreen.
+    Subclass of kivy.uix.boxlayout.BoxLayout that defines and manages the interaction of question front-end with the
+        file systems.
 
     Parameters
     ----------
@@ -35,7 +36,7 @@ class QuestionManager(BoxLayout):
 
     Attributes
     ----------
-    questions : dict[str, QQuestion]
+    questions : dict[str, Question]
         Dictionary that links the question IDs to the questions.
     answers : dict[str, str]
         Dictionary that stores the answers linked to question IDs.
@@ -48,10 +49,13 @@ class QuestionManager(BoxLayout):
     @staticmethod
     def question_class_from_type(question_type: str) -> type:
         """
+        Obtain the type definition of a question type for the add_question function.
+        OVERLOAD REQUIRED TO WORK!!
 
         Parameters
         ----------
         question_type: str
+            Name of the question type from a question_dict.
         """
         pass
 
