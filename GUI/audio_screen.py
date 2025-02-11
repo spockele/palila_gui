@@ -52,7 +52,7 @@ class AudioQuestionScreen(PalilaScreen):
         The secondary instance of AudioManager linked to this specific screen.
     question_manager : AQuestionManager
         The instance of QuestionManager linked to this specific screen.
-    audio_block : bool
+    audio_playing : bool
         Switch indicating that audio replay should be blocked.
     """
 
@@ -94,7 +94,7 @@ class AudioQuestionScreen(PalilaScreen):
             self.audio_manager_right.active = True
             self.ids.extra_message.text = 'Listen to both samples at least once before answering the question.'
 
-        self.audio_block = False
+        self.audio_playing = False
 
         # Create a link to the question manager from the Kivy code.
         self.question_manager: AQuestionManager = self.ids.question_manager
@@ -144,7 +144,7 @@ class AudioQuestionScreen(PalilaScreen):
         """
         audio_state_left = self.audio_manager_left.count >= 1
         audio_state_right = self.audio_manager_right.n_max is None or self.audio_manager_right.count >= 1
-        audio_state = audio_state_left and audio_state_right
+        audio_state = audio_state_left and audio_state_right and not self.audio_playing
 
         if audio_state or self.state_override:
             self.question_manager.unlock()
@@ -160,6 +160,8 @@ class AudioQuestionScreen(PalilaScreen):
             # Make sure the continue button is locked if not
             else:
                 self.ids.continue_bttn.lock()
+        else:
+            self.ids.continue_bttn.lock()
 
 
 class AudioManager(BoxLayout):
@@ -195,7 +197,6 @@ class AudioManager(BoxLayout):
         self.thread = None
 
         # Initial values for the audio playback
-        self.playing = False
         self.count = 0
 
         self.parent_screen = None
@@ -229,16 +230,15 @@ class AudioManager(BoxLayout):
         Function that starts the audio.
         """
         # Check the count and if audio is already playing
-        if self.count < self.n_max and not self.playing and not self.parent_screen.audio_block:
+        if self.count < self.n_max and not self.parent_screen.audio_playing:
             # Set up the ProgressBarThread and the corresponding bar
             self.thread = ProgressBarThread(self.ids.progress)
             self.ids.progress.max = self.audio.length
             # Start the thread, audio and set the playing boolean
             self.thread.start()
             self.audio.play()
-            self.playing = True
-            self.parent_screen.audio_block = True
-            self.parent_screen.ids.continue_bttn.lock()
+            self.parent_screen.audio_playing = True
+            self.parent_screen.unlock_check()
             # Reflect the audio playing in the play button and text
             self.ids.bttn_image.source = 'GUI/assets/hearing.png'
             self.ids.bttn.background_color = [.5, .5, 1, 1]
@@ -254,8 +254,7 @@ class AudioManager(BoxLayout):
         self.thread.join()
         self.thread = None
         # Register that no audio is playing
-        self.playing = False
-        self.parent_screen.audio_block = False
+        self.parent_screen.audio_playing = False
         # Check the remaining replay allowance
         remaining = self.n_max - self.count
         # If there is allowance left
