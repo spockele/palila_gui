@@ -336,6 +336,9 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
         screen_nums = sorted(questionnaire_dict['screen dict'].keys())
         # Loop over those numbers
         for ii, screen_num in enumerate(screen_nums):
+            # ==========================================================================================================
+            # TODO: change this method of assignment of previous and next screen (see issue #75)
+            #       POTENTIAL ALIASING!!!
             if ii:
                 # When this is not the last screen, define the previous indexed screen as previous to this one
                 questionnaire_dict['previous'] = f'{part}-questionnaire {ii}'
@@ -347,7 +350,7 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
 
             else:
                 questionnaire_dict['next'] = next_screen
-
+            # ==========================================================================================================
             if ii:
                 # Create a new questionnaire screen with the necessary parameters
                 new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
