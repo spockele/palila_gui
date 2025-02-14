@@ -19,6 +19,7 @@ Module containing the overall classes and functions for the Questionnaire screen
 from kivy.properties import ColorProperty, NumericProperty
 from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.widget import Widget
+import copy
 
 from .screens import QuestionScreen, BackButton
 from .tools import NumPadBubble
@@ -330,6 +331,7 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
         manager.get_screen(questionnaire_dict['previous']).next_screen = questionnaire_dict['next']
 
     else:
+        next_screen = copy.deepcopy(questionnaire_dict['next'])
         # Extract the screen numbers from the question distribution
         screen_nums = sorted(questionnaire_dict['screen dict'].keys())
         # Loop over those numbers
@@ -342,6 +344,9 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
             if screen_num < max(screen_nums):
                 # If not, define the next one by the index + 2
                 questionnaire_dict['next'] = f'{part}-questionnaire {ii + 2}'
+
+            else:
+                questionnaire_dict['next'] = next_screen
 
             if ii:
                 # Create a new questionnaire screen with the necessary parameters
