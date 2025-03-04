@@ -17,7 +17,7 @@ pid mode = auto
 randomise = no
 demo = no
 
-override = no
+override = yes
 
 [questionnaire]
 	default = yes
@@ -81,9 +81,11 @@ override = no
 		interval = 0
 		time = 1
 
+
 	[[intro]]
 		text = '''This is the first part of the PALILA GUI demo. This part showcases audio's with common questions. It also shows multi-audio screens and the replay ability.'''
 		time = 1
+
 
 	[[audio 0]]
 		filename = 'prototyping_placeholder.wav'
@@ -93,6 +95,7 @@ override = no
 			text = 'This exact question-sample combination is repeated twice.'
 			type = Text
 
+
 	[[audio 1]]
 		filename = 'prototyping_placeholder.wav'
 		filename_2 = 'prototyping_placeholder.wav'
@@ -100,6 +103,7 @@ override = no
 		[[[question q1]]]
 			text = 'This is an example of two sample files with (a) common question(s).'
 			type = Text
+
 
 	[[audio 2]]
 		filename = 'prototyping_placeholder.wav'
@@ -109,6 +113,7 @@ override = no
 		[[[question q1]]]
 			text = 'This is an example of sound samples that can be replayed.'
 			type = Text
+
 
 	[[questionnaire]]
 		[[[question showcase]]]
@@ -126,12 +131,27 @@ override = no
 			This part showcases most options for questions.'''
 		time = 1
 
+
 	[[breaks]]
-		text = 'Breaks can also be put at an interval.'
-		interval = 2
+		text = 'Breaks can also be put at a regular interval.'
+		interval = 3
 		time = 1
 
-	[[audio 0]]
+
+    [[audio elevenpoint]]
+		filename = 'prototyping_placeholder.wav'
+
+		[[[question q1]]]
+		    type = Annoyance
+		    text = '''This is a demonstration of the standard 11-point scale.
+		    	One with custom text, one with the ISO phrasing.'''
+
+		[[[question q2]]]
+		    type = Annoyance
+		    text = ''
+
+
+	[[audio textquestion]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question 0]]]
@@ -139,7 +159,8 @@ override = no
 			text = '''This is just text, no question asked.
 				If only a text is present, the continue button unlocks after playing audio.'''
 
-	[[audio 1]]
+
+	[[audio multiplechoice1]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question mc]]]
@@ -154,7 +175,8 @@ override = no
 			type = Spinner
 			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worse', 'Prefer not to Answer'
 
-	[[audio 2]]
+
+	[[audio multiplechoice2]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question mc]]]
@@ -171,7 +193,8 @@ override = no
 			unlocked by = 'mc'
 			unlock condition = 'Yes'
 
-	[[audio 3]]
+
+	[[audio scale]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question sl]]]
@@ -193,7 +216,8 @@ override = no
 			left note = 'Not nice'
 			right note = 'Very nice'
 
-	[[audio 4]]
+
+	[[audio slider]]
 		filename = 'prototyping_placeholder.wav'
 
 		[[[question sl]]]
