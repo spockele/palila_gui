@@ -78,7 +78,7 @@ class QuestionnaireScreen(QuestionScreen):
             self.add_widget(back_button)
 
         # Add the borders to all questions
-        [question.border() for question in self.question_manager.questions.values()]
+        [question.border() for question in list(self.question_manager.questions.values())[:-1]]
 
     def set_next_screen(self, next_screen: str) -> None:
         """
