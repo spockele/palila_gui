@@ -385,10 +385,10 @@ class IntegerScaleAQuestion(ButtonAQuestion):
         if no_notes:
             scale_width = .95
             scale_start = .025
-            self.ids.scale_bar.size_hint = (.96, .2)
+            self.ids.scale_bar.size_hint = (.95, .2)
         else:
-            scale_width = .64
-            scale_start = .18
+            scale_width = .81
+            scale_start = .095
 
         # Determine the number of buttons and their width
         n_button = self.max - self.min + 1
@@ -401,6 +401,31 @@ class IntegerScaleAQuestion(ButtonAQuestion):
             button.size_hint_y = .75 * (button_width ** .95) * 9
             # Determine their positions
             button.pos_hint = {'center_x': (scale_start + button_width / 2) + (bi * button_width), 'center_y': .5}
+
+
+class AnnoyanceAQuestion(IntegerScaleAQuestion):
+    """
+    Question with an 11-point annoyance scale. Subclass of GUI.audio_screen.IntegerScaleAQuestion.
+
+    Parameters
+    ----------
+    question_dict: dict
+        Dictionary with all the information to construct the question.
+        Should include the following keys: 'id'
+    **kwargs
+        Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
+
+    """
+    def __init__(self, question_dict: dict, **kwargs) -> None:
+        if not question_dict['text']:
+            question_dict['text'] = 'What number from 0 to 10 best describes how much you are\n'\
+                                    'bothered, disturbed or annoyed by the presented noise?'
+        question_dict['min'] = 0
+        question_dict['max'] = 10
+        question_dict['left note'] = 'Not at all'
+        question_dict['right note'] = 'Extremely'
+
+        super().__init__(question_dict, **kwargs)
 
 
 class SpinnerAQuestion(SpinnerQuestion, AudioQuestion):

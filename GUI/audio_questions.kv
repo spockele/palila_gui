@@ -15,7 +15,7 @@
 
 <AudioQuestion>
     orientation: 'vertical'
-    spacing: 20
+    spacing: 10
 
     Label:
         id: question_text
@@ -24,7 +24,7 @@
 
         text: ''
 
-        font_size: 42
+        font_size: 44
         text_size: self.size
         halign: 'left'
         valign: 'bottom'
@@ -50,7 +50,7 @@
             id: left_note
 
             pos_hint: {'x': 0, 'center_y': .5, }
-            size_hint: .15, 1
+            size_hint: .085, 1
 
             text: ''
 
@@ -62,7 +62,7 @@
             id: right_note
 
             pos_hint: {'right': 1, 'center_y': .5, }
-            size_hint: .15, 1
+            size_hint: .085, 1
 
             text: ''
 
@@ -74,7 +74,7 @@
         	id: scale_bar
 
             pos_hint: {'center_x': .5, 'center_y': .5}
-            size_hint: .65, .2
+            size_hint: .81, .2
 
             canvas.after:
                 Color:
