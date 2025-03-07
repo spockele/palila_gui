@@ -63,11 +63,11 @@ class AudioQuestionScreen(QuestionScreen):
                  'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'),
                  'max replays': '2',
                  'questions': ['question 1', 'question 2'],
-                 'question 1': {'type': 'IntegerScale',
+                 'question 1': {'type': 'IntegerScale', 'multi': False,
                                 'text': 'This screen is a demonstration.\nSelect a number on the scale:',
                                 'min': '0', 'max': '7',
                                 'left note': 'Very Bad', 'right note': 'Very Good', 'id': 'demo-01'},
-                 'question 2': {'type': 'Slider',
+                 'question 2': {'type': 'Slider', 'multi': False,
                                 'text': 'Now select a number on this slider scale:',
                                 'min': '0', 'max': '10', 'step': '.50', 'id': 'demo-02'}
                  }

@@ -339,7 +339,8 @@ class ButtonQuestion(Question):
     Parameters
     ----------
     question_dict: dict
-        Dictionary with all the information to construct the question. Should include the following keys: 'id', 'text'.
+        Dictionary with all the information to construct the question.
+        Should include the following keys: 'id', 'text', 'multi'.
     **kwargs
         Keyword arguments. These are passed on to the kivy.uix.boxlayout.BoxLayout constructor.
 
