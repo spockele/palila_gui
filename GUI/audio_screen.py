@@ -129,10 +129,10 @@ class AudioQuestionScreen(QuestionScreen):
         Check whether the continue button can be unlocked.
         """
         audio_state_left = self.audio_manager_left.count >= 1
-        audio_state_right = self.audio_manager_right.n_max is None or self.audio_manager_right.count >= 1
+        audio_state_right = not self.audio_manager_right.active or self.audio_manager_right.count >= 1
         audio_state = audio_state_left and audio_state_right
 
-        if audio_state or self.state_override and not self.audio_playing:
+        if (audio_state or self.state_override) and not self.audio_playing:
             self.question_manager.unlock()
             self.ids.extra_message.text = ''
 
