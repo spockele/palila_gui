@@ -17,26 +17,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
-# [v1.2.0] - Unreleased
+# [v1.2.0] - 28 March 2025
+
+This update contains major back-end changes to the code structure, mainly targeted at duplicate and redundant code. This version also contains some fixes, deprecations and removals in line with planned developements.
+
 ### Added
+- ```Annoyance``` audio question type, containing the standardised 11-point annoyance question.
 
 ### Changed
 - Revamp of the progress bar: static regardless of screen, turns green when part is completed, resets when returning to main questionnaire.
 - Removed final semicolon \(;\) from the multiple choice, multiple answer question type.
 - Removed ```AttributeError``` from ```MultiMulipleChoiceQQuestion```, because it was not relevant.
 - Added way to enter multiple ```unlock_condition``` items by using a semicolon.
+- Cleanup of the root directory. Moved Python support scripts to their own folder and modified the ```.bat``` scripts.
+
+
+- FOR DEVELOPERS: this update contains major changes to the Questionnaire and Audio Screen logic, and their underlying management classes. The main changes are the equalisation and merger of both systems. Please refer to the commit history to understand these changes.
 
 ### Deprecated
 - The Questionnaire ```MultiMultipleChoice``` question type will be removed in future versions. Multiple-choice-multiple-answer questions can be created using the ```MultipleChoice``` type with ```multi = yes```
 - Questionnaire question IDs should now be defined in the brackets. They will always be standardised to the ```[part_id]-questionnaire-[question_id]``` format. 
 
 ### Removed
-- The deprecated keywords ```dependant``` and ```dependant condition``` are now fully removed. They are now defined in the conditionally unlocked question and renamed: ```unlocked by``` and ```unlock condition```.
+- The deprecated keywords ```dependant``` and ```dependant condition``` are now fully removed. They are now defined in the locked question and renamed: ```unlocked by``` and ```unlock condition```.
 - ```PointCompassAQuestion``` type has been removed, because it is unnecessarily complex.
+- ```filler``` keyword removed from input system, to reflect desired GUI layout behaviour.
 
 ### Fixed
 - When returning to the main questionnaire from the end screen, the full questionnaire is now accessible.
 - Pressing play on an audio now locks the continue button, to avoid the audio playing in the next screen.
+- Fixed the ```demo``` screen at the start of the GUI.
 
 
 ## [v1.1.2] - 17 December 2024
@@ -55,7 +65,8 @@ Hotfix for a critical navigation issue that makes v1.1.0 unusable.
 This issue was related to the incomplete removal of the unused pre-navigation function of the PalilaScreen class
 
 
-## [v1.1.0] - 3 June 2024
+## [v1.1.0] - 3 June 2024 
+### !! THIS VERSION DOES NOT WORK !!
 
 ### Added
 - The number of replays of sound samples is now recorded in the output file:
