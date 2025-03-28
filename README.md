@@ -56,7 +56,7 @@ Pockelé, J.S. (2024). Graphical User Interface for the Psychoacoustic Listening
 
 ---
 ## Experiment Configuration
-The experiment configuration consists of the following files in this directory, where ```<experiment name>``` represents the name you use for your experiment:
+The experiment configuration consists of the following files, where ```<experiment name>``` represents the name you use for your experiment:
 - An experiment configuration file (```<experiment name>.palila```)
   - Defines the experiment (audios, questions, etc.).
   - An example can be found in ```gui_dev.palila```.
@@ -65,7 +65,7 @@ The experiment configuration consists of the following files in this directory, 
   - Contains the audio samples and the responses of the experiment.
   - See for example the ```.\gui_dev``` directory.
 
-The script ```setup_new.bat``` will create the configuration file and experiment file directory for you, and do the necessary modification in the code for it to run.
+The script ```NEW_EXPERIMENT.bat``` will create the configuration file and experiment file directory for you, and do the necessary modification in the code for it to run.
 
 
 ### Config file structure (```.palila```)
@@ -91,8 +91,7 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
                                         
     [[question <string>]] (optional)    # -> SubSection defining a question in the questionnaire. 
                                         #   <string> defines the name.
-        id = <string> (optional)            # -> Optional custom ID for the question in the output file.
-                                            #   If not defined, a standardised ID will be assigned
+        
         type = <string>                     # -> Defines the type of question. See below for specifics of each types.
         text = <string>                     # -> Defines the question text.
         manual screen = <integer>           # -> In case of manual split = yes, this defines the screen to 
@@ -165,28 +164,30 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
 
 ### The questionnaire question types:
 - ```FreeNumber```: Question asking for a freely entered numerical value.
-  - Requires no additional input.
+   - Requires no additional arguments.
 
 
 - ```FreeText```: Question asking for a freely entered answer (can be anything, maximum 2 lines).
-  - Requires no additional input.
+  - Requires no additional arguments.
 
 
 - ```MultipleChoice```: Multiple choice question with buttons.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
-  - For multiple answers, set ```multi = yes```.
+  - To allow for multiple answers, set ```multi = yes```.
+
 
 - ```Spinner```: Multiple choice question with a dropdown menu.
   - Requires: ```choices = <string>, <string>, ...``` -> Defines the dropdown items.
 
 ### The audio question types:
 - ```Text```: Just text, no question.
-  - Requires no additional inputs.
+  - Requires no additional arguments.
 
 
 - ```MultipleChoice```: Multiple choice question with buttons.
-  - Requires: ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
+  - Required arguments:\
+    ```choices = <string>, <string>, ...``` -> Defines the choice buttons.
   - Recommended limit of 4-5 choices.
 
 
@@ -195,40 +196,47 @@ demo = <boolean> (optional)         # -> Show a demonstration for participants b
 
 
 - ```IntegerScale```: Rating question with an integer numerical scale.
-  - Requires the following arguments:\
+  - Required arguments:\
     ```min = <integer>``` -> Defines the minimum value of the scale.\
     ```max = <integer>``` -> Defines the minimum value of the scale.
-  - Recommended range: ```4 <= (max - min) <= 8 with left and right note, else 6 <= (max - min) <= 10```
-  - Optional:\
+  - Optional arguments:\
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
+  - Recommended range:\
+    ```4 <= max - min <= 8``` with left and right note, else ```6 <= max - min <= 10```
+
+
+- ```Annoyance```: Subtype of the ```IntegerScale``` containing the standardised 11-point annoyance question.
+  - Requires no additional arguments.
+  - IMPORTANT:\
+    ```text``` MUST be set as ```text = ''``` for this question to work.
+  - Optional arguments:\
+    ```text``` -> Defines a custom question text for the annoyance scale.
 
 
 - ```Slider```: Rating question with a slider input.
-  - Requires the following arguments:\
+  - Required arguments:\
     ```min = <float>``` -> Defines the minimum value of the scale.\
     ```max = <float>``` -> Defines the minimum value of the scale.\
     ```step = <float>``` -> Defines the steps of the slider scale.
-  - Recommended to use only after NumScale does not suffice in resolution.
-  - Optional:\
+  - Optional arguments:\
     ```left note = <string>``` -> Defines the text on the left side of the scale.\
     ```right note = <string>``` -> Defines the text on the right side of the scale.
+  - Recommended to use only when IntegerScale does not suffice in resolution.
 
 ---
 ## Output file format
-Results from an experiment will be output as individual ```.csv``` files in the directory 
+Results from an experiment will be stored as individual ```.csv``` files in the directory 
 ```.\<experiment name>\responses\```.\
-The ```.csv``` files contain a table which is structured as follows:
+Results are ONLY STORED after completion of the full experiment.\
+The ```.csv``` files contain a table with the following structure:
 
 |          | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
 |:--------:|:-------------------:|:-------------------:|-----|:---------------------------:|
 | response |   ```<answer>```    |  ``` <answer> ```   | ... | ```<Completion Time> [s]``` |
 
-The individual response files can be merged into a single ```.csv``` file using the ```.\merge_responses.bat``` script. This script requires modifying Line 27 in ```.\merge_responses.py``` to:
-```
-CURRENT_PATH = os.path.abspath('<experiment_name>')
-```
-The resulting ```.\<experiment_name>\responses_table.csv``` file will contain a table structured as follows:
+The individual response files can be merged into a single ```.csv``` file using the ```.\merge_responses.bat``` script.\
+The resulting ```.\<experiment_name>\responses_table.csv``` file contains a table with the following structure:
 
 |     | ```<question ID>``` | ```<question ID>``` | ... |            Timer            |
 |:---:|:-------------------:|:-------------------:|-----|:---------------------------:|
@@ -237,8 +245,7 @@ The resulting ```.\<experiment_name>\responses_table.csv``` file will contain a 
 | ... |         ...         |         ...         | ... |             ...             |
 
 ### Standardised question IDs
-For all audio questions, and for questionnaire questions with no custom ID, a standardised ```<question ID>``` will 
-be generated. The format is defined:
+For all questions, a standardised ```<question ID>``` will be generated. The format is defined:
 - In the main questionnaire: ```main-questionnaire-<question name>```.
 - In part questionnaires: ```<part name>-questionnaire-<question name>```.
 - For audio questions: ```<part name>-<audio name>-<question name>```.
@@ -248,7 +255,7 @@ The names (part, audio and question) are the ```<string>``` values defined in th
 <b>NOTE</b>: When ```repeat``` is set in an ```[audio]``` section, a two digit (01, 02, ...) ```<repetition index>``` is
 added between the audio and question name as follows:```<part name>-<audio name>_<repetition index>-<question name>```.
 
-### Storing of audio replays
+### Audio replay counters
 In case an audio sample can be replayed, the number of replays is stored under the following ```<question ID>``` format:
 - For audio screens with 1 sample: ```<part name>-<audio name>(_<repetition index>)-replays```
 - For audio screens with 2 samples: ```<part name>-<audio name>(_<repetition index>)-replays-left``` and 
