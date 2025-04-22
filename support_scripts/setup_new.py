@@ -35,17 +35,12 @@ demo = no
     randomise = yes
     
     [[questions]]
-        [[[question q1]]]
-            text = '''What number from 0 to 10 best shows how much you would be bothered, disturbed
-or annoyed by this sound?'''
-            type = IntegerScale
-
-            min = 0
-            max = 10
+        [[[question annoyance]]]
+            text = ''
+            type = Annoyance
 
     [[audio 0]]
         filename = 'tone500Hz.wav'
-        repeat = 2
 
 """
 
