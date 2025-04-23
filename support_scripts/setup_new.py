@@ -29,18 +29,18 @@ randomise = no
 demo = no
 
 [questionnaire]
-    default = yes
+\tdefault = yes
 
 [part 0]
-    randomise = yes
+\trandomise = yes
     
-    [[questions]]
-        [[[question annoyance]]]
-            text = ''
-            type = Annoyance
+\t[[questions]]
+\t\t[[[question annoyance]]]
+\t\t\ttext = ''
+\t\t\ttype = Annoyance
 
-    [[audio 0]]
-        filename = 'tone500Hz.wav'
+\t[[audio 0]]
+\t\tfilename = 'tone500Hz.wav'
 
 """
 
