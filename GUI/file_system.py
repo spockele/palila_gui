@@ -539,10 +539,12 @@ class PalilaExperiment(ConfigObj):
 
         if 'welcome' not in self.keys():
             # Add the default message if it is not defined in the input file
-            self['welcome'] = 'Welcome to this listening experiment.\nPlease enter your participant ID:'
+            self['welcome'] = 'Welcome to this listening experiment.'
         else:
             # Fix the welcome message.
             self['welcome'] = self['welcome'].replace('\t', '')
+
+        self['welcome'] = self['welcome'] + '\nPlease enter your participant ID:'
 
         if 'goodbye' not in self.keys():
             # Add the default message if it is not defined in the input file
