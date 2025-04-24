@@ -88,7 +88,7 @@ class PalilaScreenManager(ScreenManager):
 
         # Add the demo screen if that is required and set the correct screen as current
         if self.experiment.as_bool('demo'):
-            screen = AudioQuestionScreen({}, demo=True, name='demo')
+            screen = AudioQuestionScreen(self.experiment['demo dict'], demo=True, name='demo')
             self.add_widget(screen)
             self.current = 'demo'
         else:

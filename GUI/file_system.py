@@ -529,6 +529,42 @@ class PalilaExperiment(ConfigObj):
 
         return previous_audio, previous_name
 
+    def _prepare_demo(self):
+        """
+        Prepare the demonstration screen, based on its definition in the PALILA file.
+        """
+        if 'demo' not in self.keys():
+            self['demo'] = 'no'
+            self['demo dict'] = {}
+        else:
+            if 'demo' in self.sections:
+                self['demo dict'] = self['demo']
+                self['demo dict']['questions'] = [question for question in self['demo dict'].sections]
+                for question in self['demo dict']['questions']:
+                    self['demo dict'][question]['id'] = 'demo'
+
+                if 'filename' in self['demo dict'].keys():
+                    self['demo dict']['filepath'] = os.path.join(self.path, self['demo dict']['filename'])
+                else:
+                    self['demo dict']['filepath'] = os.path.abspath('GUI/assets/tone500Hz.wav')
+
+                if 'filename_2' in self['demo dict'].keys():
+                    self['demo dict']['filepath_2'] = os.path.join(self.path, self['demo dict']['filename_2'])
+
+                if 'max replays' not in self['demo dict']:
+                    self['demo dict']['max replays'] = '1'
+
+                self['demo'] = 'yes'
+            else:
+                self['demo dict'] = {'max replays': '1', 'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'),
+                                     'questions': ['question 1', ], 'question 1': {'type': 'Annoyance',
+                                                                                   'text': '',
+                                                                                   'id': 'demo'},
+                                     }
+
+            self['demo dict']['previous'] = ''
+            self['demo dict']['next'] = 'welcome'
+
     def _prepare_experiment(self) -> None:
         """
         Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
@@ -553,12 +589,11 @@ class PalilaExperiment(ConfigObj):
             # Fix the goodbye message.
             self['goodbye'] = self['goodbye'].replace('\t', '')
 
-        if 'demo' not in self.keys():
-            # Set up the demo variable
-            self['demo'] = 'no'
+        # Set up the demonstration screen, if it is required.
+        self._prepare_demo()
 
         if 'override' not in self.keys():
-            # Set up the demo variable
+            # Set up the override variable
             self['override'] = 'no'
 
         # Prepare the main questionnaire

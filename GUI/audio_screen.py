@@ -57,17 +57,6 @@ class AudioQuestionScreen(QuestionScreen):
     audio_playing : bool
         Switch indicating that audio replay should be blocked.
     """
-
-    demo_dict = {'previous': '',
-                 'next': 'welcome',
-                 'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'),
-                 'max replays': '1',
-                 'questions': ['question 1', ],
-                 'question 1': {'type': 'IntegerScale', 'multi': False,
-                                'text': 'This screen is a demonstration.\nSelect a number on the scale:',
-                                'min': '0', 'max': '7', 'id': 'demo'},
-                 }
-
     def __init__(self,
                  config_dict: dict,
                  demo: bool = False,
@@ -76,9 +65,9 @@ class AudioQuestionScreen(QuestionScreen):
                  ) -> None:
 
         self.demo = demo
-        config_dict = config_dict if not self.demo else self.demo_dict
 
-        super().__init__(config_dict, config_dict['questions'], 2, state_override=state_override, lock=True, **kwargs)
+        super().__init__(config_dict, config_dict['questions'], 2,
+                         state_override=state_override, lock=True, **kwargs)
 
         # Get better references to the audio and question managers
         self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left
@@ -420,6 +409,7 @@ class AnnoyanceAQuestion(IntegerScaleAQuestion):
         question_dict['max'] = 10
         question_dict['left note'] = 'Not at all'
         question_dict['right note'] = 'Extremely'
+        question_dict['multi'] = False
 
         super().__init__(question_dict, **kwargs)
 
