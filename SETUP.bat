@@ -30,4 +30,4 @@ echo Installing required Python packages...
 .\venv\Scripts\python.exe -m pip install -r .\support_scripts\requirements.txt
 
 echo.
-set /p n="Setup complete. Press any button to exit setup... "
+set /p n="Setup complete. Press enter to exit... "
