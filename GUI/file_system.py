@@ -444,6 +444,7 @@ class PalilaExperiment(ConfigObj):
         break_time = 0 if not breaks else int(self[part]['breaks']['time'])
         break_text = self[part]['breaks']['text'] if breaks and 'text' in self[part]['breaks']\
             else f'Please take some time to refocus during this break.'
+        break_text = break_text.replace('\t', '')
         break_count = 0 if not breaks else 1
 
         # ==========================================================================================================
