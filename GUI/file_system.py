@@ -370,8 +370,6 @@ class PalilaExperiment(ConfigObj):
             # Identify the part and audio names for use in the Question class.
             self[part][audio][question]['part-audio'] = self[part][audio]['part-audio'] + '-'
 
-            # Remove tabs from the input file in the question text
-            self[part][audio][question]['text'] = self[part][audio][question]['text'].replace('\t', '')
             # TODO: Check where this multi is used, try to use in MultipleChoice questions
             # Convert multi into a boolean if it exists, otherwise set to False
             if 'multi' in self[part][audio][question]:

@@ -19,7 +19,8 @@ Module containing all code for the Audio Question screens.
 from kivy.properties import NumericProperty, ListProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.audio import SoundLoader
-import os
+
+import warnings
 
 from .tools import ProgressBarThread
 from .screens import QuestionScreen
@@ -402,9 +403,10 @@ class AnnoyanceAQuestion(IntegerScaleAQuestion):
 
     """
     def __init__(self, question_dict: dict, **kwargs) -> None:
-        if not question_dict['text']:
+        if not 'text' in question_dict.keys():
             question_dict['text'] = 'What number from 0 to 10 best describes how much you are\n'\
                                     'bothered, disturbed or annoyed by the presented noise?'
+
         question_dict['min'] = 0
         question_dict['max'] = 10
         question_dict['left note'] = 'Not at all'

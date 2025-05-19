@@ -116,7 +116,7 @@ class QuestionManager(BoxLayout):
             The answer string to update to.
         """
         self.answers[question_id] = answer
-        # Have the AudioQuestionScreen check the state
+        # Have the QuestionScreen check the state
         self.parent.unlock_check()
 
 
@@ -197,7 +197,7 @@ class Question(BoxLayout):
         super().__init__(**kwargs)
         # Store the input information
         self.question_dict = question_dict
-        self.ids.question_text.text = question_dict['text']
+        self.ids.question_text.text = question_dict['text'].replace('\t', '')
         self.qid = question_dict['id']
 
         # Initialise the list of dependent questions
