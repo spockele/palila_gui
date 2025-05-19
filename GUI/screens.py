@@ -313,8 +313,6 @@ class QuestionScreen(PalilaScreen):
     ----------
     config_dict: dict
 
-    questions: list
-
     state_override: bool, optional (default=False)
 
     **kwargs
@@ -328,14 +326,12 @@ class QuestionScreen(PalilaScreen):
 
     def __init__(self,
                  config_dict: dict,
-                 questions: list,
                  n_max: int,
                  state_override: bool = False,
                  **kwargs
                  ) -> None:
 
         self.config_dict = config_dict
-        self.questions = questions
 
         super().__init__(self.config_dict['previous'], self.config_dict['next'], **kwargs)
 
@@ -346,11 +342,11 @@ class QuestionScreen(PalilaScreen):
         self.question_manager: QuestionManager = self.ids.question_manager
 
         # Add the questions from the list to this screen.
-        for question in self.questions:
+        for question in self.config_dict['questions']:
             self.question_manager.add_question(self.config_dict[question])
 
         # Fill up the empty space.
-        for _ in range(n_max - len(self.questions)):
+        for _ in range(n_max - len(self.config_dict['questions'])):
             self.question_manager.add_widget(Filler())
 
     def unlock_check(self):

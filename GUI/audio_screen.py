@@ -66,7 +66,7 @@ class AudioQuestionScreen(QuestionScreen):
 
         self.demo = demo
 
-        super().__init__(config_dict, config_dict['questions'], 2,
+        super().__init__(config_dict, 2,
                          state_override=state_override, lock=True, **kwargs)
 
         # Get better references to the audio and question managers

@@ -55,13 +55,12 @@ class QuestionnaireScreen(QuestionScreen):
 
     def __init__(self,
                  questionnaire_dict: dict,
-                 questions: list,
                  state_override: bool = False,
                  back_function: callable = None,
                  **kwargs
                  ) -> None:
 
-        super().__init__(questionnaire_dict, questions, 7, state_override=state_override, lock=True, **kwargs)
+        super().__init__(questionnaire_dict, 7, state_override=state_override, lock=True, **kwargs)
 
         # In case it's not the first screen (indicated by the presence of a back_function), set up the back button
         if back_function is not None:
@@ -331,35 +330,39 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
         manager.get_screen(questionnaire_dict['previous']).next_screen = questionnaire_dict['next']
 
     else:
-        next_screen = copy.deepcopy(questionnaire_dict['next'])
         # Extract the screen numbers from the question distribution
         screen_nums = sorted(questionnaire_dict['screen dict'].keys())
         # Loop over those numbers
         for ii, screen_num in enumerate(screen_nums):
-            # ==========================================================================================================
-            # TODO: change this method of assignment of previous and next screen (see issue #75)
-            #       POTENTIAL ALIASING!!!
+            screen_dict = dict()
+
             if ii:
                 # When this is not the last screen, define the previous indexed screen as previous to this one
-                questionnaire_dict['previous'] = f'{part}-questionnaire {ii}'
+                screen_dict['previous'] = f'{part}-questionnaire {ii}'
+            else:
+                screen_dict['previous'] = questionnaire_dict['previous']
 
             # Check if this is the last questionnaire screen.
             if screen_num < max(screen_nums):
                 # If not, define the next one by the index + 2
-                questionnaire_dict['next'] = f'{part}-questionnaire {ii + 2}'
+                screen_dict['next'] = f'{part}-questionnaire {ii + 2}'
 
             else:
-                questionnaire_dict['next'] = next_screen
-            # ==========================================================================================================
+                screen_dict['next'] = questionnaire_dict['next']
+
+            screen_dict['questions'] = questionnaire_dict['screen dict'][screen_num]
+            for question in screen_dict['questions']:
+                screen_dict[question] = questionnaire_dict[question]
+
             if ii:
                 # Create a new questionnaire screen with the necessary parameters
-                new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
+                new_screen = QuestionnaireScreen(screen_dict,
                                                  state_override=state_override, back_function=manager.navigate_previous,
                                                  name=f'{part}-questionnaire {ii + 1}',
                                                  )
             else:
                 # Special case for the first questionnaire screen
-                new_screen = QuestionnaireScreen(questionnaire_dict, questionnaire_dict['screen dict'][screen_num],
+                new_screen = QuestionnaireScreen(screen_dict,
                                                  state_override=state_override, name=f'{part}-questionnaire {ii + 1}',
                                                  )
             # Add the questionnaire screen to the ScreenManager
