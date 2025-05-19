@@ -549,9 +549,7 @@ class PalilaExperiment(ConfigObj):
                 self['demo'] = 'yes'
             else:
                 self['demo dict'] = {'max replays': '1', 'filepath': os.path.abspath('GUI/assets/tone500Hz.wav'),
-                                     'questions': ['question 1', ], 'question 1': {'type': 'Annoyance',
-                                                                                   'text': '',
-                                                                                   'id': 'demo'},
+                                     'questions': ['question 1', ], 'question 1': {'type': 'Annoyance', 'id': 'demo'},
                                      }
 
             self['demo dict']['previous'] = ''
