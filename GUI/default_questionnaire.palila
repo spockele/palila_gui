@@ -44,6 +44,14 @@ manual split = yes
 	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Email', 'Other'
 	manual screen = 1
 
+[question how_found_other]
+	type = FreeText
+	text = 'Which other way made you find this experiment?'
+	manual screen = 1
+
+	unlocked by = 'how_found'
+	unlock condition = 'Other'
+
 [question affiliation]
 	type = Spinner
 	text = '''Your current, most direct affiliation with TU Delft:'''
