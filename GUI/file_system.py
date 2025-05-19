@@ -176,6 +176,7 @@ class PalilaExperiment(ConfigObj):
         SyntaxError :
             If anything in the config file is wrong.
         """
+        # TODO: look at which of these checks can be put in a configspec, and which should be decentralised.
         # Check that the experiment is not completely empty
         if not self.sections:
             raise SyntaxError(f'Empty experiment in input file {self.name}.palila')
@@ -215,6 +216,7 @@ class PalilaExperiment(ConfigObj):
         part : str
             The part of the experiment where this questionnaire is located.
         """
+        # TODO: look at which of these checks can be put in a configspec, and which should be decentralised.
         if part == 'main':
             # Check for the default keyword in the main questionnaire
             if 'default' in questionnaire_dict.keys():
@@ -318,6 +320,7 @@ class PalilaExperiment(ConfigObj):
             If set to True, questions will be obtained from self[part]['questions'] instead of the audio dictionary.
             Defaults to False.
         """
+        # TODO: look at which of these checks can be put in a configspec, and which should be decentralised.
         # Define the full filepath of the audio
         self[part][audio]['filepath'] = os.path.join(self.path, self[part][audio]['filename'])
         if 'filename_2' in self[part][audio].keys():
@@ -399,7 +402,7 @@ class PalilaExperiment(ConfigObj):
         current_name: str
             The formatted name of the last audio (or questionnaire) of this part.
         """
-
+        # TODO: look at which of these checks can be put in a configspec, and which should be decentralised.
         # Set the intro as the current added screen
         audio = 'intro'
         current_name = f'{part}-intro'
@@ -521,6 +524,7 @@ class PalilaExperiment(ConfigObj):
         """
         Prepare the demonstration screen, based on its definition in the PALILA file.
         """
+        # TODO: look at which of these checks can be put in a configspec, and which should be decentralised.
         if 'demo' not in self.keys():
             self['demo'] = 'no'
             self['demo dict'] = {}
@@ -557,9 +561,7 @@ class PalilaExperiment(ConfigObj):
         """
         Put things in the dictionaries where they are needed for the ScreenManager to properly build the GUI.
         """
-        # ==============================================================================================================
-        # PREPARATION OF THE WELCOME AND GOODBYE MESSAGES
-        # ==============================================================================================================
+        # TODO: look at which of these checks can be put in a configspec, and which should be decentralised.
 
         if 'welcome' not in self.keys():
             # Add the default message if it is not defined in the input file
