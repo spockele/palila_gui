@@ -144,11 +144,10 @@ override = yes
 		[[[question q1]]]
 		    type = Annoyance
 		    text = '''This is a demonstration of the standard 11-point scale.
-		    	One with custom text, one with the ISO phrasing.'''
+				One with custom text, one with the ISO phrasing.'''
 
 		[[[question q2]]]
 		    type = Annoyance
-		    text = ''
 
 
 	[[audio textquestion]]
