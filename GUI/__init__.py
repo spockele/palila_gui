@@ -26,6 +26,7 @@ from kivy.config import Config
 from kivy.lang import Builder
 from kivy.app import App
 
+import datetime
 import warnings
 
 from .questionnaire_screen import *
@@ -168,7 +169,12 @@ class PalilaScreenManager(ScreenManager):
         pid : str
             The participant ID to be set.
         """
-        self.answers.set_pid(pid)
+        if self.experiment['pid mode'] == 'auto':
+            self.answers.set_pid(datetime.datetime.now().strftime('%y%m%d-%H%M'))
+        elif self.experiment['pid mode'] == 'input':
+            self.answers.set_pid(pid)
+        else:
+            raise SyntaxError(f'Participant ID mode "pid mode = {self.experiment["pid mode"]}" not supported!')
 
     def store_answer(self, key: str, value: str) -> None:
         """

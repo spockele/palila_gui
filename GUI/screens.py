@@ -175,7 +175,7 @@ class WelcomeScreen(PalilaScreen):
             self.ids.pid_entry.text = ''
 
         else:
-            raise SyntaxError('Invalid pid mode in input file.')
+            raise SyntaxError(f'Participant ID mode "pid mode = {pid_mode}" not supported!')
 
         self.ids.welcome.text = welcome_text
 
@@ -183,9 +183,7 @@ class WelcomeScreen(PalilaScreen):
         """
         Function setting the PID before navigating
         """
-        if not self.ids.pid_entry.disabled:
-            # Set the PID in case the entry box is not disabled
-            self.manager.set_pid(self.ids.pid_entry.text)
+        self.manager.set_pid(self.ids.pid_entry.text)
 
     def check_lock(self, input_text: str) -> None:
         """

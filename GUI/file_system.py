@@ -646,18 +646,14 @@ class PalilaAnswers:
     def __init__(self, experiment: PalilaExperiment) -> None:
         # Store the experiment inside this class
         self.experiment = experiment
-        self.pid_mode = self.experiment['pid mode']
         # Set up the output dataframe
         columns = self.experiment.question_id_list
         columns.append('timer')
         self.out = pd.DataFrame('', index=['response'], columns=self.experiment.question_id_list)
 
-        # Initialise the PID in case of auto mode
-        if self.pid_mode == 'auto':
-            self.pid = datetime.datetime.now().strftime('%y%m%d-%H%M')
-            self.out_path = os.path.join(self.experiment.path, 'responses', f'{self.pid}.csv')
-        else:
-            self.pid = None
+        # Initialise the Participant ID and output path variables.
+        self.pid = None
+        self.out_path = None
 
         # Initialise the indicator to show if the timer is running.
         self.timing = False
