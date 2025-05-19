@@ -67,6 +67,7 @@ class PalilaExperiment(ConfigObj):
         # Create list of parts in the overall dict
         self['parts'] = [part for part in self.sections if 'part' in part]
 
+        # TODO: take a look at this code, and make a change
         # Create a list of audios in each part dict
         for part in self['parts']:
             self[part]['audios'] = []
@@ -123,53 +124,40 @@ class PalilaExperiment(ConfigObj):
         FileNotFoundError :
             If an audio file from the config file is not found.
         """
+        # TODO: look at which of these checks can be put in a configspec, and which should be decentralised.
         # Check that the part is not completely empty
         if not self[part].sections:
-            raise SyntaxError(f'Empty experiment part ("{part}") found in input file {self.name}.palila')
+            raise SyntaxError(f'Empty experiment part "{part}" found in input file {self.name}.palila')
 
-        # Check that the part contains audio questions.
+        # Check that the part contains audio blocks.
         if not self[part]['audios']:
-            raise SyntaxError(f'Experiment {part} does not contain any audio questions.')
+            raise SyntaxError(f'Experiment {part} does not contain any audio blocks.')
 
         # Check the intro section if it exists
         if 'intro' in self[part].sections:
             if 'text' not in self[part]['intro']:
                 raise SyntaxError(f'Experiment {part} intro does not contain "text" variable.')
-
             if 'time' not in self[part]['intro']:
                 raise SyntaxError(f'Experiment {part} intro does not contain "time" variable.')
-            elif not self[part]['intro']['time'].isnumeric():
-                raise SyntaxError(f'Experiment {part} intro "time" is not a number.')
 
         if 'breaks' in self[part].sections:
             if 'interval' not in self[part]['breaks']:
                 raise SyntaxError(f'Experiment {part} breaks does not contain "interval" variable.')
-            elif (not self[part]['breaks']['interval'].startswith('-') and
-                  not self[part]['breaks']['interval'].isnumeric()):
-                raise SyntaxError(f'Experiment {part} breaks "interval" is not a number.')
-            elif (self[part]['breaks']['interval'].startswith('-') and
-                  not self[part]['breaks']['interval'][1:].isnumeric()):
-                raise SyntaxError(f'Experiment {part} breaks "interval" is not a number.')
-
             if 'time' not in self[part]['breaks']:
                 raise SyntaxError(f'Experiment {part} breaks does not contain "time" variable.')
-            elif not self[part]['breaks']['time'].isnumeric():
-                raise SyntaxError(f'Experiment {part} breaks "time" is not a number.')
 
         # Check if the questionnaire is split properly
         if 'questionnaire' in self[part].sections:
             if 'manual split' in self[part]['questionnaire']:
                 self[part]['questionnaire']['manual split'] = self[part]['questionnaire'].as_bool('manual split')
-                if self[part]['questionnaire']['manual split']:
-                    for question in self[part]['questionnaire'].sections:
-                        if 'manual screen' not in self[part]['questionnaire'][question]:
-                            raise SyntaxError(f'Experiment {part} questionnaire {question} does not contain '
-                                              f'"manual screen" variable.')
-                        elif self[part]['questionnaire'][question]['manual screen'].isnumeric():
-                            raise SyntaxError(f'Experiment {part} questionnaire {question} "manual screen" '
-                                              f'is not a number.')
             else:
                 self[part]['questionnaire']['manual split'] = False
+
+            if self[part]['questionnaire']['manual split']:
+                for question in self[part]['questionnaire'].sections:
+                    if 'manual screen' not in self[part]['questionnaire'][question]:
+                        raise SyntaxError(f'Experiment {part} questionnaire {question} does not contain '
+                                          f'"manual screen" variable.')
 
         # Check the individual audios in the experiment part
         for audio in self[part]['audios']:
@@ -199,13 +187,14 @@ class PalilaExperiment(ConfigObj):
         # Check if the questionnaire is split properly
         if 'manual split' in self['questionnaire']:
             self['questionnaire']['manual split'] = self['questionnaire'].as_bool('manual split')
-            if self['questionnaire']['manual split']:
-                for question in self['questionnaire'].sections:
-                    if 'manual screen' not in self['questionnaire'][question]:
-                        raise SyntaxError('If manual split is set, each questionnaire question requires '
-                                          'an assigned screen.')
         else:
             self['questionnaire']['manual split'] = False
+
+        if self['questionnaire']['manual split']:
+            for question in self['questionnaire'].sections:
+                if 'manual screen' not in self['questionnaire'][question]:
+                    raise SyntaxError('If manual split is set, each questionnaire question requires '
+                                      'an assigned screen.')
 
         # Check for the presence of experiment parts
         if not self['parts']:
