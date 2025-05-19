@@ -36,7 +36,6 @@ demo = no
     
 \t[[questions]]
 \t\t[[[question annoyance]]]
-\t\t\ttext = ''
 \t\t\ttype = Annoyance
 
 \t[[audio 0]]
