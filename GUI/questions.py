@@ -20,6 +20,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 
+from configobj import Section
+
 
 __all__ = ['QuestionManager', 'Question', 'SpinnerQuestion', 'ButtonQuestion',
            'FreeNumberTextInput', ]
@@ -338,7 +340,7 @@ class ButtonQuestion(Question):
 
     Parameters
     ----------
-    question_dict: dict
+    question_dict: configobj.Section
         Dictionary with all the information to construct the question.
         Should include the following keys: 'id', 'text', 'multi'.
     **kwargs
@@ -354,11 +356,16 @@ class ButtonQuestion(Question):
         Variable to temporarily store the last selected button when this question is locked.
     """
 
-    def __init__(self, question_dict: dict, **kwargs) -> None:
+    def __init__(self, question_dict: Section, **kwargs) -> None:
         super().__init__(question_dict, **kwargs)
         self.choices: list[ChoiceButton] = []
         self.choice_temp = None
-        self.multi = question_dict['multi']
+
+        # Check for multiple answer option trigger.
+        if 'multi' in question_dict.keys():
+            self.multi = question_dict.as_bool('multi')
+        else:
+            self.multi = False
 
         # Add every choice as a button.
         self.buttons = []

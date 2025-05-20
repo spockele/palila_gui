@@ -362,13 +362,6 @@ class PalilaExperiment(ConfigObj):
             # Identify the part and audio names for use in the Question class.
             self[part][audio][question]['part-audio'] = self[part][audio]['part-audio'] + '-'
 
-            # TODO: Check where this multi is used, try to use in MultipleChoice questions
-            # Convert multi into a boolean if it exists, otherwise set to False
-            if 'multi' in self[part][audio][question]:
-                self[part][audio][question]['multi'] = self[part][audio][question].as_bool('multi')
-            else:
-                self[part][audio][question]['multi'] = False
-
             # Generate a standardised question id
             # Extract the question name
             question_id = question.replace('question ', '')
