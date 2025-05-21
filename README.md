@@ -1,8 +1,7 @@
 # PALILA GUI
 
 Graphical user interface for listening experiments in the
-[<b><u>P</u></b>sycho<b><u>A</u></b>coustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://iiav.org/content/archives_icsv_last/2023_icsv29/content/papers/papers/full_paper_274_20230331114441190.pdf)
-[[1](#merinomartinez_2023)] at the [Delft University of Technology, Faculty of Aerospace Engineering](https://www.tudelft.nl/lr).
+[<b><u>P</u></b>sycho<b><u>A</u></b>coustic <b><u>LI</u></b>stening <b><u>LA</u></b>boratory (PALILA)](https://www.tudelft.nl/lr/palila) at the [Delft University of Technology, Faculty of Aerospace Engineering](https://www.tudelft.nl/lr).
 
 ![GitHub Release](https://img.shields.io/github/v/release/spockele/palila_gui?logo=github) [![DOI](https://zenodo.org/badge/789127892.svg)](https://zenodo.org/doi/10.5281/zenodo.11028965) ![GitHub License](https://img.shields.io/github/license/spockele/palila_gui) ![GitHub language count](https://img.shields.io/github/languages/top/spockele/palila_gui)
 
@@ -263,8 +262,4 @@ In case an audio sample can be replayed, the number of replays is stored under t
 
 [//]: # (---)
 
-[//]: # (## Publications using this code)
-
----
-## References
-<a id="merinomartinez_2023"> [1] R. Merino-Martínez, B. von den Hoff, and D. G. Simons, ‘Design and Acoustic Characterization of a Psycho-acoustic listening facility’, in Proceedings of the 29th international congress on sound and vibration, E. Carletti, Ed., Prague, Czech Republic: IIAV CZECH s.r.o., Jul. 2023, pp. 274–281.</a>
+[//]: # (## References)
