@@ -7,10 +7,10 @@ Graphical user interface for listening experiments in the
 ![GitHub Release](https://img.shields.io/github/v/release/spockele/palila_gui?logo=github) [![DOI](https://zenodo.org/badge/789127892.svg)](https://zenodo.org/doi/10.5281/zenodo.11028965) ![GitHub License](https://img.shields.io/github/license/spockele/palila_gui) ![GitHub language count](https://img.shields.io/github/languages/top/spockele/palila_gui)
 
 ### Developed by:
-- [ir. Josephine Siebert Pockelé](https://orcid.org/0009-0002-5152-9986)
-  - PhD Candidate, [TU Delft Aircraft Noise and Climate Effects Section](https://www.tudelft.nl/lr/organisatie/afdelingen/control-and-operations/aircraft-noise-and-climate-effects-ance).
+- [Josephine Pockelé](https://orcid.org/0009-0002-5152-9986)
+  - PhD Candidate, [TU Delft, Aerospace Engineering](https://www.tudelft.nl/lr/).
   - Email: [j.s.pockele@tudelft.nl](mailto:j.s.pockele@tudelft.nl)
-  - LinkedIn: [Josephine (Fien) Pockelé](https://www.linkedin.com/in/josephine-pockele)
+  - LinkedIn: [Josephine Pockelé](https://www.linkedin.com/in/josephine-pockele)
 ---
 ### Requirements
 - Windows 10 or 11.
@@ -51,7 +51,7 @@ limitations under the License.
 ### Citation
 If you use this code for published research, please cite it as below:
 ```
-Pockelé, J.S. (2025). Graphical User Interface for the Psychoacoustic Listening Laboratory (PALILA GUI) (version v1.2.0). Zenodo. DOI: 10.5281/zenodo.11028965.
+Pockelé, J.S. (2025). Graphical User Interface for the Psychoacoustic Listening Laboratory (PALILA GUI) (version v1.2.1). Zenodo. DOI: 10.5281/zenodo.11028965.
 ```
 
 ---

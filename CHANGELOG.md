@@ -17,6 +17,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
+## [v1.2.1] - tbd
+
+### Added
+- The ```demo``` parameter can now be defined as a block to define a custom demonstration screen.
+- A first version of the user manual is now included.
+
+### Changed
+- The 'Please enter your participant ID' part of the welcome message is now always visible.
+- ```text``` is now an optional parameter for the ```Annoyance``` question type.
+- An open question (```how_found_other```) is added to the questionnaire for when participants select 'other' in ```how_found```.
+
+### Deprecated
+- Experiment configuration information will be removed from the README. This section will not be maintained from v1.2.0.
+
+### Removed
+- Removed the ```default_questionnaire.pdf``` document. This information is now included in the manual.
+
+
 # [v1.2.0] - 28 March 2025
 
 This update contains major back-end changes to the code structure, mainly targeted at duplicate and redundant code. This version also contains some fixes, deprecations and removals in line with planned developements.
