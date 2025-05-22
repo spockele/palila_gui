@@ -128,12 +128,15 @@ class ProgressTracker(FloatLayout):
 
     def track(self, screen_name: str, back_to_main_questionnaire: bool = False) -> None:
         """
+        Update the tracker.
 
         Parameters
         ----------
         screen_name: str
+            String with the name of the screen which has been completed and should be added to 
+            the list of completed screens.
         back_to_main_questionnaire: bool, optional (default=False)
-
+            Special trigger, for the moment a participant goes back to the main questionnaire.
         """
         # Reset the main questionnaire part of the tracker when returning there from the end screen.
         if back_to_main_questionnaire:
@@ -244,13 +247,26 @@ class NumPadBubble(Bubble):
 
 class NavigationButton(Button):
     """
-    Button subclass with special functionality to go back
+    Customised button for navigation.
     """
     arrow_angle = NumericProperty()
     arrow_opacity = NumericProperty()
 
 
 class NavigationBar(FloatLayout):
+    """
+    Bar at the bottom of the screen with logos and the navigation buttons.
+
+    Parameters
+    ----------
+    manager: PalilaScreenManager
+        ScreenManager instance linked to this Navigation Bar
+
+    Attributes
+    ----------
+    back_button: NavigationButton
+        Separate button used for going back in the GUI.
+    """
     message = StringProperty()
     def __init__(self, manager, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -264,42 +280,67 @@ class NavigationBar(FloatLayout):
         self.back_button.pos_hint = {'x': .35, 'y': .05}
         self.back_button.size_hint = (.0625, .7)
 
-    def hide(self):
+    def hide(self) -> None:
+        """
+        Hides the navigation buttons from view.
+        """
         self.ids.continue_button.opacity = 0.
         self.back_button.opacity = 0.
         self.ids.message.text = ''
         self.ids.continue_button.disabled = True
 
     def lock(self, *_):
+        """
+        Lock the navigation.
+        """
         self.message = 'Complete this screen before continuing'
         self.ids.continue_button.disabled = True
 
     def unlock(self, *_):
+        """
+        Unlock the navigation.
+        """
         self.message = ''
         self.ids.continue_button.disabled = False
 
     def _back_action(self):
+        """
+        Action for the back_button.
+        """
         self._reset(self.palila_manager.current_screen.previous_screen)
         self.palila_manager.navigate_previous()
 
     def _continue_action(self):
+        """
+        Action for the continue_button.
+        """
         self._reset(self.palila_manager.current_screen.next_screen)
         self.palila_manager.navigate_next()
 
     def _reset(self, next_screen):
+        """
+        Reset the navigation bar before moving to the next screen
+        """
+        # Reset the back button.
         self.back_button.arrow_opacity = 1
         self.back_button.pos_hint = {'x': .35, 'y': .05}
         self.back_button.size_hint_x = .0625
+        # Reset the continue button opacity.
+        self.ids.continue_button.opacity = 1
 
+        # Check if the next screen requires a back button.
         if self.palila_manager.get_screen(next_screen).back_button:
+            # Shrink the continue button.
             self.ids.continue_button.size_hint_x = .235
             self.ids.continue_button.pos_hint = {'x': .415, 'y': .05}
 
+            # Add the back button if it is not there yet.
             if self.back_button.parent is None:
                 self.add_widget(self.back_button)
 
         else:
+            # Reset the continue button size
             self.ids.continue_button.size_hint_x = .3
             self.ids.continue_button.pos_hint = {'center_x': .5, 'y': .05}
-
+            # Remove the back button from view.
             self.remove_widget(self.back_button)
