@@ -149,28 +149,57 @@
 						PopMatrix
 
 
+<NavigationButton>
+	text: root.text
+
+	text_size: self.size
+	valign: 'center'
+	halign: 'center'
+
+	Image:
+		id: arrow
+
+		pos: self.parent.pos
+		size: self.parent.size
+
+		source: 'GUI/assets/arrow.png'
+		opacity: root.arrow_opacity
+
+		canvas.before:
+			PushMatrix
+			Rotate:
+				axis: 0, 0, 1
+				angle: root.arrow_angle
+				origin: self.center
+
+		canvas.after:
+			PopMatrix
+
+
+
 <NavigationBar>
 	size_hint: 1., .15
 
 	Label:
-		id: continue_lbl
+		id: message
 
 		pos_hint: {'center_x': .5, 'y': .7}
 		size_hint: .3, .3
 
-		text: 'Complete this screen before continuing'
+		text: root.message
 
-    Button:
-    	id: continue_bttn
+    NavigationButton:
+    	id: continue_button
 
         pos_hint: {'center_x': .5, 'y': .05}
         size_hint: .3, .65
 
         text: 'Continue'
+        opacity: 1
 
         font_size: 42
 
-        on_release: root.palila_manager.navigate_next()
+        on_release: root._continue_action()
 
     Image:
         pos_hint: {'x': .05, 'y': .05}

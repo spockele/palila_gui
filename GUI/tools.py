@@ -20,7 +20,7 @@ Module with the code for smaller tools used by parts of the GUI.
 from kivy.uix.behaviors.focus import FocusBehavior
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.progressbar import ProgressBar
-from kivy.properties import ListProperty
+from kivy.properties import ListProperty, NumericProperty, StringProperty
 from kivy.uix.widget import Widget
 from kivy.uix.bubble import Bubble
 from kivy.uix.button import Button
@@ -242,8 +242,56 @@ class NumPadBubble(Bubble):
             self.coupled_widget.text = self.coupled_widget.text[:-1]
 
 
+class NavigationButton(Button):
+    """
+    Button subclass with special functionality to go back
+    """
+    arrow_angle = NumericProperty()
+    arrow_opacity = NumericProperty()
+
+
 class NavigationBar(FloatLayout):
+    message = StringProperty()
     def __init__(self, manager, **kwargs) -> None:
         super().__init__(**kwargs)
 
         self.palila_manager = manager
+
+        self.back_button = NavigationButton()
+        self.back_button.on_release = self._back_action
+        self.back_button.arrow_angle = 180
+        self.back_button.arrow_opacity = 1
+        self.back_button.pos_hint = {'x': .35, 'y': .05}
+        self.back_button.size_hint = (.0625, .65)
+
+    def hide(self):
+        self.ids.continue_button.opacity = 0.
+        self.back_button.opacity = 0.
+        self.ids.message.text = ''
+        self.ids.continue_button.disabled = True
+
+    def _back_action(self):
+        self._reset(self.palila_manager.current_screen.previous_screen)
+        self.palila_manager.navigate_previous()
+
+    def _continue_action(self):
+        self._reset(self.palila_manager.current_screen.next_screen)
+        self.palila_manager.navigate_next()
+
+    def _reset(self, next_screen):
+        self.back_button.arrow_opacity = 1
+        self.back_button.pos_hint = {'x': .35, 'y': .05}
+        self.back_button.size_hint = (.0625, .65)
+
+        if self.palila_manager.get_screen(next_screen).back_button:
+            self.ids.continue_button.size_hint_x = .235
+            self.ids.continue_button.pos_hint = {'x': .415, 'y': .05}
+
+            if self.back_button.parent is None:
+                self.add_widget(self.back_button)
+
+        else:
+            self.ids.continue_button.size_hint_x = .3
+            self.ids.continue_button.pos_hint = {'center_x': .5, 'y': .05}
+
+            self.remove_widget(self.back_button)

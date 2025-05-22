@@ -340,9 +340,8 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
 
             if ii:
                 # Create a new questionnaire screen with the necessary parameters
-                new_screen = QuestionnaireScreen(screen_dict,
-                                                 state_override=state_override,
-                                                 name=f'{part}-questionnaire {ii + 1}',
+                new_screen = QuestionnaireScreen(screen_dict, back_button=True,
+                                                 state_override=state_override, name=f'{part}-questionnaire {ii + 1}',
                                                  )
             else:
                 # Special case for the first questionnaire screen

@@ -55,10 +55,18 @@ class PalilaScreen(Screen):
     next_screen : str
         Name of the next screen in the ScreenManager.
     """
-    def __init__(self, previous_screen: str, next_screen: str, **kwargs) -> None:
+    def __init__(self,
+                 previous_screen: str,
+                 next_screen: str,
+                 back_button: bool = False,
+                 **kwargs
+                 ) -> None:
+
         super().__init__(**kwargs)
         self.previous_screen = previous_screen
         self.next_screen = next_screen
+
+        self.back_button = back_button
 
     def set_next_screen(self, next_screen: str) -> None:
         """
@@ -143,7 +151,29 @@ class EndScreen(PalilaScreen):
     """
 
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, back_button=True, **kwargs)
+
+    def on_pre_enter(self, *_):
+        self.manager.navigation.back_button.arrow_opacity = 0
+        self.manager.navigation.back_button.text = 'Back to first\nQuestionnaire'
+        self.manager.navigation.back_button.pos_hint = {'right': .495}
+        self.manager.navigation.back_button.size_hint_x = .145
+        self.manager.navigation.back_button.font_size = 32
+
+        self.manager.navigation.ids.continue_button.text = 'Finish\nExperiment'
+        self.manager.navigation.ids.continue_button.pos_hint = {'x': .505}
+        self.manager.navigation.ids.continue_button.size_hint_x = .145
+        self.manager.navigation.ids.continue_button.font_size = 32
+
+        self.manager.get_screen(self.previous_screen).set_next_screen(self.name)
+
+    def on_pre_leave(self, *_):
+        self.manager.navigation.back_button.arrow_opacity = 1
+        self.manager.navigation.back_button.text = ''
+        self.manager.navigation.back_button.font_size = 42
+
+        self.manager.navigation.ids.continue_button.text = 'Continue'
+        self.manager.navigation.ids.continue_button.font_size = 42
 
 
 class FinalScreen(PalilaScreen):
@@ -171,6 +201,9 @@ class FinalScreen(PalilaScreen):
         self.manager.answers.save_to_file()
         # Don't forget to unlock the escape button
         Config.set('kivy', 'exit_on_escape', '1')
+
+    def on_pre_enter(self, *args):
+        self.manager.navigation.hide()
 
 
 class TimedTextScreen(PalilaScreen):

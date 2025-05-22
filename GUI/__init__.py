@@ -74,11 +74,12 @@ class PalilaScreenManager(ScreenManager):
         self.answers = answers
 
         self.size_hint = (1., 1. - .015 - .15)
-        self.tracker = ProgressTracker(self.screen_names, size_hint=(1., .015, ))
         self.navigation = NavigationBar(self)
 
         # Go about initialising the Screens based on the input file
         self._initialise_screens()
+
+        self.tracker = ProgressTracker(self.screen_names, size_hint=(1., .015, ))
 
     def _initialise_screens(self) -> None:
         """
