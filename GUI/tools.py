@@ -270,6 +270,14 @@ class NavigationBar(FloatLayout):
         self.ids.message.text = ''
         self.ids.continue_button.disabled = True
 
+    def lock(self):
+        self.message = 'Complete this screen before continuing'
+        self.ids.continue_button.disabled = True
+
+    def unlock(self):
+        self.message = ''
+        self.ids.continue_button.disabled = False
+
     def _back_action(self):
         self._reset(self.palila_manager.current_screen.previous_screen)
         self.palila_manager.navigate_previous()
