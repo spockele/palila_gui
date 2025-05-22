@@ -236,7 +236,11 @@ class TimedTextScreen(PalilaScreen):
         Start the timer and ProgressBar when entering the screen.
         """
         self.timing_thread.start()
-        Clock.schedule_once(self.manager.navigation.unlock, self.ids.timer.max)
+        Clock.schedule_once(self._after_timer, self.ids.timer.max)
+
+    def _after_timer(self, *_):
+        self.manager.navigation.unlock()
+        self.ids.timer.opacity = 0
 
 
 class QuestionScreen(PalilaScreen):

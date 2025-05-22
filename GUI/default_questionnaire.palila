@@ -26,16 +26,16 @@ manual split = yes
 	choices = 'Man', 'Woman', 'Other', 'Prefer not to say'
 	manual screen = 1
 
-[question education]
-	type = Spinner
-	text = 'Highest completed level of school/education: '
-	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
-	manual screen = 1
-
 [question employment]
 	type = Spinner
 	text = 'Current employment status: '
 	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work', 'Unable to work'
+	manual screen = 1
+
+[question education]
+	type = Spinner
+	text = 'Highest completed level of school/education: '
+	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
 	manual screen = 1
 
 [question how_found]

@@ -17,18 +17,19 @@
 	Label:
 		id: top_text
 
-        pos_hint: {'center_x': .5, 'y': .875}
-        size_hint: 1., .1
+        pos_hint: {'center_x': .5, 'top': .975}
+        size_hint: 1., .12
 
 		text: 'Please fill out this questionnaire: '
 
         font_size: 42
         text_size: .95 * self.size[0], self.size[1]
         valign: 'center'
+        color: (.95, .95, .95, 1)
 
         canvas.before:
         	Color:
-        		rgba: (0 / 255, 166 / 255, 214 / 255, .7)
+        		rgba: (0, 118 / 255, 194 / 255, 1.)
 
         	Rectangle:
         		size: self.size
@@ -37,8 +38,8 @@
 	QQuestionManager:
 		id: question_manager
 
-        pos_hint: {'center_x': .5, 'y': .17}
-        size_hint: .95, .69
+        pos_hint: {'center_x': .5, 'y': 0.02}
+        size_hint: .95, .825
 
         orientation: 'vertical'
         spacing: 10

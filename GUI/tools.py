@@ -262,7 +262,7 @@ class NavigationBar(FloatLayout):
         self.back_button.arrow_angle = 180
         self.back_button.arrow_opacity = 1
         self.back_button.pos_hint = {'x': .35, 'y': .05}
-        self.back_button.size_hint = (.0625, .65)
+        self.back_button.size_hint = (.0625, .7)
 
     def hide(self):
         self.ids.continue_button.opacity = 0.
@@ -289,7 +289,7 @@ class NavigationBar(FloatLayout):
     def _reset(self, next_screen):
         self.back_button.arrow_opacity = 1
         self.back_button.pos_hint = {'x': .35, 'y': .05}
-        self.back_button.size_hint = (.0625, .65)
+        self.back_button.size_hint_x = .0625
 
         if self.palila_manager.get_screen(next_screen).back_button:
             self.ids.continue_button.size_hint_x = .235

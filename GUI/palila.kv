@@ -48,14 +48,14 @@
 	text_size: .95 * self.size[0], self.size[1]
 	halign: 'left'
 	valign: 'center'
-	height: '55dp'
+	height: '50dp'
 	background_color: .95, .988, 1., 1.
 
 
 <WelcomeScreen>
 	BoxLayout:
-		pos_hint: {'center_x': .5, 'center_y': .6}
-		size_hint: .7, .2
+		pos_hint: {'center_x': .5, 'center_y': .5}
+		size_hint: .7, .25
 
 		orientation: 'vertical'
 
@@ -83,8 +83,8 @@
 
 <EndScreen>
 	Label:
-		pos_hint: {'center_x': .5, 'center_y': .6}
-		size_hint: .7, .2
+		pos_hint: {'center_x': .5, 'center_y': .5}
+		size_hint: .7, .25
 
 		text: 'You have reached the end of the experiment.\nYou can return to the first questionnaire to check your answers.\nOr you can finish the experiment.'
 
@@ -98,8 +98,8 @@
 	Label:
 		id: goodbye
 
-		pos_hint: {'center_x': .5, 'center_y': .6}
-		size_hint: .7, .2
+		pos_hint: {'center_x': .5, 'center_y': .5}
+		size_hint: .7, .25
 
 		text: ''
 
@@ -113,14 +113,14 @@
 	ProgressBar:
 		id: timer
 
-		pos_hint: {'center_x': .5, 'y': .115}
-		size_hint: .28, .01
+		pos_hint: {'center_x': .5, 'y': 0}
+		size_hint: .5, .01
 
 	Label:
 		id: intro_text
 
-		pos_hint: {'center_x': .5, 'center_y': .6}
-		size_hint: .7, .7
+		pos_hint: {'center_x': .5, 'center_y': .5}
+		size_hint: .7, .85
 
 		text: ''
 
