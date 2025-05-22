@@ -147,3 +147,40 @@
 							origin: self.center
 					canvas.after:
 						PopMatrix
+
+
+<NavigationBar>
+	size_hint: 1., .15
+
+	Label:
+		id: continue_lbl
+
+		pos_hint: {'center_x': .5, 'y': .7}
+		size_hint: .3, .3
+
+		text: 'Complete this screen before continuing'
+
+    Button:
+    	id: continue_bttn
+
+        pos_hint: {'center_x': .5, 'y': .05}
+        size_hint: .3, .65
+
+        text: 'Continue'
+
+        font_size: 42
+
+        on_release: root.palila_manager.navigate_next()
+
+    Image:
+        pos_hint: {'x': .05, 'y': .05}
+        size_hint: .1, .7
+
+        source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
+
+    Image:
+        pos_hint: {'x': .88, 'y': .05}
+        size_hint: .07, .7
+
+        fit_mode: 'contain'
+        source: 'GUI/assets/PALILA.png'
