@@ -132,10 +132,10 @@ class WelcomeScreen(PalilaScreen):
         """
         if self.ids.pid_entry.text:
             # Unlock in case text is in the box
-            pass
+            self.manager.navigation.unlock()
         else:
             # Lock the button in case there is no text in the box
-            pass
+            self.manager.navigation.lock()
 
 
 class EndScreen(PalilaScreen):
@@ -227,12 +227,16 @@ class TimedTextScreen(PalilaScreen):
         self.ids.timer.max = float(config_dict['time'])
         self.timing_thread = ProgressBarThread(self.ids.timer)
 
+    def on_pre_enter(self, *_):
+        self.manager.navigation.lock()
+        self.manager.navigation.message = 'Please wait for the timer.'
+
     def on_enter(self, *_) -> None:
         """
         Start the timer and ProgressBar when entering the screen.
         """
         self.timing_thread.start()
-        # Clock.schedule_once(self.manager.navigation.unlock, self.ids.timer.max)
+        Clock.schedule_once(self.manager.navigation.unlock, self.ids.timer.max)
 
 
 class QuestionScreen(PalilaScreen):
@@ -287,11 +291,11 @@ class QuestionScreen(PalilaScreen):
 
         # If all questions are answered and the audio is listened to: unlock the continue button.
         if question_state or self.state_override:
-            pass
+            self.manager.navigation.unlock()
 
         else:
             # Otherwise, make sure the continue button is locked.
-            pass
+            self.manager.navigation.lock()
 
     def on_pre_leave(self, *_):
         """

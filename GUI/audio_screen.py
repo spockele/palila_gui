@@ -124,7 +124,7 @@ class AudioQuestionScreen(QuestionScreen):
 
         else:
             # Otherwise, lock
-            pass
+            self.manager.navigation.lock()
 
 
 class AudioManager(BoxLayout):

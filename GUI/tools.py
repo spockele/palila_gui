@@ -270,11 +270,11 @@ class NavigationBar(FloatLayout):
         self.ids.message.text = ''
         self.ids.continue_button.disabled = True
 
-    def lock(self):
+    def lock(self, *_):
         self.message = 'Complete this screen before continuing'
         self.ids.continue_button.disabled = True
 
-    def unlock(self):
+    def unlock(self, *_):
         self.message = ''
         self.ids.continue_button.disabled = False
 
