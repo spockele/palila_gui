@@ -17,6 +17,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
+## [v1.2.2] - tbd
+
+[//]: # (### Added)
+
+### Changed
+- Made the "continue" and other navigation buttons static on the screen.
+
+[//]: # (### Deprecated)
+
+[//]: # (### Removed)
+
+[//]: # (### Fixed)
+
+
 ## [v1.2.1] - tbd
 
 ### Added
