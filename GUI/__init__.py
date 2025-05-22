@@ -161,9 +161,13 @@ class PalilaScreenManager(ScreenManager):
         """
         Navigate to the previous screen, based on the string defined in the current screen.
         """
+        if 'main-questionnaire' not in self.current and self.current_screen.previous_screen == 'main-questionnaire 1':
+            self.tracker.track(self.current, back_to_main_questionnaire=True)
+
         # Set the transition direction and the new current screen
         self.transition.direction = 'right'
         self.current = self.current_screen.previous_screen
+
 
     def set_pid(self, pid: str) -> None:
         """
