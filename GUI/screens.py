@@ -17,7 +17,6 @@ Module containing some fundamental Kivy GUI elements for the PALILA GUI.
 # limitations under the License.
 
 from kivy.uix.screenmanager import Screen
-from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.config import Config
 from kivy.clock import Clock
@@ -26,8 +25,7 @@ from .questions import QuestionManager
 from .tools import ProgressBarThread
 
 
-__all__ = ['PalilaScreen', 'WelcomeScreen', 'EndScreen', 'FinalScreen', 'TimedTextScreen', 'QuestionScreen',
-           'Filler', 'BackButton']
+__all__ = ['PalilaScreen', 'WelcomeScreen', 'EndScreen', 'FinalScreen', 'TimedTextScreen', 'QuestionScreen', 'Filler']
 
 
 class Filler(Widget):
@@ -35,63 +33,6 @@ class Filler(Widget):
     Empty widget to be used as a custom filler
     """
     pass
-
-
-class BackButton(Button):
-    """
-    Button subclass with special functionality to go back
-    """
-
-    def set_arrow(self) -> None:
-        """
-        Set an arrow in the BackButton using the Image Widget.
-        """
-        self.text = ''
-        self.ids.back_bttn_image.source = 'GUI/assets/arrow.png'
-        self.ids.back_bttn_image.opacity = 1.
-
-
-class ContinueButton(Button):
-    """
-    Button subclass with special functionality to continue.
-
-    Parameters
-    ----------
-    **kwargs
-        Keyword arguments. These are passed on to the kivy.uix.button.Button constructor.
-    """
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
-        # Button is always locked initially
-        self.disabled = True
-
-    def set_arrow(self) -> None:
-        """
-        Set an arrow in the ContinueButton using the Image Widget.
-        """
-        self.text = ''
-        self.ids.continue_bttn_image.source = 'GUI/assets/arrow.png'
-        self.ids.continue_bttn_image.opacity = 1.
-
-    def on_release(self) -> None:
-        """
-        Click action button to do the navigation if the button is unlocked
-        """
-        self.parent.manager.navigate_next()
-
-    def unlock(self, *_) -> None:
-        """
-        Set the button state to unlocked
-        """
-        self.disabled = False
-        self.parent.ids.continue_lbl.text = ''
-
-    def lock(self, *_) -> None:
-        """
-        Set the button state to locked
-        """
-        self.disabled = True
-        self.parent.ids.continue_lbl.text = 'Complete this screen before continuing'
 
 
 class PalilaScreen(Screen):
@@ -104,8 +45,6 @@ class PalilaScreen(Screen):
         Name of the previous screen in the ScreenManager.
     next_screen : str
         Name of the next screen in the ScreenManager.
-    lock : bool, optional
-        Optional boolean to keep the PalilaScreen locked.
     **kwargs
         Keyword arguments. These are passed on to the kivy.uix.screenmanager.Screen constructor.
 
@@ -116,19 +55,10 @@ class PalilaScreen(Screen):
     next_screen : str
         Name of the next screen in the ScreenManager.
     """
-    def __init__(self, previous_screen: str, next_screen: str, lock: bool = False, **kwargs) -> None:
+    def __init__(self, previous_screen: str, next_screen: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.previous_screen = previous_screen
         self.next_screen = next_screen
-
-        if not lock:
-            self.ids.continue_bttn.unlock()
-
-    def reset_continue_label(self, *_) -> None:
-        """
-        Function to call for resetting the continue label
-        """
-        self.ids.continue_lbl.text = ''
 
     def set_next_screen(self, next_screen: str) -> None:
         """
@@ -164,15 +94,15 @@ class WelcomeScreen(PalilaScreen):
     """
 
     def __init__(self, pid_mode: str, welcome_text: str, *args, **kwargs) -> None:
-        super().__init__(*args, lock=True, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if pid_mode == 'auto':
             self.ids.pid_entry.text = 'Your participant ID is set automatically.'
             self.ids.pid_entry.disabled = True
-            self.ids.continue_bttn.unlock()
 
         elif pid_mode == 'input':
             self.ids.pid_entry.text = ''
+            self.ids.pid_entry.on_text = self.check_lock
 
         else:
             raise SyntaxError(f'Participant ID mode "pid mode = {pid_mode}" not supported!')
@@ -185,17 +115,19 @@ class WelcomeScreen(PalilaScreen):
         """
         self.manager.set_pid(self.ids.pid_entry.text)
 
-    def check_lock(self, input_text: str) -> None:
+    def on_pre_enter(self, *args):
+        self.check_lock()
+
+    def check_lock(self) -> None:
         """
         Function to properly set the lock of the Continue Button with each text entry
         """
-        if input_text:
-            # Unlock and reset message in case text is in the box
-            self.reset_continue_label()
-            self.ids.continue_bttn.unlock()
+        if self.ids.pid_entry.text:
+            # Unlock in case text is in the box
+            pass
         else:
             # Lock the button in case there is no text in the box
-            self.ids.continue_bttn.lock()
+            pass
 
 
 class EndScreen(PalilaScreen):
@@ -212,37 +144,6 @@ class EndScreen(PalilaScreen):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        # First readjust the continue button
-        self.ids.continue_bttn.font_size = 32
-        self.ids.continue_bttn.text = 'Finish\nExperiment'
-        self.ids.continue_bttn.size_hint_x = .145
-        self.ids.continue_bttn.pos_hint = {'x': .505, 'y': .015}
-        # Create the back button and pass all information to it
-        self.back_button = BackButton()
-        self.back_button.pos_hint = {'right': .495, 'y': .015}
-        self.back_button.size_hint = (.145, .1)
-        self.back_button.text = 'Back to first\nQuestionnaire'
-        # Add the button to the screen
-        self.add_widget(self.back_button)
-
-    def back_function(self, *_) -> None:
-        """
-        Function for the on_release of the BackButton.
-        """
-        # Set up the screen where this button navigates to,
-        #  in order to come back without going through the whole experiment.
-        going_to: PalilaScreen = self.manager.get_screen(self.previous_screen)
-        going_to.set_next_screen(self.name)
-        self.manager.tracker.track(self.name, back_to_main_questionnaire=True)
-        # Actually navigate using the PalilaScreenManager
-        self.manager.navigate_previous()
-
-    def on_parent(self, *_) -> None:
-        """
-        Assigns the BackButton's on_release when this screen gets a parent.
-        This is needed, because the current screen requires a parent which is not always the case.
-        """
-        self.back_button.on_release = self.back_function
 
 
 class FinalScreen(PalilaScreen):
@@ -261,8 +162,6 @@ class FinalScreen(PalilaScreen):
 
     def __init__(self, *args, goodbye: str, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.ids.continue_bttn.text = ''
-        self.ids.continue_bttn.disabled = True
         self.ids.goodbye.text = goodbye
 
     def on_enter(self, *args) -> None:
@@ -286,7 +185,7 @@ class TimedTextScreen(PalilaScreen):
         Keyword arguments. These are passed on to the PalilaScreen constructor.
     """
     def __init__(self, config_dict: dict, **kwargs) -> None:
-        super().__init__(config_dict['previous'], config_dict['next'], lock=True, **kwargs)
+        super().__init__(config_dict['previous'], config_dict['next'], **kwargs)
 
         self.ids.intro_text.text = config_dict['text']
         if '\n' not in config_dict['text']:
@@ -295,14 +194,12 @@ class TimedTextScreen(PalilaScreen):
         self.ids.timer.max = float(config_dict['time'])
         self.timing_thread = ProgressBarThread(self.ids.timer)
 
-        self.ids.continue_lbl.text = ''
-
     def on_enter(self, *_) -> None:
         """
         Start the timer and ProgressBar when entering the screen.
         """
         self.timing_thread.start()
-        Clock.schedule_once(self.ids.continue_bttn.unlock, self.ids.timer.max)
+        # Clock.schedule_once(self.manager.navigation.unlock, self.ids.timer.max)
 
 
 class QuestionScreen(PalilaScreen):
@@ -357,12 +254,11 @@ class QuestionScreen(PalilaScreen):
 
         # If all questions are answered and the audio is listened to: unlock the continue button.
         if question_state or self.state_override:
-            self.reset_continue_label()
-            self.ids.continue_bttn.unlock()
+            pass
 
         else:
             # Otherwise, make sure the continue button is locked.
-            self.ids.continue_bttn.lock()
+            pass
 
     def on_pre_leave(self, *_):
         """

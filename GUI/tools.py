@@ -23,6 +23,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.properties import ListProperty
 from kivy.uix.widget import Widget
 from kivy.uix.bubble import Bubble
+from kivy.uix.button import Button
 
 import threading
 import time
@@ -239,3 +240,10 @@ class NumPadBubble(Bubble):
         """
         if self.coupled_widget is not None:
             self.coupled_widget.text = self.coupled_widget.text[:-1]
+
+
+class NavigationBar(FloatLayout):
+    def __init__(self, manager, **kwargs) -> None:
+        super().__init__(**kwargs)
+
+        self.palila_manager = manager

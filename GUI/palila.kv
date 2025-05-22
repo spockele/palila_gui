@@ -96,39 +96,41 @@
 			PopMatrix
 
 
-<Screen>
-    Image:
-        pos_hint: {'x': .05, 'y': .01}
-        size_hint: .1, .09
+<NavigationBar>
+	size_hint: 1., .15
 
-        source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
-
-    Image:
-        pos_hint: {'x': .88, 'y': 0.01}
-        size_hint: .07, .09
-
-        fit_mode: 'contain'
-        source: 'GUI/assets/PALILA.png'
-
-
-<PalilaScreen>
 	Label:
 		id: continue_lbl
 
-		pos_hint: {'center_x': .5, 'y': .11}
-		size_hint: .3, .05
+		pos_hint: {'center_x': .5, 'y': .7}
+		size_hint: .3, .3
 
 		text: 'Complete this screen before continuing'
 
-    ContinueButton:
+    Button:
     	id: continue_bttn
 
-        pos_hint: {'center_x': .5, 'y': 0.01}
-        size_hint: .3, .1
+        pos_hint: {'center_x': .5, 'y': .05}
+        size_hint: .3, .65
 
         text: 'Continue'
 
         font_size: 42
+
+        on_release: root.palila_manager.navigate_next()
+
+    Image:
+        pos_hint: {'x': .05, 'y': .05}
+        size_hint: .1, .7
+
+        source: 'GUI/assets/TUDelft_logo_descriptor_rgb.png'
+
+    Image:
+        pos_hint: {'x': .88, 'y': .05}
+        size_hint: .07, .7
+
+        fit_mode: 'contain'
+        source: 'GUI/assets/PALILA.png'
 
 
 <WelcomeScreen>
@@ -158,9 +160,6 @@
 
 			multiline: False
 			text_size: self.size
-
-			on_text:
-				self.parent.parent.check_lock(self.text)
 
 
 <EndScreen>

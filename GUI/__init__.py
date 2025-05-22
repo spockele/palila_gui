@@ -38,6 +38,8 @@ from .tools import *
 
 __all__ = ['main', ]
 
+from .tools import NavigationBar
+
 Builder.load_file('GUI/audio_screen.kv')
 Builder.load_file('GUI/audio_questions.kv')
 Builder.load_file('GUI/tools.kv')
@@ -71,10 +73,12 @@ class PalilaScreenManager(ScreenManager):
         self.experiment = experiment
         self.answers = answers
 
+        self.size_hint = (1., 1. - .015 - .15)
+        self.tracker = ProgressTracker(self.screen_names, size_hint=(1., .015, ))
+        self.navigation = NavigationBar(self)
+
         # Go about initialising the Screens based on the input file
         self._initialise_screens()
-
-        self.tracker = ProgressTracker(self.screen_names, size_hint=(1., .015, ))
 
     def _initialise_screens(self) -> None:
         """
@@ -215,7 +219,7 @@ class PalilaApp(App):
         self.experiment = PalilaExperiment(experiment_name)
         self.answers = PalilaAnswers(self.experiment)
 
-    def build(self) -> PalilaScreenManager:
+    def build(self) -> GridLayout:
         """
         Builds the App (default App function)
         """
@@ -230,6 +234,7 @@ class PalilaApp(App):
         Config.set('kivy', 'exit_on_escape', '0')
 
         main_layout.add_widget(manager)
+        main_layout.add_widget(manager.navigation)
         main_layout.add_widget(manager.tracker)
 
         # Required return of the ScreenManager

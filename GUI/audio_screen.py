@@ -20,8 +20,6 @@ from kivy.properties import NumericProperty, ListProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.audio import SoundLoader
 
-import warnings
-
 from .tools import ProgressBarThread
 from .screens import QuestionScreen
 from .questions import *
@@ -67,8 +65,7 @@ class AudioQuestionScreen(QuestionScreen):
 
         self.demo = demo
 
-        super().__init__(config_dict, 2,
-                         state_override=state_override, lock=True, **kwargs)
+        super().__init__(config_dict, 2, state_override=state_override, **kwargs)
 
         # Get better references to the audio and question managers
         self.audio_manager_left: AudioManagerLeft = self.ids.audio_manager_left
@@ -118,6 +115,7 @@ class AudioQuestionScreen(QuestionScreen):
         audio_state_right = not self.audio_manager_right.active or self.audio_manager_right.count >= 1
         audio_state = audio_state_left and audio_state_right
 
+        # In case all conditions are met, unlock.
         if (audio_state or self.state_override) and not self.audio_playing:
             self.question_manager.unlock()
             self.ids.extra_message.text = ''
@@ -125,7 +123,8 @@ class AudioQuestionScreen(QuestionScreen):
             super().unlock_check()
 
         else:
-            self.ids.continue_bttn.lock()
+            # Otherwise, lock
+            pass
 
 
 class AudioManager(BoxLayout):

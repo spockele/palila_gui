@@ -19,9 +19,8 @@ Module containing the overall classes and functions for the Questionnaire screen
 from kivy.properties import ColorProperty, NumericProperty
 from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.widget import Widget
-import copy
 
-from .screens import QuestionScreen, BackButton
+from .screens import QuestionScreen
 from .tools import NumPadBubble
 from .questions import *
 
@@ -56,25 +55,10 @@ class QuestionnaireScreen(QuestionScreen):
     def __init__(self,
                  questionnaire_dict: dict,
                  state_override: bool = False,
-                 back_function: callable = None,
                  **kwargs
                  ) -> None:
 
-        super().__init__(questionnaire_dict, 7, state_override=state_override, lock=True, **kwargs)
-
-        # In case it's not the first screen (indicated by the presence of a back_function), set up the back button
-        if back_function is not None:
-            # First readjust the continue button
-            self.ids.continue_bttn.size_hint_x -= .065
-            self.ids.continue_bttn.pos_hint = {'x': .415, 'y': .015}
-            # Create the back button and pass all information to it
-            back_button = BackButton()
-            back_button.pos_hint = {'x': .35, 'y': .015}
-            back_button.size_hint = (.0625, .1)
-            back_button.on_release = back_function
-            back_button.set_arrow()
-            # Add the button to the screen
-            self.add_widget(back_button)
+        super().__init__(questionnaire_dict, 7, state_override=state_override, **kwargs)
 
         # Add the borders to all questions
         [question.border() for question in list(self.question_manager.questions.values())[:-1]]
@@ -357,7 +341,7 @@ def questionnaire_setup(questionnaire_dict: dict, manager: ScreenManager, state_
             if ii:
                 # Create a new questionnaire screen with the necessary parameters
                 new_screen = QuestionnaireScreen(screen_dict,
-                                                 state_override=state_override, back_function=manager.navigate_previous,
+                                                 state_override=state_override,
                                                  name=f'{part}-questionnaire {ii + 1}',
                                                  )
             else:
