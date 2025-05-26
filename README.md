@@ -55,6 +55,8 @@ Pockelé, J.S. (2025). Graphical User Interface for the Psychoacoustic Listening
 
 ---
 ## Experiment Configuration
+**IMPORTANT: this section of the README is not up-to-date since v1.2.0. It will be removed and replaced by the full manual in a future version.**
+
 The experiment configuration consists of the following files, where ```<experiment name>``` represents the name you use for your experiment:
 - An experiment configuration file (```<experiment name>.palila```)
   - Defines the experiment (audios, questions, etc.).
