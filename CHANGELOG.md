@@ -17,12 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (### Fixed)
 
-## [v1.2.2] - tbd
+[//]: # (## [v1.2.2] - tbd)
 
 [//]: # (### Added)
 
-### Changed
-- Made the "continue" and other navigation buttons static on the screen.
+[//]: # (### Changed)
 
 [//]: # (### Deprecated)
 
@@ -41,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The 'Please enter your participant ID' part of the welcome message is now always visible.
 - ```text``` is now an optional parameter for the ```Annoyance``` question type.
 - An open question (```how_found_other```) is added to the questionnaire for when participants select 'other' in ```how_found```.
+- Made the "continue" and other navigation buttons static on the screen.
 
 ### Deprecated
 - Experiment configuration information will be removed from the README. This section will not be maintained from v1.2.0.
