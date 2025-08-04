@@ -1,0 +1,162 @@
+## This is your experiment input file. It is set up with a basic structure for a PALILA GUI experiment.
+override = yes
+
+pid mode = auto
+randomise = no
+demo = no
+
+[questionnaire]
+	default = yes
+
+	[[question heard_before]]
+		text = 'Have you ever heard wind turbine noise before?'
+		type = MultipleChoice
+		choices = 'Yes', 'No', 'Not sure'
+		manual screen = 4
+
+	[[question live_near]]
+		text = 'Can you see a wind turbine from your home?'
+		type = MultipleChoice
+		choices = 'Yes', 'No'
+		manual screen = 4
+
+	[[question live_distance]]
+		text = '''If yes, what is the approximate distance from
+			your home to this/these wind turbines?'''
+		type = MultipleChoice
+		choices = '< 500 m', '500 - 1000 m', '1 - 2 km', '> 2 km'
+		manual screen = 4
+
+		unlocked by = 'live_near'
+		unlock condition = 'Yes'
+
+
+[part annoyance_1]
+	randomise = yes
+
+	[[intro]]
+		text = '''Thank you for filling out our questionnaire!
+
+			In the first part of the listening experiment, you will listen
+			to noise recordings of a wind turbine.
+
+			While listening, imagine that this is the sound situation
+			outdoors (e.g. your garden or a park).'''
+
+		time = 0
+
+	[[questions]]
+		[[[question annoyance]]]
+			type = Annoyance
+
+	[[audio sample_1]]
+		filename = 'tone500Hz.wav'
+		repeat = 2
+
+	[[audio sample_2]]
+		filename = 'tone500Hz.wav'
+		repeat = 2
+
+	[[audio sample_3]]
+		filename = 'tone500Hz.wav'
+		repeat = 2
+
+
+[part compare]
+	randomise = yes
+
+	[[intro]]
+		text = '''In the second part of the listening experiment, you will listen
+			to noise recordings of a wind turbine. Each screen will contain two
+			sound samples, which you will compare.
+
+			While listening, imagine that this is the sound situation
+			outdoors (e.g. your garden or a park).'''
+
+		time = 0
+
+	[[breaks]]
+		text = '''This is a short break from listening.
+			Please stay as long as you need.
+			When you continue, imagine that this is the sound situation
+			outdoors (e.g. your garden or a park).'''
+
+		interval = -2
+		time = 0
+
+	[[questions]]
+		[[[question which]]]
+			text = '''Which sample did you experience as more annoying?'''
+			type = MultipleChoice
+
+			choices = 'Left', 'Equally Annoying', 'Right'
+
+		[[[question rating]]]
+			text = '''On this scale from 1 to 10, how much MORE bothered, disturbed or annoyed were you by the most annoying sample, compared to the less annoying sample?'''
+			type = IntegerScale
+
+			min = 1
+			max = 10
+			left note = 'Almost equal'
+			right note = 'A lot more'
+
+			unlocked by = which
+			unlock condition = Left;Right
+
+
+	[[audio comparison_1]]
+		filename = 'tone500Hz.wav'
+		filename_2 = 'tone500Hz.wav'
+
+		repeat = 2
+		max replays = 2
+
+	[[audio comparison_2]]
+		filename = 'tone500Hz.wav'
+		filename_2 = 'tone500Hz.wav'
+
+		repeat = 2
+		max replays = 2
+
+
+[part annoyance_2]
+	randomise = yes
+
+	[[intro]]
+		text = '''
+			In this final part of the listening experiment, you will listen
+			to noise recordings of a wind turbine, once more.
+
+			While listening, imagine that this is the sound situation
+			outdoors (e.g. your garden or a park).'''
+
+		time = 0
+
+	[[questions]]
+		[[[question annoyance]]]
+			type = Annoyance
+
+	[[audio sample_1]]
+		filename = 'tone500Hz.wav'
+		repeat = 2
+
+	[[audio sample_2]]
+		filename = 'tone500Hz.wav'
+		repeat = 2
+
+	[[audio sample_3]]
+		filename = 'tone500Hz.wav'
+		repeat = 2
+
+	[[questionnaire]]
+		[[[question wt_opinion_change]]]
+			type = MultipleChoice
+			text = '''Has this experiment changed your attitude
+				towards wind turbines?'''
+			choices = 'Yes, positively', 'No', 'Yes, negatively'
+
+		[[[question wtn_acceptable]]]
+			type = MultipleChoice
+			text = '''Would you find any of the presented sound situations
+				acceptable in your daily life?'''
+			choices = 'None', 'Some', 'Most', 'All'
