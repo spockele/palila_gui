@@ -74,16 +74,15 @@ class PalilaExperiment(ConfigObj):
             # Go over all the sections to find audios
             for audio in self[part]:
                 if 'audio ' in audio:
+                    # Get the number of repeats for this audio.
+                    repeat = 1 if 'repeat' not in self[part][audio].keys() else int(self[part][audio]['repeat'])
                     # In case a repeat is requested, add the required number of repeating audios
-                    if 'repeat' in self[part][audio].keys():
-                        # Get the number of repeats.
-                        repeat = int(self[part][audio]['repeat'])
-                        # For each repeat
+                    if repeat > 1:
                         for ri in range(repeat):
-                            # Create a new name and add to the list of audios
+                            # Add the repetition index to the audio name, and add to the list of audios.
                             new_name = audio + '_' + str(ri + 1).zfill(2)
                             self[part]['audios'].append(new_name)
-                            # Copy this audio as a repeat
+                            # Copy this audio to each repetition.
                             self[part][new_name] = {}
                             for key, value in self[part][audio].items():
                                 if 'question ' in key:
@@ -211,7 +210,7 @@ class PalilaExperiment(ConfigObj):
 
         Parameters
         ----------
-        questionnaire_dict : dict
+        questionnaire_dict : configobj.Section
             The specific questionnaire dictionary to be pre-processed.
         part : str
             The part of the experiment where this questionnaire is located.
@@ -496,6 +495,7 @@ class PalilaExperiment(ConfigObj):
             previous_name = current_name
             previous_audio = audio
 
+        # TODO: consider changing this to add a break before the questionnaire. Current behaviour doesn't make sense...
         if breaks and break_interval >= 0:
             # Set the current audio and name accordingly
             audio = f'break {break_count}'
