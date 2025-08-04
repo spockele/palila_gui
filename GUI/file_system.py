@@ -225,10 +225,13 @@ class PalilaExperiment(ConfigObj):
 
             # Get the default questionnaire setup if that is set
             if questionnaire_dict['default']:
+                questionnaire_dict_additional = questionnaire_dict
                 # Load the configfile
-                questionnaire_dict.update(
-                    ConfigObj(os.path.join(os.path.abspath('GUI'), 'default_questionnaire.palila'))
-                )
+                default_path = os.path.join(os.path.abspath('GUI'), 'default_questionnaire.palila')
+                questionnaire_dict = ConfigObj(default_path)
+                questionnaire_dict.update(questionnaire_dict_additional)
+
+            print(questionnaire_dict)
 
             # Set the questionnaire's 'previous' to the welcome screen
             questionnaire_dict['previous'] = 'welcome'
@@ -578,7 +581,7 @@ class PalilaExperiment(ConfigObj):
             self['override'] = 'no'
 
         # Prepare the main questionnaire
-        self._prepare_questionnaire(self['questionnaire'], 'main')
+        self['questionnaire'] = self._prepare_questionnaire(self['questionnaire'], 'main')
 
         # Pre-define some values to start the parts loop
         previous_part = ''
