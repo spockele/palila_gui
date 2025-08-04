@@ -29,7 +29,7 @@ import threading
 import time
 
 
-__all__ = ['ProgressTracker', 'ProgressBarThread', 'NumPadBubble', ]
+__all__ = ['ProgressTracker', 'ProgressBarThread', 'NumPadBubble', 'NavigationBar', ]
 
 
 class PartIndicator(Widget):
