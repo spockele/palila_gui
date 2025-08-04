@@ -13,41 +13,33 @@
 ## 	limitations under the License.
 
 
-manual split = yes
-
 [question age]
 	type = FreeNumber
 	text = 'Age: '
-	manual screen = 1
 
 [question gender]
 	type = MultipleChoice
 	text = 'Gender identity:'
 	choices = 'Man', 'Woman', 'Other', 'Prefer not to say'
-	manual screen = 1
 
 [question employment]
 	type = Spinner
 	text = 'Current employment status: '
 	choices = 'Prefer not to say', 'Employed for wages', 'Self-employed', 'Homemaker', 'Student', 'Retired', 'Out of work', 'Unable to work'
-	manual screen = 1
 
 [question education]
 	type = Spinner
 	text = 'Highest completed level of school/education: '
 	choices = 'Prefer not to say', 'Elementary (Kindergarten through primary school)', 'Some High School (No Diploma)', 'High School Graduate', 'Some College, but No Degree', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate'
-	manual screen = 1
 
 [question how_found]
 	type = Spinner
 	text = 'How did you find out about this experiment?'
 	choices = 'Posters', 'Information screens', 'Social media', 'TU Delft website', 'Brightspace', 'Email', 'Other'
-	manual screen = 1
 
 [question how_found_other]
 	type = FreeText
 	text = 'Which other way made you find this experiment?'
-	manual screen = 1
 
 	unlocked by = 'how_found'
 	unlock condition = 'Other'
@@ -56,52 +48,44 @@ manual split = yes
 	type = Spinner
 	text = '''Your current, most direct affiliation with TU Delft:'''
 	choices = 'Prefer not to say', 'Student / employee at TU Delft', 'Student / employee at a partner university', 'Employee at a partner company', 'None of the above'
-	manual screen = 1
 
 
 [question hearing_rating]
 	type = Spinner
 	text = 'How good do you think your hearing is?'
 	choices = 'Excellent', 'Very Good', 'Good', 'Fair', 'Poor'
-	manual screen = 2
 
 [question accident]
 	type = MultipleChoice
 	text = '''Have you had an accident involving your head
 		that affected your hearing?'''
 	choices = 'Yes', 'No'
-	manual screen = 2
 
 [question hearing_aid]
 	type = MultipleChoice
 	text = 'Do you normally use a hearing aid?'
 	choices = 'Yes', 'No'
-	manual screen = 2
 
 [question wearing_aid]
 	type = MultipleChoice
 	text = 'Are you currently wearing a hearing aid?'
 	choices = 'Yes', 'No'
-	manual screen = 2
 
 [question blast_trauma]
 	type = MultipleChoice
 	text = '''Have you suffered a shooting or explosion injury
 		(blast trauma)?'''
 	choices = 'Yes', 'No'
-	manual screen = 2
 
 [question work_protection]
 	type = MultipleChoice
 	text = '''Do you have to wear hearing protection at work,
 		or did you have to in the past?'''
 	choices = 'Yes', 'No'
-	manual screen = 2
 
 [question which_protection]
 	type = FreeText
 	text = '''What noise do/did you have to protect yourself from?'''
-	manual screen = 2
 
 	unlocked by = 'work_protection'
 	unlock condition = 'Yes'
@@ -112,12 +96,10 @@ manual split = yes
 	text = '''Have you suffered, or are you currently
 		suffering from any ear disease?'''
 	choices = 'Yes', 'No'
-	manual screen = 3
 
 [question which_disease]
 	type = FreeText
 	text = 'If yes, what kind of ear disease?'
-	manual screen = 3
 
 	unlocked by = 'ear_disease'
 	unlock condition = 'Yes'
@@ -126,20 +108,17 @@ manual split = yes
 	type = MultipleChoice
 	text = 'Do you suffer from ringing in the ears (tinnitus)?'
 	choices = 'Yes', 'No'
-	manual screen = 3
 
 [question cold]
 	type = MultipleChoice
 	text = 'Do you currently have a cold?'
 	choices = 'Yes', 'No'
-	manual screen = 3
 
 [question cold_magnitude]
 	type = Spinner
 	text = '''How bad is your cold?
 		From 1 (very weak) to 5 (very strong)'''
 	choices = '1', '2', '3', '4', '5'
-	manual screen = 3
 
 	unlocked by = 'cold'
 	unlock condition = 'Yes'
@@ -148,10 +127,8 @@ manual split = yes
 	type = MultipleChoice
 	text = 'Are you currently feeling well?'
 	choices = 'Yes', 'No'
-	manual screen = 3
 
 [question tired]
 	type = MultipleChoice
 	text = 'Are you currently feeling very tired?'
 	choices = 'Yes', 'No'
-	manual screen = 3
