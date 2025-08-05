@@ -1,7 +1,6 @@
 """
 Module containing some fundamental Kivy GUI elements for the PALILA GUI.
 """
-
 # Copyright (c) 2025 Josephine Siebert Pockelé
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,7 @@ Module containing some fundamental Kivy GUI elements for the PALILA GUI.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManagerException
 from kivy.uix.widget import Widget
 from kivy.config import Config
 from kivy.clock import Clock
@@ -154,18 +153,24 @@ class EndScreen(PalilaScreen):
         super().__init__(*args, back_button=True, **kwargs)
 
     def on_pre_enter(self, *_):
-        self.manager.navigation.back_button.arrow_opacity = 0
-        self.manager.navigation.back_button.text = 'Back to first\nQuestionnaire'
-        self.manager.navigation.back_button.pos_hint = {'right': .495}
-        self.manager.navigation.back_button.size_hint_x = .145
-        self.manager.navigation.back_button.font_size = 32
+        try:
+            self.manager.get_screen(self.previous_screen).set_next_screen(self.name)
 
-        self.manager.navigation.ids.continue_button.text = 'Finish\nExperiment'
-        self.manager.navigation.ids.continue_button.pos_hint = {'x': .505}
-        self.manager.navigation.ids.continue_button.size_hint_x = .145
-        self.manager.navigation.ids.continue_button.font_size = 32
+            self.manager.navigation.back_button.arrow_opacity = 0
+            self.manager.navigation.back_button.text = 'Back to first\nQuestionnaire'
+            self.manager.navigation.back_button.pos_hint = {'right': .495}
+            self.manager.navigation.back_button.size_hint_x = .145
+            self.manager.navigation.back_button.font_size = 32
 
-        self.manager.get_screen(self.previous_screen).set_next_screen(self.name)
+            self.manager.navigation.ids.continue_button.text = 'Finish\nExperiment'
+            self.manager.navigation.ids.continue_button.pos_hint = {'x': .505}
+            self.manager.navigation.ids.continue_button.size_hint_x = .145
+            self.manager.navigation.ids.continue_button.font_size = 32
+
+        except ScreenManagerException:
+            self.back_button = False
+            self.manager.navigation.reset(self.name)
+            self.manager.navigation.ids.continue_button.text = 'Finish Experiment'
 
     def on_pre_leave(self, *_):
         self.manager.navigation.back_button.arrow_opacity = 1

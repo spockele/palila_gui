@@ -231,8 +231,6 @@ class PalilaExperiment(ConfigObj):
                 questionnaire_dict = ConfigObj(default_path)
                 questionnaire_dict.update(questionnaire_dict_additional)
 
-            print(questionnaire_dict)
-
             # Set the questionnaire's 'previous' to the welcome screen
             questionnaire_dict['previous'] = 'welcome'
             # Set the part ID correctly

@@ -307,17 +307,17 @@ class NavigationBar(FloatLayout):
         """
         Action for the back_button.
         """
-        self._reset(self.palila_manager.current_screen.previous_screen)
+        self.reset(self.palila_manager.current_screen.previous_screen)
         self.palila_manager.navigate_previous()
 
     def _continue_action(self):
         """
         Action for the continue_button.
         """
-        self._reset(self.palila_manager.current_screen.next_screen)
+        self.reset(self.palila_manager.current_screen.next_screen)
         self.palila_manager.navigate_next()
 
-    def _reset(self, next_screen):
+    def reset(self, next_screen):
         """
         Reset the navigation bar before moving to the next screen
         """
