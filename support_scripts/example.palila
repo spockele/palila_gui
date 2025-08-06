@@ -12,20 +12,17 @@ demo = no
 		text = 'Have you ever heard wind turbine noise before?'
 		type = MultipleChoice
 		choices = 'Yes', 'No', 'Not sure'
-		manual screen = 4
 
 	[[question live_near]]
 		text = 'Can you see a wind turbine from your home?'
 		type = MultipleChoice
 		choices = 'Yes', 'No'
-		manual screen = 4
 
 	[[question live_distance]]
 		text = '''If yes, what is the approximate distance from
 			your home to this/these wind turbines?'''
 		type = MultipleChoice
 		choices = '< 500 m', '500 - 1000 m', '1 - 2 km', '> 2 km'
-		manual screen = 4
 
 		unlocked by = 'live_near'
 		unlock condition = 'Yes'
