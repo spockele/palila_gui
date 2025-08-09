@@ -115,7 +115,7 @@
 	choices = 'Yes', 'No'
 
 [question cold_magnitude]
-	type = Spinner
+	type = MultipleChoice
 	text = '''How bad is your cold?
 		From 1 (very weak) to 5 (very strong)'''
 	choices = '1', '2', '3', '4', '5'
