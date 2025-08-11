@@ -19,12 +19,14 @@ Graphical user interface for listening experiments in the
   - Other resolutions will result in visual defects.
 
 ### Installation
-1. Download this software to the desired location, either:
-   - through git
-   - by downloading the zip file and unpacking it
-2. Run ```setup.bat```
+1. Download this software to the desired location, by:
+   - using ```git clone``` on this repository.
+   - downloading the zip file and unpacking it.
+2. Run ```setup.bat```. In case this script does not work:
+   - create a Python virtual environment in the ```.\venv``` directory.
+   - install the required packages in ```support_scripts\requirements.txt```.
 
-Now you can run the GUI with ```PALILA.bat```
+Now you can run the GUI using ```PALILA.bat```
 
 ---
 
@@ -55,7 +57,7 @@ Pockelé, J.S. (2025). Graphical User Interface for the Psychoacoustic Listening
 
 ---
 ## Experiment Configuration
-**IMPORTANT: this section of the README is not up-to-date since v1.2.0. It will be removed and replaced by the full manual in a future version.**
+**IMPORTANT: this section of the README is not up-to-date since v1.2.0. It will be replaced by the user manual in a future version.**
 
 The experiment configuration consists of the following files, where ```<experiment name>``` represents the name you use for your experiment:
 - An experiment configuration file (```<experiment name>.palila```)
