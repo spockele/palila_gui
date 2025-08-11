@@ -387,6 +387,10 @@ class IntegerScaleAQuestion(ButtonAQuestion):
             # Determine their positions
             button.pos_hint = {'center_x': (scale_start + button_width / 2) + (bi * button_width), 'center_y': .5}
 
+    def assign_dependant(self, question) -> None:
+        super().assign_dependant(question)
+        # TODO: add functionality to allow for "less than" or "greater than" conditions (#104).
+
 
 class AnnoyanceAQuestion(IntegerScaleAQuestion):
     """
@@ -521,6 +525,10 @@ class SliderAQuestion(AudioQuestion):
         self.ids.slider.cursor_image = 'GUI/assets/Slider_cursor_answered.png'
 
         self.answered = True
+
+    def assign_dependant(self, question) -> None:
+        super().assign_dependant(question)
+        # TODO: add functionality to allow for "less than" or "greater than" conditions (#104).
 
     def dependant_lock(self) -> None:
         """

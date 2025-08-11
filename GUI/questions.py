@@ -226,6 +226,7 @@ class Question(BoxLayout):
         # Code for the new dependency system to check if the dependent question(s) should be unlocked
         # Loop over all dependent questions
         for question in self.dependants:
+            # TODO: modify this to allow for commas instead of semicolons (#86)
             # Check if the unlock condition of this dependent question is met.
             # Also ensure this does not happen with this question disabled. Otherwise, undesired unlocks will happen.
             if any(a in question.unlock_condition.split(';') for a in answer.split(';')) and not self.disabled:
