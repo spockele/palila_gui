@@ -168,6 +168,7 @@ class EndScreen(PalilaScreen):
             self.manager.navigation.ids.continue_button.font_size = 32
 
         except ScreenManagerException:
+            self.ids.endtext.text = 'You have reached the end of the experiment.\nPlease press the finish button below.'
             self.back_button = False
             self.manager.navigation.reset(self.name)
             self.manager.navigation.ids.continue_button.text = 'Finish Experiment'

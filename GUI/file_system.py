@@ -566,7 +566,7 @@ class PalilaExperiment(ConfigObj):
 
         if 'goodbye' not in self.keys():
             # Add the default message if it is not defined in the input file
-            self['goodbye'] = 'Thank you for your participation in this experiment!'
+            self['goodbye'] = 'Thank you for your participation!'
         else:
             # Fix the goodbye message.
             self['goodbye'] = self['goodbye'].replace('\t', '')
