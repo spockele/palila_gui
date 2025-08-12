@@ -35,18 +35,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - The ```demo``` parameter can now be defined as a block to define a custom demonstration screen.
 - A first version of the user manual is now included.
+- Added the example PALILA file from the manual.
 
 ### Changed
 - The 'Please enter your participant ID' part of the welcome message is now always visible.
 - ```text``` is now an optional parameter for the ```Annoyance``` question type.
 - An open question (```how_found_other```) is added to the questionnaire for when participants select 'other' in ```how_found```.
 - Made the "continue" and other navigation buttons static on the screen.
+- Changed the default questionnaire's ```cold_magnitude``` question to ```MultipleChoice```.
+- The default questionnaire no longer uses ```manual split = yes```.
 
 ### Deprecated
 - Experiment configuration information will be removed from the README. This section will not be maintained from v1.2.0.
 
 ### Removed
 - Removed the ```default_questionnaire.pdf``` document. This information is now included in the manual.
+
+### Fixed
+- Without the ```[questionnaire]``` block, the GUI still showed the 'back to main questionnaire' button, which has now been removed in this case.
+- The repetition index in the question identifier no longer appears when ```repeat = 1```.
 
 
 # [v1.2.0] - 28 March 2025
