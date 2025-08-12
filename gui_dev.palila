@@ -22,214 +22,153 @@ override = yes
 [questionnaire]
 	default = yes
 
-# 	[[question testing]]
-# 		text = 'Just Testing'
-# 		type = MultipleChoice
-# 		choices = 'Ok', 'Understood', 'Ay Ay Captain'
-#
-# 	[[question testing_multi]]
-# 		text = 'Just Testing'
-# 		type = MultipleChoice
-# 		choices = 'Ok', 'Understood', 'Ay Ay Captain'
-#         multi = yes
-#
-# 	[[question testing_dep_1]]
-# 		text = 'This question is dependant on the previous one'
-# 		type = MultipleChoice
-# 		choices = 'Ok', 'Understood'
-#
-# 		unlocked by = 'testing'
-# 		unlock condition = 'Ok;Understood'
-#
-# 	[[question testing_dep_1_multi]]
-# 		text = 'This question is dependant on the previous one'
-# 		type = MultipleChoice
-# 		choices = 'Ok', 'Understood', 'Ay Ay Captain'
-# 		multi = yes
-#
-# 		unlocked by = 'testing'
-# 		unlock condition = 'Ok'
-#
-# 	[[question testing_dep_2]]
-# 		text = 'This question is dependant on the first one'
-# 		type = MultipleChoice
-# 		choices = 'Ok', 'Understood'
-#
-# 		unlocked by = 'testing'
-# 		unlock condition = 'Understood'
-#
-# 	[[question testing_dep_3]]
-# 		text = 'This question is dependant on the previous one'
-# 		type = MultipleChoice
-# 		choices = 'Ok', 'Understood'
-#
-# 		unlocked by = 'testing_dep_2'
-# 		unlock condition = 'Ok'
+	[[question freetext]]
+		type = FreeText
+		text = 'This is the FreeText question  type:'
+
+	[[question freenumber]]
+		type = FreeNumber
+		text = 'This is the FreeNumber question  type:'
+
+	[[question multiplechoice]]
+		type = MultipleChoice
+		text = 'This is the MultipleChoice question  type:'
+
+		choices = 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5'
+		multi = yes
+
+	[[question spinner]]
+		type = Spinner
+		text = 'This is the Spinner question  type:'
+
+		choices = 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5'
 
 
-[part 1]
-	randomise = no
-
-	[[breaks]]
-		text = 'Breaks can be put at the end of each part.'
-		interval = 0
-		time = 1
-
+[part question_types]
 
 	[[intro]]
-		text = '''This is the first part of the PALILA GUI demo. This part showcases audio's with common questions. It also shows multi-audio screens and the replay ability.'''
-		time = 1
+		text = 'This part will illustrate all different question types that are available for the audio screens.'
+		time = 0
 
+	[[audio example_demo]]
+		filename = 'tone500Hz.wav'
 
-	[[audio 0]]
-		filename = 'prototyping_placeholder.wav'
-		repeat = 2
+		[[[question annoyance]]]
+			type = Annoyance
 
-		[[[question q1]]]
-			text = 'This exact question-sample combination is repeated twice.'
-			type = Text
-
-
-	[[audio 1]]
-		filename = 'prototyping_placeholder.wav'
-		filename_2 = 'prototyping_placeholder.wav'
-
-		[[[question q1]]]
-			text = 'This is an example of two sample files with (a) common question(s).'
-			type = Text
-
-
-	[[audio 2]]
-		filename = 'prototyping_placeholder.wav'
-		filename_2 = 'prototyping_placeholder.wav'
-		max replays = 5
-
-		[[[question q1]]]
-			text = 'This is an example of sound samples that can be replayed.'
-			type = Text
-
-
-	[[questionnaire]]
-		[[[question showcase]]]
-			text = '''This is an optional questionnaire
-				at the end of a part: '''
+		[[[question multiplechoice]]]
 			type = MultipleChoice
-			choices = 'Ok', 'Understood'
+			text = 'Would you find this sound situation acceptable inside your home?'
+
+			choices = 'Always', 'Only during the day', 'Never'
 
 
-[part 2]
-	randomise = no
-
-	[[intro]]
-		text = '''This is the second part of the PALILA GUI demo.
-			This part showcases most options for questions.'''
-		time = 1
-
-
-	[[breaks]]
-		text = 'Breaks can also be put at a regular interval.'
-		interval = 3
-		time = 1
-
-
-    [[audio elevenpoint]]
+	[[audio text]]
 		filename = 'prototyping_placeholder.wav'
+		filename_2 = 'tone500Hz.wav'
 
-		[[[question q1]]]
-		    type = Annoyance
-		    text = '''This is a demonstration of the standard 11-point scale.
-				One with custom text, one with the ISO phrasing.'''
-
-		[[[question q2]]]
-		    type = Annoyance
-
-
-	[[audio textquestion]]
-		filename = 'prototyping_placeholder.wav'
-
-		[[[question 0]]]
+		[[[question text]]]
 			type = Text
-			text = '''This is just text, no question asked.
-				If only a text is present, the continue button unlocks after playing audio.'''
+			text = '''This is the Text question type. It specifically has not 1...
+				not 2...
+				not 3...
+				not 4...
+				but 5 lines available for the question text.'''
 
-
-	[[audio multiplechoice1]]
+	[[audio MultipleChoice]]
 		filename = 'prototyping_placeholder.wav'
 
-		[[[question mc]]]
-			text = '''This is a multiple choice question.
-				Do you like it?'''
+		[[[question multiplechoice]]]
 			type = MultipleChoice
-			choices = 'Yes', 'No', 'Not Sure'
+			text = 'This is the MultipleChoice question type:'
 
-		[[[question sp]]]
-			text = '''This is a spinner (multiple choice) question.
-				Do you like it?'''
+			choices = 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5'
+			multi = yes
+
+		[[[question multiplechoice_lock]]]
+			type = MultipleChoice
+			text = 'This MultipleChoice question is only available after answering "Choice 1" on the previous question:'
+
+			choices = 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5'
+			multi = yes
+
+			unlocked by = multiplechoice
+			unlock condition = 'Choice 1'
+
+
+	[[audio spinner]]
+		filename = 'prototyping_placeholder.wav'
+
+		[[[question spinner]]]
 			type = Spinner
-			choices = 'Yes', 'No', 'Not Sure', 'Yes, but better', 'No, but worse', 'Prefer not to Answer'
+			text = 'This is the Spinner question type:'
+
+			choices = 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5'
+
+		[[[question spinner_lock]]]
+			type = Spinner
+			text = 'This Spinner question is only available after answering "Choice 1" on the previous question:'
+
+			choices = 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5'
+
+			unlocked by = spinner
+			unlock condition = 'Choice 1'
 
 
-	[[audio multiplechoice2]]
+	[[audio integerscale]]
 		filename = 'prototyping_placeholder.wav'
 
-		[[[question mc]]]
-			text = '''This is a multiple choice question.
-				Do you like it?'''
-			type = MultipleChoice
-			choices = 'Yes', 'No', 'Not Sure'
-
-		[[[question mcc]]]
-			text = '''This is another question, dependant on the answer of the above.'''
-			type = MultipleChoice
-			choices = 'Ok', 'Understood'
-
-			unlocked by = 'mc'
-			unlock condition = 'Yes'
-
-
-	[[audio scale]]
-		filename = 'prototyping_placeholder.wav'
-
-		[[[question sl]]]
-			text = '''This is an integer scale question.
-				On a scale from 0 to 10, how nice is it?'''
+		[[[question integerscale]]]
 			type = IntegerScale
+			text = 'This is the IntegerScale question type:'
 
 			min = 0
 			max = 10
+			left note = 'Minimum'
+			right note = 'Maximum'
 
-		[[[question sln]]]
-			text = '''This is another integer scale question. With side notes this time.
-				On a scale from 0 to 10, how nice is it?'''
+		[[[question integerscale_lock]]]
 			type = IntegerScale
+			text = 'This IntegerScale question can only be answered when the previous answer is <5:'
 
 			min = 0
-			max = 7
+			max = 12
 
-			left note = 'Not nice'
-			right note = 'Very nice'
+			unlocked by = integerscale
+			unlock condition = 0;1;2;3;4
+
+
+	[[audio annoyance]]
+		filename = 'prototyping_placeholder.wav'
+
+		[[[question annoyance]]]
+			type = Annoyance
+
+		[[[question annoyance_text]]]
+			type = Annoyance
+			text = 'This is the Annoyance question type, with custom text:'
 
 
 	[[audio slider]]
 		filename = 'prototyping_placeholder.wav'
 
-		[[[question sl]]]
-			text = '''This is a slider question.
-				On a scale from 0 to 10, how nice is it?'''
+		[[[question slider]]]
 			type = Slider
+			text = 'This is the Slider question type:'
 
-			min = 0
-			max = 10
-			step = .5
+			min = -5
+			max = 5
+			step = 0.5
+			left note = 'Minimum'
+			right note = 'Maximum'
 
-		[[[question sln]]]
-			text = '''This is another slider question. With side notes this time.
-				On a scale from 0 to 10, how nice is it?'''
+		[[[question slider_lock]]]
 			type = Slider
+			text = 'This Slider question can only be answered when the previous answer is <0:'
 
-			min = 0
-			max = 10
-			step = .5
+			min = -6
+			max = 6
+			step = 0.5
 
-			left note = 'Not nice'
-			right note = 'Very nice'
+			unlocked by = slider
+			unlock condition = -5.0;-4.5;-4.0;-3.5;-3.0;-2.5;-2.0;-1.5;-1.0;-0.5
