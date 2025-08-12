@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Made the "continue" and other navigation buttons static on the screen.
 - Changed the default questionnaire's ```cold_magnitude``` question to ```MultipleChoice```.
 - The default questionnaire no longer uses ```manual split = yes```.
+- The configuration in ```gui_dev.palila``` has been made more relevant.
 
 ### Deprecated
 - Experiment configuration information will be removed from the README. This section will not be maintained from v1.2.0.

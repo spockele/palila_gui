@@ -136,6 +136,7 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
         Function triggered by input in the TextInput bar.
         Checks the full input of the TextInput before changing the answer.
         """
+        # TODO: check necessary modifications for #102
         # Check if there is text left after the input
         if self.ids.number_input.text:
             # Check if this text is actually a number.
@@ -188,6 +189,7 @@ class FreeNumberQQuestion(QuestionnaireQuestion):
         """
         Unlock this question when it is locked by another question.
         """
+        # TODO check why this is the order of the unlock.
         self.number_input()
         super().dependant_unlock()
 
@@ -212,6 +214,7 @@ class FreeTextQQuestion(QuestionnaireQuestion):
         Function triggered by input in the TextInput bar.
         Checks the full input of the TextInput before changing the answer.
         """
+        # TODO: check necessary modifications for #102
         # Check if there is text left after the latest input.
         if self.ids.text_input.text:
             # Check that the text is no more than the supported 2 lines.
@@ -243,6 +246,7 @@ class FreeTextQQuestion(QuestionnaireQuestion):
         """
         Unlock this question when it is locked by another question.
         """
+        # TODO check why this is the order of the unlock.
         super().dependant_unlock()
         self.text_input()
 

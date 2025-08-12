@@ -232,6 +232,7 @@ class PalilaApp(App):
         Window.clearcolor = (.95, .95, .95, 1)
         # Set the screen to a fixed resolution
         Window.fullscreen = 'auto'
+        # Window.size = (1920, 1200)
 
         main_layout = GridLayout(cols=1, )
         # Create the ScreenManager and pass the experiment along
