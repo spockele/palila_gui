@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the ```default_questionnaire.pdf``` document. This information is now included in the manual.
 
 ### Fixed
+- An issue with the recognition of floating point numbers has been fixed.
 - Without the ```[questionnaire]``` block, the GUI still showed the 'back to main questionnaire' button, which has now been removed in this case.
 - The repetition index in the question identifier no longer appears when ```repeat = 1```.
 
