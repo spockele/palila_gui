@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [//]: # (### Fixed)
 
 
-## [v1.2.1] - tbd
+## [v1.2.1] - 13 August 2025
 
 ### Added
 - The ```demo``` parameter can now be defined as a block to define a custom demonstration screen.

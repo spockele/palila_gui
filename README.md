@@ -32,10 +32,9 @@ Now you can run the GUI using ```PALILA.bat```
 
 ### Copyright notice
 
-Technische Universiteit Delft hereby disclaims all copyright interest in the program “PALILA GUI”, a graphical user interface software for psychoacoustic listening epxeriments, written by the Author(s). 
-Henri Werij, Faculty of Aerospace Engineering, Technische Universiteit Delft. 
+Technische Universiteit Delft hereby disclaims all copyright interest in the program “PALILA GUI”, a graphical user interface software for psychoacoustic listening epxeriments, written by the Author(s).
 
-Copyright (c) 2025, Josephine Siebert Pockelé
+Copyright 2025, Josephine Siebert Pockelé
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -57,7 +56,7 @@ Pockelé, J.S. (2025). Graphical User Interface for the Psychoacoustic Listening
 
 ---
 ## Experiment Configuration
-**IMPORTANT: this section of the README is not up-to-date since v1.2.0. It will be replaced by the user manual in a future version.**
+**IMPORTANT: this section of the README is not up-to-date since v1.2.0. It will be fully replaced by the user manual in a future version.**
 
 The experiment configuration consists of the following files, where ```<experiment name>``` represents the name you use for your experiment:
 - An experiment configuration file (```<experiment name>.palila```)
